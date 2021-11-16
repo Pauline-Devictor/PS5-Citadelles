@@ -4,22 +4,32 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Deck {
-    private ArrayList<Batiment> batiments = new ArrayList<Batiment>();
+    private final ArrayList<Building> buildings;
 
     Deck(){
+        buildings = new ArrayList<>();
         //pour l'instant on crée une pioche de carte basique
-        for(int i = 2; i < 15; i++){
-            batiments.add(new Batiment(i));
+        for(int i = 0; i < 54; i++){
+            if(i>46)
+                buildings.add(new Building(5));
+            else if(i>39)
+                buildings.add(new Building(4));
+            else if(i>25)
+                buildings.add(new Building(3));
+            else if(i>11)
+                buildings.add(new Building(2));
+            else
+                buildings.add(new Building(1));
         }
     }
 
-     Batiment pioche(){
-        if (batiments.isEmpty()){
+     Building drawACard(){
+        if (buildings.isEmpty()){
             //pour l'instant
             return null;
         }
-        Batiment b = batiments.get(new Random().nextInt(batiments.size()-1));
-        batiments.remove(b);
+        Building b = buildings.get(new Random().nextInt(buildings.size()-1));
+        buildings.remove(b);
         return b;
     }
 }
