@@ -11,15 +11,15 @@ public class Game {
         pile = new Deck();
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
-            players.add(new Player());
+            players.add(new Player(String.valueOf((i+1))));
         }
     }
 
     String showBoard(){
         int nb_players = players.size();
         StringBuilder res = new StringBuilder();
-        for(int i=0;i<nb_players;i++){
-            res.append("Joueur ").append(i + 1).append(" :\n").append(players.get(i)).append("\n");
+        for (Player player : players) {
+            res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
         }
         return String.valueOf(res);
     }
@@ -36,7 +36,8 @@ public class Game {
     }
 
     void showWinner(List<Player> winners ){
-        winners.stream().forEach(e -> System.out.println(e.getGoldScore()));
+
+        winners.forEach(e -> System.out.println("Le Joueur "+ e.getName()+ " a gagné avec un score de " +e.getGoldScore() + " Points"));
     }
 
     void run(){

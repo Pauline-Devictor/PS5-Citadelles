@@ -3,12 +3,22 @@ package fr.unice.polytech.startingpoint;
 import java.util.ArrayList;
 
 public class Player {
+    private final String name;
     private int gold;
     private int goldScore;
     private final ArrayList<Building> buildings;
 
+
     Player(){
         //pour le moment on initialise l'or a 1000 car "illimité"
+        this.name="Non defini";
+        gold = 1000;
+        buildings = new ArrayList<>();
+        goldScore=0;
+    }
+    Player(String name){
+        //pour le moment on initialise l'or a 1000 car "illimité"
+        this.name=name;
         gold = 1000;
         buildings = new ArrayList<>();
         goldScore=0;
@@ -46,5 +56,9 @@ public class Player {
 
     public int getGoldScore() {
         return goldScore;
+    }
+
+    public String getName() {
+        return name;
     }
 }
