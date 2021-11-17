@@ -4,17 +4,22 @@ import java.util.ArrayList;
 
 public class Player {
     private int gold;
+    private int goldScore;
     private final ArrayList<Building> buildings;
 
     Player(){
         //pour le moment on initialise l'or a 1000 car "illimité"
         gold = 1000;
         buildings = new ArrayList<>();
+        goldScore=0;
     }
 
     void build(Building b){
-        b.setBuilt(true);
-        gold -= b.getCost();
+        if (b.isBuildable(getGold())) {
+            gold -= b.getCost();
+            goldScore += b.getCost();
+            b.build();
+        }
     }
 
     void play(Deck d){
@@ -27,7 +32,8 @@ public class Player {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder("Or : " + gold + "\nBâtiments :");
+        StringBuilder res = new StringBuilder("Or : " + gold );
+        res.append("\nScore des Bâtiments : ").append(goldScore).append("\nBâtiments :");
         for (Building b : buildings) {
             res.append("\n").append(b.toString()).append(" ");
         }
@@ -36,5 +42,9 @@ public class Player {
 
     public int getGold() {
         return gold;
+    }
+
+    public int getGoldScore() {
+        return goldScore;
     }
 }

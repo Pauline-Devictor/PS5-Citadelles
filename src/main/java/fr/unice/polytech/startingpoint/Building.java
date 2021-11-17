@@ -20,6 +20,15 @@ public class Building {
     void setBuilt(boolean b){
         built = b;
     }
+
+    void build(){
+        built=true;
+    }
+
+    void destroy(){
+        built=false;
+    }
+
     boolean getBuilt(){return built;}
 
     @Override

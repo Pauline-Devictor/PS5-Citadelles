@@ -24,12 +24,28 @@ public class Game {
         return String.valueOf(res);
     }
 
+    List<Player> determineWinner(){
+        int max =players.get(0).getGoldScore();
+        for (Player p : players) {
+            if(max<p.getGoldScore()){
+                max=p.getGoldScore();
+            }
+        }
+        int finalMax = max;
+        return players.stream().filter(e -> e.getGoldScore()== finalMax).toList();
+    }
+
+    void showWinner(List<Player> winners ){
+        winners.stream().forEach(e -> System.out.println(e.getGoldScore()));
+    }
+
     void run(){
         for(int i=0;i<5;i++){
             for (Player j: players) {
                 j.play(pile);
             }
-            System.out.println("Tour 1 :\n" + showBoard() );
+            System.out.println("Tour "+(i+1)+" :\n" + showBoard() );
         }
+        showWinner(determineWinner());
     }
 }
