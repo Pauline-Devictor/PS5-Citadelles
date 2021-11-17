@@ -1,4 +1,4 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.Characters;
 
 public abstract class Character {
      protected int order;
