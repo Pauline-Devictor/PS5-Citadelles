@@ -4,28 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
+    private final Board board;
     private final List<Player> players;
-    private final Deck pile;
 
-    Game(int nb_players){
-        pile = new Deck();
+    Game(Board b, int nb_players){
+        board = b;
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
-            players.add(new Player(pile, String.valueOf(i+1)));
+            players.add(new Player(board, String.valueOf(i+1)));
         }
     }
 
-    String showBoard(){
-        int nb_players = players.size();
-        StringBuilder res = new StringBuilder();
-        for (Player player : players) {
-            res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
-        }
-        return String.valueOf(res);
+    public List<Player> getPlayers() {
+        return players;
     }
+
 
     List<Player> determineWinner(){
-        int max =players.get(0).getGoldScore();
+        int max = players.get(0).getGoldScore();
         for (Player p : players) {
             if(max<p.getGoldScore()){
                 max=p.getGoldScore();
@@ -45,7 +41,7 @@ public class Game {
             for (Player j: players) {
                 j.play();
             }
-            System.out.println("Tour " + (i+1) + " :\n" + showBoard() );
+            System.out.println("Tour " + (i+1) + " :\n" + board.showBoard(players) );
         }
         showWinner(determineWinner());
     }

@@ -8,11 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestPlayer {
     Player p;
     Building b;
+    Board board;
 
     @BeforeEach
     void setUp(){
+        board = new Board();
         Deck d = new Deck();
-        p = new Player(d);
+        p = new Player(board);
         b = new Building(5);
         p.build(b);
     }
@@ -29,7 +31,7 @@ public class TestPlayer {
     @Test
     void testToString(){
         Deck d = new Deck();
-        Player j = new Player(d);
+        Player j = new Player(board);
         j.play();
         j.play();
         System.out.println(j);

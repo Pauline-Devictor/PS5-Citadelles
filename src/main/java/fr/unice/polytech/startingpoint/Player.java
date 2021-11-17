@@ -7,29 +7,27 @@ public class Player {
     private int gold;
     private int goldScore;
     private final ArrayList<Building> buildings;
-    private final Deck deck;
+    private final Board board;
     private Character role;
 
 
-    Player(Deck d, String name){
+    Player(Board b, String name){
         this.name = name;
-        //every player starts with 2 golds
-        deck = d;
-        gold = 2;
+        board = b;
+        gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
         for(int i = 0; i < 4; i++){
-            buildings.add(d.drawACard());
+            buildings.add(board.getPile().drawACard());
         }
         goldScore=0;
     }
-    Player(Deck d){
+    Player(Board b){
         this.name = "undefined";
-        //every player starts with 2 golds
-        deck = d;
-        gold = 2;
+        board = b;
+        gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
         for(int i = 0; i < 4; i++){
-            buildings.add(d.drawACard());
+            buildings.add(board.getPile().drawACard());
         }
         goldScore=0;
     }
@@ -37,6 +35,7 @@ public class Player {
     boolean build(Building b){
         boolean buildable = b.isBuildable(getGold());
         if (buildable) {
+            board.getBank().refundGold(b.getCost());
             gold -= b.getCost();
             goldScore += b.getCost();
             b.build();
@@ -45,13 +44,15 @@ public class Player {
     }
 
     void play(){
-        // choses to draw a card because hand is empty
+        // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
-            buildings.add(deck.drawACard());
+            buildings.add(board.getPile().drawACard());
+            System.out.println("a building for ya");
         }
-        // choses to get 2 golds because nothing can be built
+        // chooses to get 2 golds because nothing can be built
         else{
-            gold += 2;
+            gold += board.getBank().withdrawGold(2);
+            System.out.println("2 golds for ya");
         }
         //check if anything can be built and build the first
         for (Building b : buildings) {
