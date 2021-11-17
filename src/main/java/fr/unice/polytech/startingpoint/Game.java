@@ -11,7 +11,7 @@ public class Game {
         pile = new Deck();
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
-            players.add(new Player(String.valueOf((i+1))));
+            players.add(new Player(pile, String.valueOf(i+1)));
         }
     }
 
@@ -43,9 +43,9 @@ public class Game {
     void run(){
         for(int i=0;i<5;i++){
             for (Player j: players) {
-                j.play(pile);
+                j.play();
             }
-            System.out.println("Tour "+(i+1)+" :\n" + showBoard() );
+            System.out.println("Tour " + (i+1) + " :\n" + showBoard() );
         }
         showWinner(determineWinner());
     }
