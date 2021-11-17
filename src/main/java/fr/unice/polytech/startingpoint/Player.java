@@ -7,6 +7,7 @@ public class Player {
     private int gold;
     private int goldScore;
     private final ArrayList<Building> buildings;
+    private Character role;
 
 
     Player(){
