@@ -7,37 +7,58 @@ public class Player {
     private int gold;
     private int goldScore;
     private final ArrayList<Building> buildings;
+    private final Deck deck;
+    private Character role;
 
 
-    Player(){
-        //pour le moment on initialise l'or a 1000 car "illimité"
-        this.name="Non defini";
-        gold = 1000;
+    Player(Deck d, String name){
+        this.name = name;
+        //every player starts with 2 golds
+        deck = d;
+        gold = 2;
         buildings = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            buildings.add(d.drawACard());
+        }
         goldScore=0;
     }
-    Player(String name){
-        //pour le moment on initialise l'or a 1000 car "illimité"
-        this.name=name;
-        gold = 1000;
+    Player(Deck d){
+        this.name = "undefined";
+        //every player starts with 2 golds
+        deck = d;
+        gold = 2;
         buildings = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            buildings.add(d.drawACard());
+        }
         goldScore=0;
     }
 
-    void build(Building b){
-        if (b.isBuildable(getGold())) {
+    boolean build(Building b){
+        boolean buildable = b.isBuildable(getGold());
+        if (buildable) {
             gold -= b.getCost();
             goldScore += b.getCost();
             b.build();
-        }
+            }
+        return buildable;
     }
 
-    void play(Deck d){
-        buildings.add(d.drawACard());
-        //Construit plus qu'un batiment a la fois
-        buildings.stream()
-                .filter( b -> b.isBuildable(gold))
-                .forEach(this::build);
+    void play(){
+        // choses to draw a card because hand is empty
+        if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
+            buildings.add(deck.drawACard());
+        }
+        // choses to get 2 golds because nothing can be built
+        else{
+            gold += 2;
+        }
+        //check if anything can be built and build the first
+        for (Building b : buildings) {
+             if(build(b)){
+                 break;
+             }
+        }
     }
 
     @Override

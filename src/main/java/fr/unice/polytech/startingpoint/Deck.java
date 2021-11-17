@@ -28,8 +28,9 @@ public class Deck {
             //pour l'instant
             return null;
         }
-        Building b = buildings.get(new Random().nextInt(buildings.size()-1));
-        buildings.remove(b);
+        int index = new Random().nextInt(buildings.size()-1);
+        Building b = buildings.get(index);
+        buildings.remove(index);
         return b;
     }
 }

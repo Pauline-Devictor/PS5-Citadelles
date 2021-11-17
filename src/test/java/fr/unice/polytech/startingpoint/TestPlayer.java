@@ -11,7 +11,8 @@ public class TestPlayer {
 
     @BeforeEach
     void setUp(){
-        p = new Player();
+        Deck d = new Deck();
+        p = new Player(d);
         b = new Building(5);
         p.build(b);
     }
@@ -28,9 +29,9 @@ public class TestPlayer {
     @Test
     void testToString(){
         Deck d = new Deck();
-        Player j = new Player();
-        j.play(d);
-        j.play(d);
+        Player j = new Player(d);
+        j.play();
+        j.play();
         System.out.println(j);
     }
 }
