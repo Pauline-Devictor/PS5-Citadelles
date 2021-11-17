@@ -6,10 +6,10 @@ public abstract class Character {
      protected int order;
      protected boolean taken;
 
-     int getOrder() {
+     public int getOrder() {
         return order;
     }
-    boolean isAvailable(){
+     boolean isAvailable(){
          return taken;
     }
 }
