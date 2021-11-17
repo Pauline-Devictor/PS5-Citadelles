@@ -1,4 +1,4 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.Characters;
 
 public class Assassin extends Character{
     private final int order = 1;
