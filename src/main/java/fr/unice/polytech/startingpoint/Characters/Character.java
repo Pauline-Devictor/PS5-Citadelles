@@ -4,12 +4,12 @@ import java.util.List;
 
 public abstract class Character {
      protected int order;
-     protected boolean taken;
+     protected boolean available;
 
      public int getOrder() {
         return order;
     }
      boolean isAvailable(){
-         return taken;
+         return available;
     }
 }

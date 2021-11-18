@@ -2,6 +2,7 @@ package fr.unice.polytech.startingpoint.Characters;
 
 public class Magician extends Character{
     public Magician(){
-        order =3;
+        order = 3;
+        available = true;
     }
 }
