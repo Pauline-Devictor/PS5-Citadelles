@@ -22,7 +22,6 @@ public class TestBuilding {
         assertTrue(new Building(2).isBuildable(2));
     }
 
-
     @Test
     void isBuildableTestLower(){
         assertFalse(new Building(2).isBuildable(1));

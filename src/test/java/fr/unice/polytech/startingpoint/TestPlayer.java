@@ -4,36 +4,47 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class TestPlayer {
     Player p;
     Building b;
+    Building bNeg;
+    Building bFree;
     Board board;
 
     @BeforeEach
     void setUp(){
         board = new Board();
-        Deck d = new Deck();
         p = new Player(board);
         b = new Building(5);
-        p.build(b);
+        bNeg = new Building(0);
+        bFree = new Building(-2);
     }
 
     @Test
     void buildGold(){
-        assertEquals(p.getGold(), 995);
+
+        p.build(b);
+        assertEquals(2,p.getGold());
     }
     @Test
     void buildBuilt(){
+
+        p.build(b);
         assertTrue(b.getBuilt());
     }
 
     @Test
-    void testToString(){
-        Deck d = new Deck();
-        Player j = new Player(board);
-        j.play();
-        j.play();
-        System.out.println(j);
+    void buildScore(){
+        p.build(b);
+        assertEquals(5,p.getGoldScore());
     }
+    void buildScore0(){
+        assertEquals(0,p.getGoldScore());
+    }
+    void buildScoreNeg(){
+        assertEquals(2,p.getGoldScore());
+    }
+
 }

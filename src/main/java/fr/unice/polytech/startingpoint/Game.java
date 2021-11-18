@@ -19,7 +19,6 @@ public class Game {
         return players;
     }
 
-
     List<Player> determineWinner(){
         int max = players.get(0).getGoldScore();
         for (Player p : players) {
@@ -32,7 +31,6 @@ public class Game {
     }
 
     void showWinner(List<Player> winners ){
-
         winners.forEach(e -> System.out.println("Le Joueur "+ e.getName()+ " a gagné avec un score de " +e.getGoldScore() + " Points"));
     }
 

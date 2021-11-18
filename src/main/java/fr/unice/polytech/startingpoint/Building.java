@@ -1,11 +1,13 @@
 package fr.unice.polytech.startingpoint;
 
+import static java.lang.Math.abs;
+
 public class Building {
     private final int cost;
     private boolean built;
 
     Building(int cost){
-        this.cost = cost;
+        this.cost = abs(cost);
         built = false;
     }
 
