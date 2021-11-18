@@ -4,5 +4,6 @@ public class Bishop extends Character{
     public Bishop(){
         order = 5;
         available= true;
+        name = "Bishop";
     }
 }

@@ -4,5 +4,6 @@ public class Thief extends Character{
     public Thief(){
         order = 2;
         available= true;
+        name = "Thief";
     }
 }

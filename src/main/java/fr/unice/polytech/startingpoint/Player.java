@@ -1,6 +1,9 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.Characters.Character;
+
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     private final String name;
@@ -43,8 +46,20 @@ public class Player {
         return buildable;
     }
 
+    void chooseRole(){
+        int index;
+        Random r = new Random();
+        do {
+            index = r.nextInt(8);
+        }while (!board.getCharactersInfos(index).isAvailable());
+            role = board.getCharactersInfos(index);
+            board.getCharactersInfos(index).isTaken();
+        }
+
     void play(){
         // chooses to draw a card because hand is empty
+        chooseRole();
+        System.out.println("Here a role for ya " + getRole().getName());
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());
             System.out.println("a building for ya");
@@ -83,4 +98,6 @@ public class Player {
     public String getName() {
         return name;
     }
+
+    public Character getRole(){return role;}
 }

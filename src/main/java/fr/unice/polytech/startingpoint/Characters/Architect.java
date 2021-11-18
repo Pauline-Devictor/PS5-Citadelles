@@ -4,5 +4,6 @@ public class Architect extends Character{
     public Architect(){
         order = 7;
         available= true;
+        name = "Architecte";
     }
 }

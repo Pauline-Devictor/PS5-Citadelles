@@ -4,5 +4,6 @@ public class Condottiere extends Character{
     public Condottiere(){
        order = 8;
        available= true;
+       name = "Condottiere";
    }
 }

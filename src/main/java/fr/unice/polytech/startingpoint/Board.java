@@ -19,6 +19,8 @@ public class Board {
         return bank;
     }
 
+    public Character getCharactersInfos(int index){return characters.get(index);}
+
     Board(){
         this.bank = new Bank(30);
         this.pile = new Deck();
@@ -30,6 +32,12 @@ public class Board {
         this.characters.add(new Merchant());
         this.characters.add(new Architect());
         this.characters.add(new Condottiere());
+    }
+
+    void setAllFree(){
+        for (Character character : characters) {
+            character.setFree();
+        }
     }
 
     String showBoard(List<Player> players){

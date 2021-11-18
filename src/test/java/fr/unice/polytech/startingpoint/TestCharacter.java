@@ -20,7 +20,7 @@ public class TestCharacter {
 
     @BeforeEach
     void setUp(){
-
+        condottiere.isTaken();
     }
     @Test
     void assassinGetOrder(){
@@ -53,5 +53,16 @@ public class TestCharacter {
     @Test
     void condottiereGetOrder(){
         assertEquals(8,condottiere.getOrder());
+    }
+    @Test
+    void isAvailableTrue(){assertTrue(king.isAvailable());}
+    @Test
+    void isNotAvailable(){
+        king.isTaken();
+        assertFalse(king.isAvailable());}
+    @Test
+    void is_free(){
+        condottiere.setFree();
+        assertTrue(condottiere.isAvailable());
     }
 }
