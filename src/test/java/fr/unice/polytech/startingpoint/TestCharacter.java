@@ -65,4 +65,8 @@ public class TestCharacter {
         condottiere.setFree();
         assertTrue(condottiere.isAvailable());
     }
+    @Test
+    void roleName(){
+        assertEquals("Assassin",assassin.getName());
+    }
 }

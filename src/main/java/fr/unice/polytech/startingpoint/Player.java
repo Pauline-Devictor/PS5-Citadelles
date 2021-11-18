@@ -48,18 +48,21 @@ public class Player {
 
     void chooseRole(){
         int index;
-        Random r = new Random();
         do {
-            index = r.nextInt(8);
+            index = new Random().nextInt(8);
+            if (index<0 || index>7){
+                throw new RuntimeException("Role demandé inexistant");
+            }
         }while (!board.getCharactersInfos(index).isAvailable());
             role = board.getCharactersInfos(index);
             board.getCharactersInfos(index).isTaken();
         }
 
     void play(){
-        // chooses to draw a card because hand is empty
+        //take a role
         chooseRole();
         System.out.println("Here a role for ya " + getRole().getName());
+        // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());
             System.out.println("a building for ya");
