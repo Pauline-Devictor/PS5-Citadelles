@@ -5,6 +5,5 @@ public class Assassin extends Character{
         order = 1;
         available = true;
         name = "Assassin";
-        player = null;
     }
 }

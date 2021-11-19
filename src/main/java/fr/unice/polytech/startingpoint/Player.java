@@ -60,7 +60,6 @@ public class Player {
         }
 
     void play(){
-        //System.out.println("Here a role for ya " + getRole().getName());
         // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());

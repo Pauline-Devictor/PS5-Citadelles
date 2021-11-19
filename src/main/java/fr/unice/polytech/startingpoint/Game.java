@@ -8,7 +8,6 @@ import java.util.List;
 public class Game {
     private final Board board;
     private final List<Player> players;
-    private final Manager manager;
 
     Game(Board b, int nb_players){
         board = b;
@@ -16,7 +15,6 @@ public class Game {
         for(int i=0;i<nb_players;i++){
             players.add(new Player(board, String.valueOf(i+1)));
         }
-        manager = new Manager(players);
     }
 
     public List<Player> getPlayers() {
@@ -45,7 +43,10 @@ public class Game {
 
     void run(){
         for(int i=0;i<5;i++){
-            manager.giveRole();
+            for(Player p:players){
+                p.chooseRole();
+                p.getRole().setPlayer(p);
+            }
             for(Character c: board.getCharacters()){
                 if (c.getPlayer() != null)
                 c.getPlayer().play();
