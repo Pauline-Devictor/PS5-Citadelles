@@ -1,8 +1,8 @@
-package fr.unice.polytech.startingpoint.Characters;
-
+package fr.unice.polytech.startingpoint.characters;
 import fr.unice.polytech.startingpoint.Player;
 
 import java.util.List;
+
 
 public abstract class Character {
     protected int order;

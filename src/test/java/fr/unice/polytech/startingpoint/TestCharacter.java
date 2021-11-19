@@ -1,6 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.Characters.*;
+import fr.unice.polytech.startingpoint.characters.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

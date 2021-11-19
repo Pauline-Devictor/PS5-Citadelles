@@ -20,14 +20,19 @@ public class Game {
     }
 
     List<Player> determineWinner(){
-        int max = players.get(0).getGoldScore();
-        for (Player p : players) {
-            if(max<p.getGoldScore()){
-                max=p.getGoldScore();
+        List<Player> list_players =getPlayers();
+        if(list_players.size() > 0){
+            int max = list_players.get(0).getGoldScore();
+            for (Player p : list_players) {
+                if(max<p.getGoldScore()){
+                    max=p.getGoldScore();
+                }
             }
+            int finalMax = max;
+            list_players = list_players.stream().filter(e -> e.getGoldScore()== finalMax).toList();
         }
-        int finalMax = max;
-        return players.stream().filter(e -> e.getGoldScore()== finalMax).toList();
+
+        return list_players;
     }
 
     void showWinner(List<Player> winners ){
