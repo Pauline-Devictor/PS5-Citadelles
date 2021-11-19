@@ -4,6 +4,7 @@ import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Game {
     private final Board board;
@@ -13,7 +14,7 @@ public class Game {
         board = b;
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
-            players.add(new Player(board, String.valueOf(i+1)));
+            players.add(new Player(board, String.valueOf(i + 1)));
         }
     }
 
@@ -33,7 +34,6 @@ public class Game {
             int finalMax = max;
             list_players = list_players.stream().filter(e -> e.getGoldScore()== finalMax).toList();
         }
-
         return list_players;
     }
 
@@ -42,18 +42,26 @@ public class Game {
     }
 
     void run(){
-        for(int i=0;i<5;i++){
+        boolean endOfGame = false;
+        int turn=1;
+        while (!endOfGame){
             for(Player p:players){
                 p.chooseRole();
                 p.getRole().setPlayer(p);
             }
             for(Character c: board.getCharacters()){
                 if (c.getPlayer() != null)
-                c.getPlayer().play();
+                    c.getPlayer().play();
             }
 
-            System.out.println("Tour " + (i+1) + " :\n" + board.showBoard(players) );
+            System.out.println("\nTour " + (turn) + " :\n" + board.showBoard(players) );
             board.setAllFree();
+            turn++;
+
+            for(Player p : players){
+                if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)
+                    endOfGame=true;
+            }
         }
         showWinner(determineWinner());
     }

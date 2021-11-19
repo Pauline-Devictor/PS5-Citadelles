@@ -1,7 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.Character;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,6 +23,7 @@ public class Player {
         }
         goldScore=0;
     }
+
     Player(Board b){
         this.name = "undefined";
         board = b;
@@ -53,19 +53,19 @@ public class Player {
         }while (!board.getCharactersInfos(index).isAvailable());
         role = board.getCharactersInfos(index);
         board.getCharactersInfos(index).isTaken();
-        System.out.println("Player "+ name +" Choose " + getRole().getName());
+        System.out.println("Player "+ name +" choose " + getRole().getName());
         }
 
     void play(){
         // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());
-            System.out.println("a building for ya");
+            System.out.println(name+" draw a Card");
         }
         // chooses to get 2 golds because nothing can be built
         else{
             gold += board.getBank().withdrawGold(2);
-            System.out.println("2 golds for ya");
+            System.out.println(name+" take 2 golds");
         }
         //check if anything can be built and build the first
         for (Building b : buildings) {
@@ -78,9 +78,9 @@ public class Player {
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder("Or : " + gold );
-        res.append("\nScore des Bâtiments : ").append(goldScore).append("\nBâtiments :");
+        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(goldScore);
         for (Building b : buildings) {
-            res.append("\n").append(b.toString()).append(" ");
+            res.append("\n\t").append(b.toString()).append(" ");
         }
         return res.toString();
     }
@@ -98,4 +98,8 @@ public class Player {
     }
 
     public Character getRole(){return role;}
+
+    public ArrayList<Building> getBuildings() {
+        return (ArrayList<Building>) buildings.clone();
+    }
 }
