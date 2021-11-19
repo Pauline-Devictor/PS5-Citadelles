@@ -50,9 +50,6 @@ public class Player {
         int index;
         do {
             index = new Random().nextInt(8);
-            if (index<0 || index>7){//A Quoi bon ???? Java ne va jamais se tromper
-                throw new RuntimeException("Role demandé inexistant");
-            }
         }while (!board.getCharactersInfos(index).isAvailable());
         role = board.getCharactersInfos(index);
         board.getCharactersInfos(index).isTaken();
