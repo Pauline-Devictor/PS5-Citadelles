@@ -5,6 +5,5 @@ public class Merchant extends Character{
         order = 6;
         available= true;
         name = "Merchant";
-        player = null;
     }
 }

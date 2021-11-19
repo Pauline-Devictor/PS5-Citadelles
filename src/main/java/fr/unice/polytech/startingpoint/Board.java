@@ -10,7 +10,6 @@ public class Board {
     private final Deck pile;
     private final Bank bank;
     private final List<Character> characters = new ArrayList<>();
-    private List<Character> role_taken = new ArrayList<>();
 
     public Deck getPile() {
         return pile;
@@ -42,7 +41,6 @@ public class Board {
         for (Character character : characters) {
             character.setFree();
             character.playerNull();
-            role_taken = new ArrayList<>();
         }
     }
 

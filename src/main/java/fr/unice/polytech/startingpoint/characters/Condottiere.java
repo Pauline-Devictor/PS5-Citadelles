@@ -5,6 +5,5 @@ public class Condottiere extends Character{
        order = 8;
        available= true;
        name = "Condottiere";
-       player = null;
    }
 }
