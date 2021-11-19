@@ -5,5 +5,6 @@ public class Magician extends Character{
         order = 3;
         available = true;
         name = "Magician";
+        player = null;
     }
 }

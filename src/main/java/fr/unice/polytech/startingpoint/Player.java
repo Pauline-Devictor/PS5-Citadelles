@@ -56,12 +56,11 @@ public class Player {
         }while (!board.getCharactersInfos(index).isAvailable());
             role = board.getCharactersInfos(index);
             board.getCharactersInfos(index).isTaken();
+        System.out.println("Player "+ name +" Choose " + getRole().getName());
         }
 
     void play(){
-        //take a role
-        chooseRole();
-        System.out.println("Here a role for ya " + getRole().getName());
+        //System.out.println("Here a role for ya " + getRole().getName());
         // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());

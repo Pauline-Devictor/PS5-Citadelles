@@ -20,9 +20,9 @@ public class Board {
         return bank;
     }
 
-    public Character getCharactersInfos(int index){return characters.get(index);}
+    public List<Character> getCharacters(){return characters;}
 
-    public List<Character> getRole_taken(){return role_taken;}
+    public Character getCharactersInfos(int index){return characters.get(index);}
 
     Board(){
         this.bank = new Bank(30);
@@ -41,13 +41,9 @@ public class Board {
     void setAllFree(){
         for (Character character : characters) {
             character.setFree();
+            character.playerNull();
             role_taken = new ArrayList<>();
         }
-    }
-
-    //actualise la liste des roles pris
-    void playerTake(int index){
-        role_taken.add(characters.get(index));
     }
 
     String showBoard(List<Player> players){

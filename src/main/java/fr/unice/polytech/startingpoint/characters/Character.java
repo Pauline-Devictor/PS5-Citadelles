@@ -19,6 +19,7 @@ public abstract class Character {
     public void isTaken(){available=false;}//un bot prend la carte
     public void setFree(){available=true;}//liberation de la carte
     public void setPlayer(Player p){player =p;}
+    public void playerNull(){player =null;}
 
 
 }

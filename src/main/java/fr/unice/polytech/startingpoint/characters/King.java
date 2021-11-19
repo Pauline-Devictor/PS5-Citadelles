@@ -5,5 +5,6 @@ public class King extends Character{
         order = 4;
         available = true;
         name = "King";
+        player = null;
     }
 }

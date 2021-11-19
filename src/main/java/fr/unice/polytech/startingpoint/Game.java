@@ -1,11 +1,14 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.characters.Character;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
     private final Board board;
     private final List<Player> players;
+    private final Manager manager;
 
     Game(Board b, int nb_players){
         board = b;
@@ -13,6 +16,7 @@ public class Game {
         for(int i=0;i<nb_players;i++){
             players.add(new Player(board, String.valueOf(i+1)));
         }
+        manager = new Manager(players);
     }
 
     public List<Player> getPlayers() {
@@ -41,9 +45,12 @@ public class Game {
 
     void run(){
         for(int i=0;i<5;i++){
-            for (Player j: players) {
-                j.play();
+            manager.giveRole();
+            for(Character c: board.getCharacters()){
+                if (c.getPlayer() != null)
+                c.getPlayer().play();
             }
+
             System.out.println("Tour " + (i+1) + " :\n" + board.showBoard(players) );
             board.setAllFree();
         }

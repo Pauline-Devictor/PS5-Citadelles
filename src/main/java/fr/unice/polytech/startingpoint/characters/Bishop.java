@@ -5,5 +5,6 @@ public class Bishop extends Character{
         order = 5;
         available= true;
         name = "Bishop";
+        player = null;
     }
 }

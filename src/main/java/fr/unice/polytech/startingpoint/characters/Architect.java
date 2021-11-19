@@ -5,5 +5,6 @@ public class Architect extends Character{
         order = 7;
         available= true;
         name = "Architecte";
+        player = null;
     }
 }

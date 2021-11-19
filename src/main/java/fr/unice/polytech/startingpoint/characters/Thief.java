@@ -5,5 +5,6 @@ public class Thief extends Character{
         order = 2;
         available= true;
         name = "Thief";
+        player = null;
     }
 }
