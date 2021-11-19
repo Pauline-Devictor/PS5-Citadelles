@@ -1,5 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
+import java.lang.Exception.*;
+
 public class Bank {
     private final int bankLimit;
     private int currentAmount;
@@ -10,25 +12,22 @@ public class Bank {
     }
 
     int withdrawGold(int gold){
-        if(currentAmount < gold){
+        if(currentAmount < Math.abs(gold)){
             currentAmount = 0;
             return currentAmount;
         }
-        currentAmount -= gold;
-        return gold;
+        currentAmount -= Math.abs(gold);
+        return Math.abs(gold);
     }
 
-    void refundGold(int gold){
-        if(currentAmount+gold > bankLimit){
-            throw new RuntimeException("bank is richer than it's supposed to be");
+    void refundGold(int gold) {
+        if(currentAmount+Math.abs(gold) > bankLimit){
+            throw new RuntimeException("The bank is richer than it should be.");
         }
-        currentAmount+=gold;
-
+        currentAmount+=Math.abs(gold);
     }
 
     int getGold(){
         return currentAmount;
     }
-
-
 }
