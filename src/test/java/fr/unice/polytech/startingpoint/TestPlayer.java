@@ -50,5 +50,9 @@ public class TestPlayer {
         p.build(bNeg);
         assertEquals(2,p.getGoldScore());
     }
-
+    @Test
+    void hasRole(){
+        p.chooseRole();
+        assertNotNull(p.getRole());
+    }
 }

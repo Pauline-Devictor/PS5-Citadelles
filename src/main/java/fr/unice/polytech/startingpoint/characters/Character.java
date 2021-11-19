@@ -10,9 +10,7 @@ public abstract class Character {
     protected String name;
     protected Player player;
 
-    public int getOrder() {
-        return order;
-    }
+    public int getOrder() {return order;}
     public boolean isAvailable(){return available;}
     public String getName(){return name;}
     public Player getPlayer(){return player;}
@@ -20,6 +18,4 @@ public abstract class Character {
     public void setFree(){available=true;}//liberation de la carte
     public void setPlayer(Player p){player =p;}
     public void playerNull(){player =null;}
-
-
 }

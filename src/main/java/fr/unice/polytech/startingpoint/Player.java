@@ -54,8 +54,8 @@ public class Player {
                 throw new RuntimeException("Role demandé inexistant");
             }
         }while (!board.getCharactersInfos(index).isAvailable());
-            role = board.getCharactersInfos(index);
-            board.getCharactersInfos(index).isTaken();
+        role = board.getCharactersInfos(index);
+        board.getCharactersInfos(index).isTaken();
         System.out.println("Player "+ name +" Choose " + getRole().getName());
         }
 

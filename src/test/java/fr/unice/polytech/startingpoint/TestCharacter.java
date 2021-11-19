@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCharacter {
-
    Assassin assassin = new Assassin();
    Thief thief = new Thief();
    Magician magician = new Magician();
@@ -17,9 +16,16 @@ public class TestCharacter {
    Merchant merchant = new Merchant();
    Architect architect = new Architect();
    Condottiere condottiere = new Condottiere();
+   Player p1;
+   Player p2;
+   Board b;
 
     @BeforeEach
     void setUp(){
+        b = new Board();
+        p1 = new Player(b,"Bob");
+        p2 = new Player(b,"Billy");
+        p2.chooseRole();
         condottiere.isTaken();
     }
     @Test
@@ -68,5 +74,16 @@ public class TestCharacter {
     @Test
     void roleName(){
         assertEquals("Assassin",assassin.getName());
+    }
+    @Test
+    void setPlayer(){
+        bishop.setPlayer(p1);
+        assertEquals(p1,bishop.getPlayer());
+    }
+    @Test
+    void setPlayerNull(){
+        assassin.setPlayer(p2);
+        assassin.playerNull();
+        assertNull(assassin.getPlayer());
     }
 }
