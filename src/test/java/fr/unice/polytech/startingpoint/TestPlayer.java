@@ -17,16 +17,16 @@ public class TestPlayer {
     void setUp(){
         board = new Board();
         p = new Player(board);
-        b = new Building(5);
-        bNeg = new Building(0);
-        bFree = new Building(-2);
+        b = new Building(2);
+        bNeg = new Building(-2);
+        bFree = new Building(0);
     }
 
     @Test
     void buildGold(){
 
         p.build(b);
-        assertEquals(2,p.getGold());
+        assertEquals(2,p.getGoldScore());
     }
     @Test
     void buildBuilt(){
@@ -38,12 +38,16 @@ public class TestPlayer {
     @Test
     void buildScore(){
         p.build(b);
-        assertEquals(5,p.getGoldScore());
+        assertEquals(2,p.getGoldScore());
     }
+    @Test
     void buildScore0(){
+        p.build(bFree);
         assertEquals(0,p.getGoldScore());
     }
+    @Test
     void buildScoreNeg(){
+        p.build(bNeg);
         assertEquals(2,p.getGoldScore());
     }
 

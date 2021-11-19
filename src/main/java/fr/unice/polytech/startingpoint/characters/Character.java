@@ -1,6 +1,4 @@
-package fr.unice.polytech.startingpoint.Characters;
-
-import java.util.List;
+package fr.unice.polytech.startingpoint.characters;
 
 public abstract class Character {
      protected int order;

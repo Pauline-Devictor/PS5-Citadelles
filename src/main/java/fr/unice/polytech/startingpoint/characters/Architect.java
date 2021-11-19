@@ -1,4 +1,4 @@
-package fr.unice.polytech.startingpoint.Characters;
+package fr.unice.polytech.startingpoint.characters;
 
 public class Architect extends Character{
     private final int order = 7;
