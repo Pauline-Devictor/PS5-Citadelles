@@ -1,7 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.Characters.*;
-import fr.unice.polytech.startingpoint.Characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,6 @@ public class Board {
     }
 
     String showBoard(List<Player> players){
-        int nb_players = players.size();
         StringBuilder res = new StringBuilder();
         for (Player player : players) {
             res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
