@@ -1,9 +1,9 @@
 package fr.unice.polytech.startingpoint.characters;
 
 public class Bishop extends Character{
-    private final int order = 5;
-    @Override
-    public int getOrder() {
-        return order;
+    public Bishop(){
+        order = 5;
+        available= true;
+        name = "Bishop";
     }
 }

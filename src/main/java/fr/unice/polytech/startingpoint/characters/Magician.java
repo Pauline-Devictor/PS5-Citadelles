@@ -1,9 +1,9 @@
 package fr.unice.polytech.startingpoint.characters;
 
 public class Magician extends Character{
-    private final int order = 3;
-    @Override
-    public int getOrder() {
-        return order;
+    public Magician(){
+        order = 3;
+        available = true;
+        name = "Magician";
     }
 }

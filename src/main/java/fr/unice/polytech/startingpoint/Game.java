@@ -45,6 +45,7 @@ public class Game {
                 j.play();
             }
             System.out.println("Tour " + (i+1) + " :\n" + board.showBoard(players) );
+            board.setAllFree();
         }
         showWinner(determineWinner());
     }
