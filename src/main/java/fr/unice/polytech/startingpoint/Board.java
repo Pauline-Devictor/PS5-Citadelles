@@ -1,7 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.Characters.*;
-import fr.unice.polytech.startingpoint.Characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ public class Board {
         return bank;
     }
 
-    public Character getCharactersInfos(int index){return characters.get(index);}
+    public List<Character> getCharacters(){return characters;}
 
-    public List<Character> getRole_taken(){return role_taken;}
+    public Character getCharactersInfos(int index){return characters.get(index);}
 
     Board(){
         this.bank = new Bank(30);
@@ -41,17 +41,12 @@ public class Board {
     void setAllFree(){
         for (Character character : characters) {
             character.setFree();
+            character.playerNull();
             role_taken = new ArrayList<>();
         }
     }
 
-    //actualise la liste des roles pris
-    void playerTake(int index){
-        role_taken.add(characters.get(index));
-    }
-
     String showBoard(List<Player> players){
-        int nb_players = players.size();
         StringBuilder res = new StringBuilder();
         for (Player player : players) {
             res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");

@@ -1,6 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.Characters.Character;
+import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,18 +50,17 @@ public class Player {
         int index;
         do {
             index = new Random().nextInt(8);
-            if (index<0 || index>7){
+            if (index<0 || index>7){//A Quoi bon ???? Java ne va jamais se tromper
                 throw new RuntimeException("Role demandé inexistant");
             }
         }while (!board.getCharactersInfos(index).isAvailable());
             role = board.getCharactersInfos(index);
             board.getCharactersInfos(index).isTaken();
+        System.out.println("Player "+ name +" Choose " + getRole().getName());
         }
 
     void play(){
-        //take a role
-        chooseRole();
-        System.out.println("Here a role for ya " + getRole().getName());
+        //System.out.println("Here a role for ya " + getRole().getName());
         // chooses to draw a card because hand is empty
         if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
             buildings.add(board.getPile().drawACard());

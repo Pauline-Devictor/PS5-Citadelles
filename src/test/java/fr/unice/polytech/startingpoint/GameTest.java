@@ -3,19 +3,24 @@ package fr.unice.polytech.startingpoint;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class GameTest {
+    Game g;
+    Player p;
+    Player p1;
 
     @BeforeEach
     void setUp() {
+        g = spy(new Game(new Board(),2));
+        p = mock(Player.class);
+        p1 = mock(Player.class);
     }
 
     @AfterEach
@@ -25,20 +30,34 @@ class GameTest {
 
     @Test
     void determineWinner() {
-        Game g = spy(new Game(new Board(),2));
-        Player p = mock(Player.class);
-        Player p1 = mock(Player.class);
-
-        g.determineWinner();
+        when(p.getGoldScore()).thenReturn(81);
+        when(p1.getGoldScore()).thenReturn(8);
+        when(g.getPlayers()).thenReturn(Arrays.asList(p,p1));
+        assertEquals(Arrays.asList(p),g.determineWinner());
     }
 
     @Test
+    void determineWinnerTie(){
+        when(p.getGoldScore()).thenReturn(8);
+        when(p1.getGoldScore()).thenReturn(8);
+        when(g.getPlayers()).thenReturn(Arrays.asList(p,p1));
+        assertEquals(Arrays.asList(p,p1),g.determineWinner());
+    }
+
+    @Test
+    void determineNoWinner(){
+        when(g.getPlayers()).thenReturn(new ArrayList<>());
+        assertEquals(new ArrayList<>(), g.determineWinner());
+    }
+
+
+    @Test
     void runTest(){
-        Game g = spy(new Game(new Board(),2));
         g.run();
         verify(g,times(1)).determineWinner();
         verify(g,times(1)).showWinner(anyList());
     }
+
 
 
 }
