@@ -11,7 +11,7 @@ public class Main {
             System.out.println("Combien voulez-vous de joueurs ?");
             nb_players = sc.nextInt();
             }while(nb_players>6  || nb_players<2);
-        new Game(new Board(),nb_players).run();
+        new Game(new Board(),6).run();
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class GameTest {
@@ -18,7 +19,7 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        g = spy(new Game(new Board(),2));
+        g = spy(new Game(new Board(),6));
         p = mock(Player.class);
         p1 = mock(Player.class);
     }
@@ -58,6 +59,16 @@ class GameTest {
         verify(g,times(1)).showWinner(anyList());
     }
 
-
+    @Test
+    void runEndOfGame(){
+        g.newGame();
+        List<Player> players = g.getPlayers();
+        int count = 0 ;
+        for (Player p: players) {
+            if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)
+                count++;
+        }
+        assertTrue(count>0);
+    }
 
 }

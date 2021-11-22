@@ -1,7 +1,5 @@
 package fr.unice.polytech.startingpoint;
 
-import java.lang.Exception.*;
-
 public class Bank {
     private final int bankLimit;
     private int currentAmount;

@@ -41,7 +41,7 @@ public class Game {
         winners.forEach(e -> System.out.println("Le Joueur "+ e.getName()+ " a gagné avec un score de " +e.getGoldScore() + " Points"));
     }
 
-    void run(){
+    List<Player> newGame(){
         boolean endOfGame = false;
         int turn=1;
         while (!endOfGame){
@@ -63,6 +63,10 @@ public class Game {
                     endOfGame=true;
             }
         }
-        showWinner(determineWinner());
+        return determineWinner();
+    }
+
+    void run(){
+        showWinner(newGame());
     }
 }
