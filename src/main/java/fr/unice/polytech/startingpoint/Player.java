@@ -1,6 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.Character;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,71 +14,83 @@ public class Player {
     private Character role;
 
 
-    Player(Board b, String name){
+    Player(Board b, String name) {
         this.name = name;
         board = b;
         gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             buildings.add(board.getPile().drawACard());
         }
-        goldScore=0;
+        goldScore = 0;
     }
 
-    Player(Board b){
+    Player(Board b) {
         this.name = "undefined";
         board = b;
         gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             buildings.add(board.getPile().drawACard());
         }
-        goldScore=0;
+        goldScore = 0;
     }
 
-    boolean build(Building b){
-        boolean buildable = b.isBuildable(getGold());
+    boolean build(Building b) {
+        boolean buildable = isBuildable(b);
         if (buildable) {
             board.getBank().refundGold(b.getCost());
             gold -= b.getCost();
             goldScore += b.getCost();
             b.build();
-            }
+        }
         return buildable;
     }
 
-    void chooseRole(){
+    boolean alreadyBuilt(Building b) {
+        for (Building tmp : getBuildings()) {
+            if (tmp.getBuilding().equals(b.getBuilding()) && tmp.getBuilt())
+                return true;
+        }
+        return false;
+    }
+
+    boolean isBuildable(Building b) {
+        return gold >= b.getCost() && !b.getBuilt() && !alreadyBuilt(b);
+    }
+
+    void chooseRole() {
         int index;
         do {
             index = new Random().nextInt(8);
-        }while (!board.getCharactersInfos(index).isAvailable());
+        } while (!board.getCharactersInfos(index).isAvailable());
         role = board.getCharactersInfos(index);
         board.getCharactersInfos(index).isTaken();
-        System.out.println("Player "+ name +" choose " + getRole().getName());
-        }
+        System.out.println("Player " + name + " choose " + getRole().getName());
+    }
 
-    void play(){
-        // chooses to draw a card because hand is empty
-        if(buildings.stream().allMatch(Building::getBuilt) || buildings.isEmpty()){
+    void play() {
+        // chooses to draw a card because there is nothing buildable
+        if (buildings.stream().allMatch(this::alreadyBuilt)) {
             buildings.add(board.getPile().drawACard());
-            System.out.println(name+" draw a Card");
+            System.out.println(name + " draw a Card");
         }
         // chooses to get 2 golds because nothing can be built
-        else{
+        else {
             gold += board.getBank().withdrawGold(2);
-            System.out.println(name+" take 2 golds");
+            System.out.println(name + " take 2 golds");
         }
         //check if anything can be built and build the first
         for (Building b : buildings) {
-             if(build(b)){
-                 break;
-             }
+            if (build(b)) {
+                break;
+            }
         }
     }
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder("Or : " + gold );
+        StringBuilder res = new StringBuilder("Or : " + gold);
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(goldScore);
         for (Building b : buildings) {
             res.append("\n\t").append(b.toString()).append(" ");
@@ -97,9 +110,12 @@ public class Player {
         return name;
     }
 
-    public Character getRole(){return role;}
-
+    public Character getRole() {
+        return role;
+    }
+    
     public ArrayList<Building> getBuildings() {
         return (ArrayList<Building>) buildings.clone();
+
     }
 }

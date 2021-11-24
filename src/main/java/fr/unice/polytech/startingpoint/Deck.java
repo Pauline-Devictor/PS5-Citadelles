@@ -8,18 +8,40 @@ public class Deck {
 
     Deck(){
         buildings = new ArrayList<>();
-        //pour l'instant on crée une pioche de carte basique
-        for(int i = 0; i < 54; i++){
-            if(i>46)
-                buildings.add(new Building(5));
-            else if(i>39)
-                buildings.add(new Building(4));
-            else if(i>25)
-                buildings.add(new Building(3));
-            else if(i>11)
-                buildings.add(new Building(2));
-            else
-                buildings.add(new Building(1));
+        buildings.add(new Building(BuildingEnum.CourDesMiracles));
+        buildings.add(new Building(BuildingEnum.Laboratoire));
+        buildings.add(new Building(BuildingEnum.Manufacture));
+        buildings.add(new Building(BuildingEnum.Observatoire));
+        buildings.add(new Building(BuildingEnum.Cimetiere));
+        buildings.add(new Building(BuildingEnum.Bibiliotheque));
+        buildings.add(new Building(BuildingEnum.EcoleDeMagie));
+        buildings.add(new Building(BuildingEnum.Universite));
+        buildings.add(new Building(BuildingEnum.Dracoport));
+        for(int i=0;i<2;i++){
+            buildings.add(new Building(BuildingEnum.Cathedrale));
+            buildings.add(new Building(BuildingEnum.Palais));
+            buildings.add(new Building(BuildingEnum.HotelDeVille));
+            buildings.add(new Building(BuildingEnum.Forteresse));
+            buildings.add(new Building(BuildingEnum.Donjon));
+        }
+        for(int i=0;i<3;i++){
+            buildings.add(new Building(BuildingEnum.Temple));
+            buildings.add(new Building(BuildingEnum.Monastere));
+            buildings.add(new Building(BuildingEnum.Echoppe));
+            buildings.add(new Building(BuildingEnum.Comptoir));
+            buildings.add(new Building(BuildingEnum.Port));
+            buildings.add(new Building(BuildingEnum.TourDeGuet));
+            buildings.add(new Building(BuildingEnum.Prison));
+            buildings.add(new Building(BuildingEnum.Caserne));
+        }
+        for(int i=0;i<4;i++){
+            buildings.add(new Building(BuildingEnum.Eglise));
+            buildings.add(new Building(BuildingEnum.Chateau));
+            buildings.add(new Building(BuildingEnum.Marche));
+        }
+        for(int i=0;i<5;i++){
+            buildings.add(new Building(BuildingEnum.Manoir));
+            buildings.add(new Building(BuildingEnum.Taverne));
         }
     }
 

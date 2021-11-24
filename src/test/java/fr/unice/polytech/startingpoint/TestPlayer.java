@@ -4,55 +4,67 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 public class TestPlayer {
     Player p;
-    Building b;
-    Building bNeg;
-    Building bFree;
-    Board board;
+    Building eglise;
+    Building caserne;
+    Building tourDeGuet;
 
     @BeforeEach
     void setUp(){
-        board = new Board();
-        p = new Player(board);
-        b = new Building(2);
-        bNeg = new Building(-2);
-        bFree = new Building(0);
+        p = new Player(new Board());
+        eglise = new Building(BuildingEnum.Eglise);
+        caserne = new Building(BuildingEnum.Caserne);
+        tourDeGuet = new Building(BuildingEnum.TourDeGuet);
     }
 
     @Test
     void buildGold(){
-
-        p.build(b);
+        p.build(eglise);
         assertEquals(2,p.getGoldScore());
     }
     @Test
     void buildBuilt(){
-
-        p.build(b);
-        assertTrue(b.getBuilt());
+        p.build(eglise);
+        assertTrue(eglise.getBuilt());
     }
 
     @Test
     void buildScore(){
-        p.build(b);
+        p.build(eglise);
         assertEquals(2,p.getGoldScore());
     }
-    @Test
-    void buildScore0(){
-        p.build(bFree);
-        assertEquals(0,p.getGoldScore());
-    }
-    @Test
-    void buildScoreNeg(){
-        p.build(bNeg);
-        assertEquals(2,p.getGoldScore());
-    }
+
     @Test
     void hasRole(){
         p.chooseRole();
         assertNotNull(p.getRole());
+    }
+
+    @Test
+    void isBuildableTestHigher(){
+        assertFalse(p.isBuildable(caserne));
+    }
+
+    @Test
+    void isBuildableTesEqual(){
+        assertTrue(p.isBuildable(eglise));
+    }
+
+    @Test
+    void isBuildableTestLower(){
+        assertTrue(p.isBuildable(tourDeGuet));
+    }
+
+    @Test
+    void notAlreadyBuilt(){
+        assertFalse(p.alreadyBuilt(tourDeGuet));
+    }
+
+    @Test
+    void preExistingBuilding(){
+        p.build(tourDeGuet);
+        assertFalse(p.isBuildable(tourDeGuet));
     }
 }

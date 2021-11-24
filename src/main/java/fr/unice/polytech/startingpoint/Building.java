@@ -1,22 +1,12 @@
 package fr.unice.polytech.startingpoint;
 
-import static java.lang.Math.abs;
-
 public class Building {
-    private final int cost;
+    private final BuildingEnum building;
     private boolean built;
 
-    Building(int cost){
-        this.cost = abs(cost);
-        built = false;
-    }
-
-    int getCost(){
-        return cost;
-    }
-
-    boolean isBuildable(int gold){
-        return gold >= cost && !built;
+    Building(BuildingEnum b) {
+        building = b;
+        built=false;
     }
 
     void setBuilt(boolean b){
@@ -33,8 +23,20 @@ public class Building {
 
     boolean getBuilt(){return built;}
 
+    int getCost(){
+        return building.getCost();
+    }
+
+    public BuildingEnum getBuilding() {
+        return building;
+    }
+
+    public boolean isBuilt() {
+        return built;
+    }
+
     @Override
-    public String toString(){
-        return "[nom], Cout : "+ cost + ", Construit : " + built;
+    public String toString() {
+        return building + ", Construit : "+ getBuilt();
     }
 }

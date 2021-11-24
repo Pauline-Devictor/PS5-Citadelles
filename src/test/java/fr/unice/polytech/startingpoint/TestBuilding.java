@@ -1,29 +1,25 @@
 package fr.unice.polytech.startingpoint;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestBuilding {
+    Building eglise;
 
+    @BeforeEach
+    void setUp(){
+        eglise = new Building(BuildingEnum.Eglise);
+    }
         @Test
     void testToString(){
-        Building b = new Building(3);
-        assertEquals("[nom], Cout : 3, Construit : false", b.toString());
+        assertEquals("Eglise, Cout : 2, Quartier : Religion, Construit : false", eglise.toString());
     }
 
-    @Test
-    void isBuildableTestHigher(){
-        assertTrue(new Building(2).isBuildable(3));
-    }
-
-    @Test
-    void isBuildableTesEqual(){
-        assertTrue(new Building(2).isBuildable(2));
-    }
-
-    @Test
-    void isBuildableTestLower(){
-        assertFalse(new Building(2).isBuildable(1));
-    }
 }

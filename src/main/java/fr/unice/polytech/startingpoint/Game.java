@@ -4,12 +4,12 @@ import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Game {
     private final Board board;
     private final List<Player> players;
 
+    //TODO : Creer un board a l'init ???
     Game(Board b, int nb_players){
         board = b;
         players = new ArrayList<>();
