@@ -10,19 +10,21 @@ public class Bank {
     }
 
     int withdrawGold(int gold){
-        if(currentAmount < Math.abs(gold)){
+        gold = Math.abs(gold);
+        if(currentAmount < gold){
             currentAmount = 0;
             return currentAmount;
         }
-        currentAmount -= Math.abs(gold);
+        currentAmount -= gold;
         return Math.abs(gold);
     }
 
     void refundGold(int gold) {
-        if(currentAmount+Math.abs(gold) > bankLimit){
-            throw new RuntimeException("The bank is richer than it should be.");
+        gold = Math.abs(gold);
+        if(currentAmount+gold > bankLimit){
+            throw new IllegalArgumentException("The bank is richer than it should be.");
         }
-        currentAmount+=Math.abs(gold);
+        currentAmount+=gold;
     }
 
     int getGold(){
