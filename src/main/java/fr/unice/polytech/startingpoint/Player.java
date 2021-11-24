@@ -12,6 +12,7 @@ public class Player {
     private final ArrayList<Building> buildings;
     private final Board board;
     private Character role;
+    private boolean crown = false;
 
 
     Player(Board b, String name) {
@@ -87,6 +88,12 @@ public class Player {
             }
         }
     }
+    void takeCrown(){
+        crown=true;
+    }
+    void leaveCrown(){
+        crown=false;
+    }
 
     @Override
     public String toString() {
@@ -117,5 +124,8 @@ public class Player {
     public ArrayList<Building> getBuildings() {
         return (ArrayList<Building>) buildings.clone();
 
+    }
+    public boolean getCrown(){
+        return crown;
     }
 }

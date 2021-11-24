@@ -8,14 +8,17 @@ import java.util.List;
 public class Game {
     private final Board board;
     private final List<Player> players;
+    private final int  nb_players;
 
     //TODO : Creer un board a l'init ???
     Game(Board b, int nb_players){
+        this.nb_players = nb_players;
         board = b;
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
             players.add(new Player(board, String.valueOf(i + 1)));
         }
+        players.get(0).takeCrown();
     }
 
     public List<Player> getPlayers() {
@@ -45,13 +48,20 @@ public class Game {
         boolean endOfGame = false;
         int turn=1;
         while (!endOfGame){
-            for(Player p:players){
+            List<Player> roleOrder = getOrderPlayer();
+
+            for (Player p:roleOrder) {
                 p.chooseRole();
                 p.getRole().setPlayer(p);
             }
             for(Character c: board.getCharacters()){
-                if (c.getPlayer() != null)
+                if (c.getPlayer() != null){
                     c.getPlayer().play();
+                    //crown -> selection des roles (le dernier roi la recupere)
+                    if (c.getPlayer().getRole().getName().equals("King")){
+                        clearCrown();
+                        c.getPlayer().takeCrown();}
+                }
             }
 
             System.out.println("\nTour " + (turn) + " :\n" + board.showBoard(players) );
@@ -66,6 +76,26 @@ public class Game {
         return determineWinner();
     }
 
+    private List<Player> getOrderPlayer() {
+        int index = 0;
+        List<Player> alternateList = new ArrayList<>();
+        for (int j=0;j<nb_players;j++){
+            if (players.get(j).getCrown()){index =j;}
+        }
+        for (int i=index;i<nb_players;i++){
+         alternateList.add(players.get(i));
+        }
+        for (int i=0;i<index;i++){
+            alternateList.add(players.get(i));
+        }
+        return alternateList;
+    }
+
+    void clearCrown(){
+        for (Player p : players){
+            p.leaveCrown();
+        }
+    }
     void run(){
         showWinner(newGame());
     }
