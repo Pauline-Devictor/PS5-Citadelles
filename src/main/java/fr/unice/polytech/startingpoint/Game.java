@@ -76,7 +76,7 @@ public class Game {
         return determineWinner();
     }
 
-    private List<Player> getOrderPlayer() {
+    List<Player> getOrderPlayer() {
         int index = 0;
         List<Player> alternateList = new ArrayList<>();
         for (int j=0;j<nb_players;j++){

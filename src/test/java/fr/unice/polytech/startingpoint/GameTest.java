@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class GameTest {
@@ -22,6 +21,7 @@ class GameTest {
         g = spy(new Game(new Board(),6));
         p = mock(Player.class);
         p1 = mock(Player.class);
+        p1.takeCrown();
     }
 
     @AfterEach
@@ -70,5 +70,9 @@ class GameTest {
         }
         assertTrue(count>0);
     }
-
+    @Test
+    void clearCrown(){
+        g.clearCrown();
+        assertFalse(p1.getCrown());
+    }
 }
