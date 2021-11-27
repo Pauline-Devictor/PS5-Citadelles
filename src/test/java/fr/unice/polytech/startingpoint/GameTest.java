@@ -72,7 +72,7 @@ class GameTest {
     }
     @Test
     void clearCrown(){
-        g.clearCrown();
+        g.resetPlayer();
         assertFalse(p1.getCrown());
     }
 }

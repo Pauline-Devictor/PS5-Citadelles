@@ -16,6 +16,7 @@ public class Player {
     private final Board board;
     private Character role;
     private boolean crown = false;
+    private int nbBuildable=1;
 
 
     Player(Board b, String name) {
@@ -77,6 +78,10 @@ public class Player {
         boolean draw = buildings.stream().allMatch(this::alreadyBuilt);
         Building checkBuilding = null;
         Building checkDraw=null;
+        if (getRole().gotMurdered()){
+            System.out.println(getName() + " has been killed. Turn is skipped.");
+        }
+        else{
         // chooses to draw a card because there is nothing buildable
         if (draw){
             checkDraw=board.getPile().drawACard();
@@ -85,11 +90,16 @@ public class Player {
         // chooses to get 2 golds because nothing can be built
         else
             gold += board.getBank().withdrawGold(2);
+        }
+        getRole().usePower();
         //check if anything can be built and build the first
         for (Building b : buildings) {
             if (build(b)) {
-                checkBuilding = b;
+                nbBuildable-=1;
+                if (nbBuildable==0){
                 break;
+                checkBuilding = b;
+            }
             }
         }
         showPlay(goldSave, checkDraw, checkBuilding);
@@ -150,5 +160,15 @@ public class Player {
 
     public boolean getCrown() {
         return crown;
+    }
+
+    public void setNbBuildable(int number) {
+        nbBuildable = number;
+    }
+
+    public Character chooseVictim() {
+        Random random = new Random();
+        int victim = random.nextInt(7)+1;
+        return board.getCharacters().get(victim);
     }
 }

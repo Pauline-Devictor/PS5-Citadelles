@@ -65,7 +65,7 @@ public class Game {
                     c.getPlayer().play();
                     //crown -> selection des roles (le dernier roi la recupere)
                     if (c.getPlayer().getRole().getName().equals("King")){
-                        clearCrown();
+                        resetPlayer();
                         c.getPlayer().takeCrown();}
                 }
             }
@@ -94,9 +94,10 @@ public class Game {
         return alternateList;
     }
 
-    void clearCrown(){
+    void resetPlayer(){
         for (Player p : players){
             p.leaveCrown();
+            p.setNbBuildable(1);
         }
     }
     void run(){

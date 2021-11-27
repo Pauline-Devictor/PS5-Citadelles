@@ -43,8 +43,7 @@ public class Board {
     //Libere tous les roles et vide la liste des roles pris
     void setAllFree() {
         for (Character character : characters) {
-            character.setFree();
-            character.playerNull();
+            character.resetRole();
         }
     }
 
