@@ -27,7 +27,7 @@ public class Building {
         return building.getCost();
     }
 
-    BuildingEnum getBuilding() {
+    public BuildingEnum getBuilding() {
         return building;
     }
 

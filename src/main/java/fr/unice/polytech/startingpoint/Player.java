@@ -17,6 +17,7 @@ public class Player {
     private Character role;
     private boolean crown = false;
     private int nbBuildable=1;
+    private int taxes;
 
 
     Player(Board b, String name) {
@@ -28,6 +29,7 @@ public class Player {
             buildings.add(board.getPile().drawACard());
         }
         goldScore = 0;
+        taxes=0;
     }
 
     Player(Board b) {
@@ -88,9 +90,11 @@ public class Player {
                 buildings.add(checkDraw);
             }
             // chooses to get 2 golds because nothing can be built
-            else
+            else {
                 gold += board.getBank().withdrawGold(2);
+            }
             getRole().usePower();
+            gold += board.getBank().withdrawGold(taxes);
             //build firsts buildings available
             for (Building b : buildings) {
                 if (build(b)) {
@@ -174,5 +178,8 @@ public class Player {
         Random random = new Random();
         int victim = random.nextInt(7)+1;
         return board.getCharacters().get(victim);
+    }
+    public void setTaxes(int number){
+        taxes=number;
     }
 }

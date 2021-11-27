@@ -98,6 +98,7 @@ public class Game {
         for (Player p : players){
             p.leaveCrown();
             p.setNbBuildable(1);
+            p.setTaxes(0);
         }
     }
     void run(){
