@@ -76,46 +76,51 @@ public class Player {
     void play() {
         int goldSave = getGold();
         boolean draw = buildings.stream().allMatch(this::alreadyBuilt);
-        Building checkBuilding = null;
+        ArrayList<Building> checkBuilding = new ArrayList<>();
         Building checkDraw=null;
         if (getRole().gotMurdered()){
-            System.out.println(getName() + " has been killed. Turn is skipped.");
+            System.out.println(ANSI_ITALIC+getName() + " has been killed. Turn is skipped."+ANSI_RESET);
         }
-        else{
-        // chooses to draw a card because there is nothing buildable
-        if (draw){
-            checkDraw=board.getPile().drawACard();
-            buildings.add(checkDraw);
-        }
-        // chooses to get 2 golds because nothing can be built
-        else
-            gold += board.getBank().withdrawGold(2);
-        }
-        getRole().usePower();
-        //check if anything can be built and build the first
-        for (Building b : buildings) {
-            if (build(b)) {
-                nbBuildable-=1;
-                if (nbBuildable==0){
-                break;
-                checkBuilding = b;
+        else {
+            // chooses to draw a card because there is nothing buildable
+            if (draw) {
+                checkDraw = board.getPile().drawACard();
+                buildings.add(checkDraw);
             }
+            // chooses to get 2 golds because nothing can be built
+            else
+                gold += board.getBank().withdrawGold(2);
+            getRole().usePower();
+            //build firsts buildings available
+            for (Building b : buildings) {
+                if (build(b)) {
+                    nbBuildable -= 1;
+                    checkBuilding.add(b);
+                    if (nbBuildable == 0) {
+                        break;
+                    }
+                }
             }
+            showPlay(goldSave, checkDraw, checkBuilding);
         }
-        showPlay(goldSave, checkDraw, checkBuilding);
+
     }
 
-    private void showPlay(int goldSave, Building checkDraw, Building checkBuilding) {
+    private void showPlay(int goldSave, Building checkDraw, ArrayList<Building> checkBuilding) {
         int showGold = (getGold() - goldSave);
         String signe=ANSI_RED+"";
         if(showGold>0)
             signe=ANSI_GREEN+"+";
-        String res = ANSI_CYAN+name+ANSI_RESET + " (" + ANSI_ITALIC +role+ANSI_RESET + ") possede " + ANSI_YELLOW+getGold()+ANSI_RESET
-                + "("+signe +showGold +ANSI_RESET + ") pieces d'or";
+        StringBuilder res = new StringBuilder(ANSI_CYAN + name + ANSI_RESET + " (" + ANSI_ITALIC + role + ANSI_RESET + ") possede " + ANSI_YELLOW + getGold() + ANSI_RESET
+                + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
         if (!isNull(checkDraw))
-            res += ", a pioché "+ANSI_UNDERLINE+checkDraw.getName()+ANSI_RESET;
-        if (!isNull(checkBuilding))
-            res += " et a construit " +ANSI_BOLD+checkBuilding.getName()+ANSI_RESET;
+            res.append(", a pioché " + ANSI_UNDERLINE).append(checkDraw.getName()).append(ANSI_RESET);
+        if (checkBuilding.size()>0){
+            res.append(" et a construit ");
+            for (Building e : checkBuilding) {
+                res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
+            }
+        }
         System.out.println(res);
     }
 
@@ -155,7 +160,6 @@ public class Player {
 
     public ArrayList<Building> getBuildings() {
         return (ArrayList<Building>) buildings.clone();
-
     }
 
     public boolean getCrown() {

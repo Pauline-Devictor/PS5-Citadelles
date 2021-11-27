@@ -53,7 +53,7 @@ public class Game {
         boolean endOfGame = false;
         int tour=0;
         while (!endOfGame){
-            System.out.println(ANSI_RED_BACKGROUND+"Tour "+(++tour) +":"+ANSI_RESET);
+            System.out.println(ANSI_RED_BACKGROUND+ANSI_BLACK+"Tour "+(++tour) +":"+ANSI_RESET);
             List<Player> roleOrder = getOrderPlayer();
 
             for (Player p:roleOrder) {
