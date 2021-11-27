@@ -27,12 +27,16 @@ public class Building {
         return building.getCost();
     }
 
-    public BuildingEnum getBuilding() {
+    BuildingEnum getBuilding() {
         return building;
     }
 
-    public boolean isBuilt() {
+    boolean isBuilt() {
         return built;
+    }
+
+    String getName(){
+        return building.getName();
     }
 
     @Override

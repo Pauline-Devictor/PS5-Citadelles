@@ -5,15 +5,16 @@ import fr.unice.polytech.startingpoint.characters.Character;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.unice.polytech.startingpoint.Main.*;
+
 public class Game {
     private final Board board;
     private final List<Player> players;
     private final int  nb_players;
 
-    //TODO : Creer un board a l'init ???
-    Game(Board b, int nb_players){
+    Game(int nb_players){
         this.nb_players = nb_players;
-        board = b;
+        board = new Board();
         players = new ArrayList<>();
         for(int i=0;i<nb_players;i++){
             players.add(new Player(board, String.valueOf(i + 1)));
@@ -41,13 +42,18 @@ public class Game {
     }
 
     void showWinner(List<Player> winners ){
-        winners.forEach(e -> System.out.println("Le Joueur "+ e.getName()+ " a gagné avec un score de " +e.getGoldScore() + " Points"));
+        if(winners.size()>1)
+            System.out.println(ANSI_BLUE_BACKGROUND+ANSI_BLACK+"Les gagnants sont :"+ANSI_RESET);
+        else
+            System.out.println(ANSI_BLUE_BACKGROUND+ANSI_BLACK+"Le gagnant est :"+ANSI_RESET);
+        winners.forEach(System.out::println);
     }
 
     List<Player> newGame(){
         boolean endOfGame = false;
-        int turn=1;
+        int tour=0;
         while (!endOfGame){
+            System.out.println(ANSI_RED_BACKGROUND+"Tour "+(++tour) +":"+ANSI_RESET);
             List<Player> roleOrder = getOrderPlayer();
 
             for (Player p:roleOrder) {
@@ -63,10 +69,7 @@ public class Game {
                         c.getPlayer().takeCrown();}
                 }
             }
-
-            System.out.println("\nTour " + (turn) + " :\n" + board.showBoard(players) );
             board.setAllFree();
-            turn++;
 
             for(Player p : players){
                 if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)

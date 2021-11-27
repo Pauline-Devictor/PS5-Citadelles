@@ -16,4 +16,9 @@ public abstract class Character {
     public void setFree(){available=true;}//liberation de la carte
     public void setPlayer(Player p){player =p;}
     public void playerNull(){player =null;}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

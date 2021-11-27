@@ -18,7 +18,7 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        g = spy(new Game(new Board(),6));
+        g = spy(new Game(6));
         p = mock(Player.class);
         p1 = mock(Player.class);
         p1.takeCrown();

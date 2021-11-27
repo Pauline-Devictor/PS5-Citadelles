@@ -5,6 +5,9 @@ import fr.unice.polytech.startingpoint.characters.Character;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static fr.unice.polytech.startingpoint.Main.*;
+import static java.util.Objects.isNull;
+
 public class Player {
     private final String name;
     private int gold;
@@ -67,37 +70,56 @@ public class Player {
         } while (!board.getCharactersInfos(index).isAvailable());
         role = board.getCharactersInfos(index);
         board.getCharactersInfos(index).isTaken();
-        System.out.println("Player " + name + " choose " + getRole().getName());
     }
 
     void play() {
+        int goldSave = getGold();
+        boolean draw = buildings.stream().allMatch(this::alreadyBuilt);
+        Building checkBuilding = null;
+        Building checkDraw=null;
         // chooses to draw a card because there is nothing buildable
-        if (buildings.stream().allMatch(this::alreadyBuilt)) {
-            buildings.add(board.getPile().drawACard());
-            System.out.println(name + " draw a Card");
+        if (draw){
+            checkDraw=board.getPile().drawACard();
+            buildings.add(checkDraw);
         }
         // chooses to get 2 golds because nothing can be built
-        else {
+        else
             gold += board.getBank().withdrawGold(2);
-            System.out.println(name + " take 2 golds");
-        }
         //check if anything can be built and build the first
         for (Building b : buildings) {
             if (build(b)) {
+                checkBuilding = b;
                 break;
             }
         }
+        showPlay(goldSave, checkDraw, checkBuilding);
     }
-    void takeCrown(){
-        crown=true;
+
+    private void showPlay(int goldSave, Building checkDraw, Building checkBuilding) {
+        int showGold = (getGold() - goldSave);
+        String signe=ANSI_RED+"";
+        if(showGold>0)
+            signe=ANSI_GREEN+"+";
+        String res = ANSI_CYAN+name+ANSI_RESET + " (" + ANSI_ITALIC +role+ANSI_RESET + ") possede " + ANSI_YELLOW+getGold()+ANSI_RESET
+                + "("+signe +showGold +ANSI_RESET + ") pieces d'or";
+        if (!isNull(checkDraw))
+            res += ", a pioché "+ANSI_UNDERLINE+checkDraw.getName()+ANSI_RESET;
+        if (!isNull(checkBuilding))
+            res += " et a construit " +ANSI_BOLD+checkBuilding.getName()+ANSI_RESET;
+        System.out.println(res);
     }
-    void leaveCrown(){
-        crown=false;
+
+    void takeCrown() {
+        crown = true;
+    }
+
+    void leaveCrown() {
+        crown = false;
     }
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder("Or : " + gold);
+        StringBuilder res = new StringBuilder(ANSI_PURPLE + name + ANSI_RESET + " Or : " + gold);
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(goldScore);
         for (Building b : buildings) {
             res.append("\n\t").append(b.toString()).append(" ");
@@ -120,12 +142,13 @@ public class Player {
     public Character getRole() {
         return role;
     }
-    
+
     public ArrayList<Building> getBuildings() {
         return (ArrayList<Building>) buildings.clone();
 
     }
-    public boolean getCrown(){
+
+    public boolean getCrown() {
         return crown;
     }
 }
