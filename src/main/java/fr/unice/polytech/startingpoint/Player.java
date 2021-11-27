@@ -13,7 +13,7 @@ public class Player {
     private final Board board;
     private Character role;
     private boolean crown = false;
-    private int nbBuildable =1;
+    private int nbBuildable=1;
 
 
     Player(Board b, String name) {
@@ -72,16 +72,15 @@ public class Player {
     }
 
     void play() {
-        // chooses to draw a card because there is nothing buildable
-        if(getRole().gotMurdered()){
-            System.out.println(getName() +" has been killed. His turn is skipped");
+        if (getRole().gotMurdered()){
+            System.out.println(getName() + " has been killed. Turn is skipped.");
         }
         else{
+        // chooses to draw a card because there is nothing buildable
         if (buildings.stream().allMatch(this::alreadyBuilt)) {
             buildings.add(board.getPile().drawACard());
             System.out.println(name + " draw a Card");
         }
-
         // chooses to get 2 golds because nothing can be built
         else {
             gold += board.getBank().withdrawGold(2);
@@ -92,27 +91,16 @@ public class Player {
         for (Building b : buildings) {
             if (build(b)) {
                 nbBuildable-=1;
-                if (nbBuildable == 0){
-                break;
-                }
+                if (nbBuildable==0){break;}
             }
-        }}
+        }
+        }
     }
     void takeCrown(){
         crown=true;
     }
     void leaveCrown(){
         crown=false;
-    }
-    //Choose victim if assassin
-    public Character chooseVictim(){
-        Random random = new Random();
-        //random.nextInt return integer between 0,6 and we want between 1,7 so rdm.nextInt +1
-        int i = random.nextInt(7)+1;
-        return board.getCharacters().get(i);
-    }
-    public void setNbBuildable(int number){
-        this.nbBuildable=number;
     }
 
     @Override
@@ -140,12 +128,22 @@ public class Player {
     public Character getRole() {
         return role;
     }
-    
+
     public ArrayList<Building> getBuildings() {
         return (ArrayList<Building>) buildings.clone();
 
     }
     public boolean getCrown(){
         return crown;
+    }
+
+    public void setNbBuildable(int number) {
+        nbBuildable = number;
+    }
+
+    public Character chooseVictim() {
+        Random random = new Random();
+        int victim = random.nextInt(7)+1;
+        return board.getCharacters().get(victim);
     }
 }
