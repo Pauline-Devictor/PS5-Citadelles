@@ -68,7 +68,7 @@ public class TestCharacter {
         assertFalse(king.isAvailable());}
     @Test
     void is_free(){
-        condottiere.setFree();
+        condottiere.resetRole();
         assertTrue(condottiere.isAvailable());
     }
     @Test
@@ -83,7 +83,7 @@ public class TestCharacter {
     @Test
     void setPlayerNull(){
         assassin.setPlayer(p2);
-        assassin.playerNull();
+        assassin.resetRole();
         assertNull(assassin.getPlayer());
     }
 }
