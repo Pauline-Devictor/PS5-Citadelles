@@ -16,11 +16,12 @@ public class Player {
     private final Board board;
     private Character role;
     private boolean crown = false;
-    private int nbBuildable=1;
+    private int nbBuildable = 1;
     private int taxes;
+    private final Strategies strat;
 
 
-    Player(Board b, String name) {
+    Player(Board b, String name, Strategies strat) {
         this.name = name;
         board = b;
         gold = board.getBank().withdrawGold(2);
@@ -29,7 +30,8 @@ public class Player {
             buildings.add(board.getPile().drawACard());
         }
         goldScore = 0;
-        taxes=0;
+        taxes = 0;
+        this.strat = strat;
     }
 
     Player(Board b) {
@@ -41,9 +43,10 @@ public class Player {
             buildings.add(board.getPile().drawACard());
         }
         goldScore = 0;
+        strat = Strategies.balanced;
     }
 
-    boolean build(Building b) {
+    void build(Building b) {
         boolean buildable = isBuildable(b);
         if (buildable) {
             board.getBank().refundGold(b.getCost());
@@ -51,7 +54,6 @@ public class Player {
             goldScore += b.getCost();
             b.build();
         }
-        return buildable;
     }
 
     boolean alreadyBuilt(Building b) {
@@ -79,53 +81,83 @@ public class Player {
         int goldSave = getGold();
         boolean draw = buildings.stream().allMatch(this::alreadyBuilt);
         ArrayList<Building> checkBuilding = new ArrayList<>();
-        Building checkDraw=null;
-        if (getRole().gotMurdered()){
-            System.out.println(ANSI_ITALIC+getName() + " has been killed. Turn is skipped."+ANSI_RESET);
-        }
-        else {
+        Building checkDraw = null;
+        if (getRole().gotMurdered()) {
+            System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
+        } else {
             // chooses to draw a card because there is nothing buildable
-            if (draw) {
-                checkDraw = board.getPile().drawACard();
-                buildings.add(checkDraw);
-            }
+            if (draw)
+                checkDraw = drawDecision();
             // chooses to get 2 golds because nothing can be built
-            else {
-                gold += board.getBank().withdrawGold(2);
+            else{
+                if (board.getBank().getGold()>0){
+                    gold += board.getBank().withdrawGold(2);
+                }else {
+                    checkDraw = drawDecision();
+                }
             }
             getRole().usePower();
             gold += board.getBank().withdrawGold(taxes);
             //build firsts buildings available
-            for (Building b : buildings) {
-                if (build(b)) {
-                    nbBuildable -= 1;
-                    checkBuilding.add(b);
-                    if (nbBuildable == 0) {
-                        break;
-                    }
-                }
-            }
+            buildDecision(checkBuilding);
             showPlay(goldSave, checkDraw, checkBuilding);
         }
 
     }
 
+    private Building drawDecision() {
+        Building checkDraw;
+        checkDraw = board.getPile().drawACard();
+        if (!isNull(checkDraw))
+            buildings.add(checkDraw);
+        return checkDraw;
+    }
+
+    private void buildDecision(ArrayList<Building> checkBuilding) {
+        int costMin = 0;
+        int costMax = 6;
+        if(strat==Strategies.lowGold){
+            costMax=4;
+            System.out.println("Cost Max");
+        }
+       /* if(strat==Strategies.highGold){
+            costMin=3;
+            System.out.println("Cost Max");
+        }*/
+        switch (strat) {
+            case lowGold -> costMax = 3;
+            case highGold -> costMin = 3;
+        }
+        for (Building b : buildings) {
+            if (isBuildable(b) && nbBuildable > 0) {
+                if (b.getCost() <= costMax && b.getCost() >= costMin) {
+                    build(b);
+                    nbBuildable -= 1;
+                    checkBuilding.add(b);
+                }
+            }
+        }
+    }
+
     private void showPlay(int goldSave, Building checkDraw, ArrayList<Building> checkBuilding) {
         int showGold = (getGold() - goldSave);
-        String signe=ANSI_RED+"";
-        if(showGold>0)
-            signe=ANSI_GREEN+"+";
-        StringBuilder res = new StringBuilder(ANSI_CYAN + name + ANSI_RESET + " (" + ANSI_ITALIC + role + ANSI_RESET + ") possede " + ANSI_YELLOW + getGold() + ANSI_RESET
+        String signe = ANSI_RED + "";
+        if (showGold > 0)
+            signe = ANSI_GREEN + "+";
+        StringBuilder res = new StringBuilder(ANSI_CYAN + name + ANSI_RESET + " (" + ANSI_ITALIC + strat + ", " + role + ANSI_RESET + ") possede " + ANSI_YELLOW + getGold() + ANSI_RESET
                 + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
         if (!isNull(checkDraw))
             res.append(", a pioché " + ANSI_UNDERLINE).append(checkDraw.getName()).append(ANSI_RESET);
-        if (checkBuilding.size()>0){
+        if (checkBuilding.size() > 0) {
             res.append(" et a construit ");
             for (Building e : checkBuilding) {
                 res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
             }
         }
+        if(taxes>0)
+            res.append(", a recupere ").append(taxes).append(" d'impots");
         System.out.println(res);
+        System.out.println(this);
     }
 
     void takeCrown() {
@@ -138,8 +170,10 @@ public class Player {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(ANSI_PURPLE + name + ANSI_RESET + " Or : " + gold);
-        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(goldScore);
+        StringBuilder res = new StringBuilder(ANSI_PURPLE + name + ANSI_RESET +
+                " avec la stratégie " + ANSI_RED + strat + ANSI_RESET +
+                " et " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
+        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_CYAN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
         for (Building b : buildings) {
             res.append("\n\t").append(b.toString()).append(" ");
         }
@@ -176,10 +210,11 @@ public class Player {
 
     public Character chooseVictim() {
         Random random = new Random();
-        int victim = random.nextInt(7)+1;
+        int victim = random.nextInt(7) + 1;
         return board.getCharacters().get(victim);
     }
-    public void setTaxes(int number){
-        taxes=number;
+
+    public void setTaxes(int number) {
+        taxes = number;
     }
 }

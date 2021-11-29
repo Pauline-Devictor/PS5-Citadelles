@@ -1,5 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {

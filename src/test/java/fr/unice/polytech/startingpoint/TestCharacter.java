@@ -23,8 +23,8 @@ public class TestCharacter {
     @BeforeEach
     void setUp(){
         b = new Board();
-        p1 = new Player(b,"Bob");
-        p2 = new Player(b,"Billy");
+        p1 = new Player(b);
+        p2 = new Player(b);
         p2.chooseRole();
         condottiere.isTaken();
     }

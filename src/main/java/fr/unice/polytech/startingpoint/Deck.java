@@ -1,6 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 public class Deck {
@@ -46,13 +47,13 @@ public class Deck {
     }
 
      Building drawACard(){
-        if (buildings.isEmpty()){
-            //pour l'instant
-            return null;
+        if (buildings.size()>0) {
+            int index = new Random().nextInt(buildings.size());
+            Building b = buildings.get(index);
+            buildings.remove(index);
+            return (b);
         }
-        int index = new Random().nextInt(buildings.size()-1);
-        Building b = buildings.get(index);
-        buildings.remove(index);
-        return b;
+        return null;
+        //return Optional.empty();
     }
 }

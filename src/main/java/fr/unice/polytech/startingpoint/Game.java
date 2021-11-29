@@ -4,6 +4,7 @@ import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static fr.unice.polytech.startingpoint.Main.*;
 
@@ -16,8 +17,9 @@ public class Game {
         this.nb_players = nb_players;
         board = new Board();
         players = new ArrayList<>();
-        for(int i=0;i<nb_players;i++){
-            players.add(new Player(board, String.valueOf(i + 1)));
+        Random r = new Random();
+        for(int i=1;i<=nb_players;i++){
+            players.add(new Player(board, String.valueOf(i),Strategies.pickAStrat(r.nextInt(2))));
         }
         players.get(0).takeCrown();
     }
