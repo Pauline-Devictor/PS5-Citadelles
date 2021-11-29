@@ -56,7 +56,7 @@ public class Game {
         int turn=0;
         while (!endOfGame){
             System.out.println(ANSI_RED_BACKGROUND+ANSI_BLACK+"Tour "+(++turn) +":"+ANSI_RESET +
-                    "Cartes : "+ board.getPile().isEmpty() +"Gold : "+board.getBank().getGold());
+                    " Cartes Restantes : "+ board.getPile().numberOfCards() +" Or Dans la Banque : "+board.getBank().getGold());
             List<Player> roleOrder = getOrderPlayer();
 
             for (Player p:roleOrder) {

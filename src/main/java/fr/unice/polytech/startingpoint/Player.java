@@ -90,31 +90,66 @@ public class Player {
             // chooses to draw a card because there is nothing buildable
             if (draw)
                 checkDraw = drawDecision();
-            // chooses to get 2 golds because nothing can be built
-            else{
-                if (board.getBank().getGold()>0){
+                // chooses to get 2 golds because nothing can be built
+            else {
+                if (board.getBank().getGold() > 0) {
                     gold += board.getBank().withdrawGold(2);
-                }else {
+                } else {
                     checkDraw = drawDecision();
                 }
             }
             getRole().usePower();
-            int goldTaxes=getGold();
+            int goldTaxes = getGold();
             gold += board.getBank().withdrawGold(taxes);
-            goldTaxes=getGold()-goldTaxes;
+            goldTaxes = getGold() - goldTaxes;
             //build firsts buildings available
             buildDecision(checkBuilding);
-            showPlay(goldDraw,goldTaxes, checkDraw, checkBuilding);
+            showPlay(goldDraw, goldTaxes, checkDraw, checkBuilding);
         }
 
     }
 
-    private Building drawDecision() {
+    /*private Building drawDecision() {
         Building checkDraw;
         checkDraw = board.getPile().drawACard();
         if (!isNull(checkDraw))
             buildings.add(checkDraw);
         return checkDraw;
+    }*/
+
+    private Building drawDecision() {
+        Building b1 = board.getPile().drawACard();
+        if (!isNull(b1)) {
+            Building b2 = board.getPile().drawACard();
+            if (isNull(b2)){
+                buildings.add(b1);
+                return b1;
+            }
+            else{
+                Building b = chooseBuilding(b1,b2);
+                buildings.add(b);
+                return b;
+            }
+        }
+        return b1;
+    }
+
+    /**
+     * Choose the best building according to the strategie of the player
+      * @param b1 First Building to compare
+     * @param b2 Second Building to compare
+     */
+    private Building chooseBuilding(Building b1,Building b2) {
+        //TODO 1/2 Parties infinis, a verif aux tests
+        if (buildings.contains(b1))
+            return b2;
+        if(buildings.contains(b2))
+            return b1;
+        return switch (strat){
+            case lowGold -> b1.getCost()>b2.getCost() ? b1 : b2;
+            case highGold -> b1.getCost()<b2.getCost() ? b1 : b2;
+            default -> b1;
+        };
     }
 
     private void buildDecision(ArrayList<Building> checkBuilding) {
@@ -127,8 +162,8 @@ public class Player {
         for (Building b : buildings) {
             if (isBuildable(b) && nbBuildable > 0) {
                 //TODO Modif Conditions
-                if (    (b.getCost() <= costMax && b.getCost() >= costMin)
-                        || (board.getPile().isEmpty() && board.getBank().getGold()==0)) {
+                if ((b.getCost() <= costMax && b.getCost() >= costMin)
+                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
                     build(b);
                     nbBuildable -= 1;
                     checkBuilding.add(b);
@@ -137,7 +172,7 @@ public class Player {
         }
     }
 
-    private void showPlay(int goldDraw,int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
+    private void showPlay(int goldDraw, int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
         int showGold = (getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
@@ -152,7 +187,7 @@ public class Player {
                 res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
             }
         }
-        if(goldCollect>0)
+        if (goldCollect > 0)
             res.append(" et a recupere ").append(goldCollect).append(" pieces des impôts");
         System.out.println(res);
     }

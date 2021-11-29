@@ -59,4 +59,8 @@ public class Deck {
     boolean isEmpty(){
         return buildings.size()<=0;
     }
+
+    int numberOfCards() {
+        return buildings.size();
+    }
 }
