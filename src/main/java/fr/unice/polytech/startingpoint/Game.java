@@ -53,9 +53,10 @@ public class Game {
 
     List<Player> newGame(){
         boolean endOfGame = false;
-        int tour=0;
+        int turn=0;
         while (!endOfGame){
-            System.out.println(ANSI_RED_BACKGROUND+ANSI_BLACK+"Tour "+(++tour) +":"+ANSI_RESET);
+            System.out.println(ANSI_RED_BACKGROUND+ANSI_BLACK+"Tour "+(++turn) +":"+ANSI_RESET +
+                    "Cartes : "+ board.getPile().isEmpty() +"Gold : "+board.getBank().getGold());
             List<Player> roleOrder = getOrderPlayer();
 
             for (Player p:roleOrder) {
@@ -73,8 +74,9 @@ public class Game {
             }
             board.setAllFree();
 
+            //TODO Corriger Game Freeze
             for(Player p : players){
-                if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)
+                if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8 || turn>50)
                     endOfGame=true;
             }
         }

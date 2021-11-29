@@ -78,13 +78,15 @@ public class Player {
     }
 
     void play() {
-        int goldSave = getGold();
-        boolean draw = buildings.stream().allMatch(this::alreadyBuilt);
+        int goldDraw = getGold();
+        boolean draw = !board.getPile().isEmpty() && buildings.stream().allMatch(this::alreadyBuilt);
         ArrayList<Building> checkBuilding = new ArrayList<>();
         Building checkDraw = null;
         if (getRole().gotMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
         } else {
+            //TODO Code Propre ?
+
             // chooses to draw a card because there is nothing buildable
             if (draw)
                 checkDraw = drawDecision();
@@ -97,10 +99,12 @@ public class Player {
                 }
             }
             getRole().usePower();
+            int goldTaxes=getGold();
             gold += board.getBank().withdrawGold(taxes);
+            goldTaxes=getGold()-goldTaxes;
             //build firsts buildings available
             buildDecision(checkBuilding);
-            showPlay(goldSave, checkDraw, checkBuilding);
+            showPlay(goldDraw,goldTaxes, checkDraw, checkBuilding);
         }
 
     }
@@ -116,21 +120,15 @@ public class Player {
     private void buildDecision(ArrayList<Building> checkBuilding) {
         int costMin = 0;
         int costMax = 6;
-        if(strat==Strategies.lowGold){
-            costMax=4;
-            System.out.println("Cost Max");
-        }
-       /* if(strat==Strategies.highGold){
-            costMin=3;
-            System.out.println("Cost Max");
-        }*/
         switch (strat) {
             case lowGold -> costMax = 3;
             case highGold -> costMin = 3;
         }
         for (Building b : buildings) {
             if (isBuildable(b) && nbBuildable > 0) {
-                if (b.getCost() <= costMax && b.getCost() >= costMin) {
+                //TODO Modif Conditions
+                if (    (b.getCost() <= costMax && b.getCost() >= costMin)
+                        || (board.getPile().isEmpty() && board.getBank().getGold()==0)) {
                     build(b);
                     nbBuildable -= 1;
                     checkBuilding.add(b);
@@ -139,8 +137,8 @@ public class Player {
         }
     }
 
-    private void showPlay(int goldSave, Building checkDraw, ArrayList<Building> checkBuilding) {
-        int showGold = (getGold() - goldSave);
+    private void showPlay(int goldDraw,int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
+        int showGold = (getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
             signe = ANSI_GREEN + "+";
@@ -154,10 +152,9 @@ public class Player {
                 res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
             }
         }
-        if(taxes>0)
-            res.append(", a recupere ").append(taxes).append(" d'impots");
+        if(goldCollect>0)
+            res.append(" et a recupere ").append(goldCollect).append(" pieces des impôts");
         System.out.println(res);
-        System.out.println(this);
     }
 
     void takeCrown() {

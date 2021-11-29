@@ -54,6 +54,9 @@ public class Deck {
             return (b);
         }
         return null;
-        //return Optional.empty();
+    }
+
+    boolean isEmpty(){
+        return buildings.size()<=0;
     }
 }

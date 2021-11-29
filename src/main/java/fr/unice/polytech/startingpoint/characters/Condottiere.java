@@ -12,7 +12,7 @@ public class Condottiere extends Character{
         int taxes=0;
         for (Building b:getPlayer().getBuildings()) {
             if (b.getBuilding().getDistrict() == District.Military){
-                taxes+=1;
+                taxes++;
             }
             getPlayer().setTaxes(taxes);
         }

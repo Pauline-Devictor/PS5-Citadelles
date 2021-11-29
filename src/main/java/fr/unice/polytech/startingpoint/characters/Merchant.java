@@ -12,7 +12,7 @@ public class Merchant extends Character{
         int taxes=0;
         for (Building b:getPlayer().getBuildings()) {
             if (b.getBuilding().getDistrict() == District.Commercial){
-                taxes+=1;
+                taxes++;
             }
             getPlayer().setTaxes(taxes);
         }
