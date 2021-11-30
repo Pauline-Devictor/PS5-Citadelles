@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPlayer {
     Player p;
+    Player pLow;
+    Player pHigh;
     Building eglise;
     Building caserne;
     Building tourDeGuet;
@@ -14,6 +16,8 @@ public class TestPlayer {
     @BeforeEach
     void setUp(){
         p = new Player(new Board());
+        pLow = new Player(new Board()," ",Strategies.lowGold);
+        pHigh = new Player(new Board(),"",Strategies.highGold);
         eglise = new Building(BuildingEnum.Eglise);
         caserne = new Building(BuildingEnum.Caserne);
         tourDeGuet = new Building(BuildingEnum.TourDeGuet);
@@ -67,4 +71,23 @@ public class TestPlayer {
         p.build(tourDeGuet);
         assertFalse(p.isBuildable(tourDeGuet));
     }
+    @Test
+    void chooseBuildingLow(){
+        assertEquals(eglise,p.chooseBuilding(eglise,caserne));
+
+    }
+    @Test
+    void chooseBuildingHigh(){
+        assertEquals(caserne,pHigh.chooseBuilding(eglise,caserne));
+    }
+    @Test
+    void chooseBuildingNull1(){
+        assertEquals(eglise,p.chooseBuilding(eglise,null));
+    }
+    @Test
+    void chooseBuildingNull(){
+        assertNull(p.chooseBuilding(null,null));
+    }
+
+
 }

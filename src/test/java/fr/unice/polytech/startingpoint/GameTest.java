@@ -68,7 +68,9 @@ class GameTest {
             if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)
                 count++;
         }
-        assertTrue(count>0);
+        assertTrue(count>0 ||
+                (g.getBoard().getPile().isEmpty() &&
+                        g.getBoard().getBank().getGold()==0) );
     }
     @Test
     void clearCrown(){

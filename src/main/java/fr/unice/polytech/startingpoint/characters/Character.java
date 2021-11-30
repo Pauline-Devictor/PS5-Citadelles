@@ -3,9 +3,9 @@ import fr.unice.polytech.startingpoint.Player;
 
 
 public abstract class Character {
-    private int order;
+    private final int order;
     protected boolean available;
-    private String name;
+    private final String name;
     protected Player player;
     private boolean isMurdered=false;
 

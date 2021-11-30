@@ -46,7 +46,8 @@ public class Deck {
         }
     }
 
-     Building drawACard(){
+    Building drawACard(){
+        //TODO Optional Method ?
         if (buildings.size()>0) {
             int index = new Random().nextInt(buildings.size());
             Building b = buildings.get(index);

@@ -11,22 +11,6 @@ public class Board {
     private final Bank bank;
     private final List<Character> characters = new ArrayList<>();
 
-    public Deck getPile() {
-        return pile;
-    }
-
-    public Bank getBank() {
-        return bank;
-    }
-
-    public List<Character> getCharacters() {
-        return characters;
-    }
-
-    public Character getCharactersInfos(int index) {
-        return characters.get(index);
-    }
-
     Board() {
         this.bank = new Bank(30);
         this.pile = new Deck();
@@ -47,6 +31,21 @@ public class Board {
         }
     }
 
+    public Deck getPile() {
+        return pile;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public Character getCharactersInfos(int index) {
+        return characters.get(index);
+    }
     /*String showBoard(List<Player> players){
         StringBuilder res = new StringBuilder();
         for (Player player : players) {

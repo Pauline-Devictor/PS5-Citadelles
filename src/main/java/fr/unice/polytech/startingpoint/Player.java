@@ -68,15 +68,6 @@ public class Player {
         return gold >= b.getCost() && !b.getBuilt() && !alreadyBuilt(b);
     }
 
-    void chooseRole() {
-        int index;
-        do {
-            index = new Random().nextInt(8);
-        } while (!board.getCharactersInfos(index).isAvailable());
-        role = board.getCharactersInfos(index);
-        board.getCharactersInfos(index).isTaken();
-    }
-
     void play() {
         int goldDraw = getGold();
         boolean draw = !board.getPile().isEmpty() && buildings.stream().allMatch(this::alreadyBuilt);
@@ -109,7 +100,7 @@ public class Player {
 
     }
 
-    /*private Building drawDecision() {
+   /* private Building drawDecision1() {
         Building checkDraw;
         checkDraw = board.getPile().drawACard();
         if (!isNull(checkDraw))
@@ -117,7 +108,7 @@ public class Player {
         return checkDraw;
     }*/
 
-    private Building drawDecision() {
+   private Building drawDecision() {
         Building b1 = board.getPile().drawACard();
         if (!isNull(b1)) {
             Building b2 = board.getPile().drawACard();
@@ -134,25 +125,7 @@ public class Player {
         return b1;
     }
 
-    /**
-     * Choose the best building according to the strategie of the player
-      * @param b1 First Building to compare
-     * @param b2 Second Building to compare
-     */
-    private Building chooseBuilding(Building b1,Building b2) {
-        //TODO 1/2 Parties infinis, a verif aux tests
-        if (buildings.contains(b1))
-            return b2;
-        if(buildings.contains(b2))
-            return b1;
-        return switch (strat){
-            case lowGold -> b1.getCost()>b2.getCost() ? b1 : b2;
-            case highGold -> b1.getCost()<b2.getCost() ? b1 : b2;
-            default -> b1;
-        };
-    }
-
-    private void buildDecision(ArrayList<Building> checkBuilding) {
+   private void buildDecision(ArrayList<Building> checkBuilding) {
         int costMin = 0;
         int costMax = 6;
         switch (strat) {
@@ -172,7 +145,42 @@ public class Player {
         }
     }
 
-    private void showPlay(int goldDraw, int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
+    /**
+     * Choose the best building according to the strategies of the player
+      * @param b1 First Building to compare
+     * @param b2 Second Building to compare
+     */
+    Building chooseBuilding(Building b1,Building b2) {
+        //TODO 1/3 Parties infinis, a verif aux tests
+        System.out.println(b1+" "+b2);
+        if (buildings.contains(b1))
+            return b2;
+        if(buildings.contains(b2))
+            return b1;
+        return switch (strat){
+            case lowGold -> b1.getCost()<b2.getCost() ? b1 : b2;
+            case highGold -> b1.getCost()>b2.getCost() ? b1 : b2;
+            default -> b1;
+        };
+    }
+
+    public Character chooseVictim() {
+        Random random = new Random();
+        int victim = random.nextInt(7) + 1;
+        return board.getCharacters().get(victim);
+    }
+
+    void chooseRole() {
+        int index;
+        do {
+            index = new Random().nextInt(8);
+        } while (!board.getCharactersInfos(index).isAvailable());
+        role = board.getCharactersInfos(index);
+        board.getCharactersInfos(index).isTaken();
+    }
+
+    //TODO Dans le Board ?
+    void showPlay(int goldDraw, int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
         int showGold = (getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
@@ -192,14 +200,6 @@ public class Player {
         System.out.println(res);
     }
 
-    void takeCrown() {
-        crown = true;
-    }
-
-    void leaveCrown() {
-        crown = false;
-    }
-
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder(ANSI_PURPLE + name + ANSI_RESET +
@@ -212,19 +212,19 @@ public class Player {
         return res.toString();
     }
 
-    public int getGold() {
+    int getGold() {
         return gold;
     }
 
-    public int getGoldScore() {
+    int getGoldScore() {
         return goldScore;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Character getRole() {
+    Character getRole() {
         return role;
     }
 
@@ -232,18 +232,20 @@ public class Player {
         return (ArrayList<Building>) buildings.clone();
     }
 
-    public boolean getCrown() {
+    boolean getCrown() {
         return crown;
+    }
+
+    void takeCrown() {
+        crown = true;
+    }
+
+    void leaveCrown() {
+        crown = false;
     }
 
     public void setNbBuildable(int number) {
         nbBuildable = number;
-    }
-
-    public Character chooseVictim() {
-        Random random = new Random();
-        int victim = random.nextInt(7) + 1;
-        return board.getCharacters().get(victim);
     }
 
     public void setTaxes(int number) {

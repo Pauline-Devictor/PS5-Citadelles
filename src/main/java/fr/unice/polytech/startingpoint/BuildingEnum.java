@@ -55,4 +55,6 @@ public enum BuildingEnum {
     public String toString() {
         return name+", Cout : "+cost+", Quartier : "+district;
     }
+
+
 }

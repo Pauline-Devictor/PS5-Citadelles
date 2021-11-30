@@ -19,7 +19,7 @@ public class Game {
         players = new ArrayList<>();
         Random r = new Random();
         for(int i=1;i<=nb_players;i++){
-            players.add(new Player(board, String.valueOf(i),Strategies.pickAStrat(r.nextInt(2))));
+            players.add(new Player(board, String.valueOf(i),Strategies.pickAStrat(r.nextInt(3))));
         }
         players.get(0).takeCrown();
     }
@@ -107,5 +107,9 @@ public class Game {
     }
     void run(){
         showWinner(newGame());
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

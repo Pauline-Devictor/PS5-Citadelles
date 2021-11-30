@@ -13,19 +13,6 @@ public enum Strategies {
     private final String name;
     private final int strategie;
 
-    public String getName() {
-        return name;
-    }
-
-    public int getStrategie() {
-        return strategie;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
     static Strategies pickAStrat(int nbStrat){
         switch (nbStrat){
             case 1 -> {
@@ -38,5 +25,18 @@ public enum Strategies {
                 return balanced;
             }
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getStrategie() {
+        return strategie;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
