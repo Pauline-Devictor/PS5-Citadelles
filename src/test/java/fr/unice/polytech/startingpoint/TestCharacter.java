@@ -74,25 +74,25 @@ public class TestCharacter {
         buildings.add(new Building(BuildingEnum.Caserne));
         buildings.add(new Building(BuildingEnum.Forteresse));
 
-        when(kingOne.getBuildings()).thenReturn(buildings);
+        when(kingOne.getCardHand()).thenReturn(buildings);
 
         bishopOne = spy(new Player(b));
         when(bishopOne.getRole()).thenReturn(bishop);
         b.getCharacters().get(4).setPlayer(bishopOne);
-        when(bishopOne.getBuildings()).thenReturn(buildings);
         bishop.setPlayer(bishopOne);
+        when(bishopOne.getCardHand()).thenReturn(buildings);
 
         merchantOne = spy(new Player(b));
         when(merchantOne.getRole()).thenReturn(merchant);
         b.getCharacters().get(5).setPlayer(merchantOne);
-        when(merchantOne.getBuildings()).thenReturn(buildings);
         merchant.setPlayer(merchantOne);
+        when(merchantOne.getCardHand()).thenReturn(buildings);
 
         condottiereOne = spy(new Player(b));
         when(condottiereOne.getRole()).thenReturn(condottiere);
         b.getCharacters().get(7).setPlayer(condottiereOne);
-        when(condottiereOne.getBuildings()).thenReturn(buildings);
         condottiere.setPlayer(condottiereOne);
+        when(condottiereOne.getCardHand()).thenReturn(buildings);
     }
     @Test
     void assassinGetOrder(){
@@ -165,9 +165,9 @@ public class TestCharacter {
 
     @Test
     void draw2Cards(){
-        int numberBuild = architectOne.getBuildings().size();
+        int numberBuild = architectOne.getCardHand().size();
         architectOne.draw2Cards();
-        assertEquals(numberBuild+2, architectOne.getBuildings().size());
+        assertEquals(numberBuild+2, architectOne.getCardHand().size());
     }
     @Test
     public void murder(){

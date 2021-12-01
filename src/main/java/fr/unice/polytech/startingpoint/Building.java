@@ -4,14 +4,14 @@ package fr.unice.polytech.startingpoint;
 
 public class Building {
     private final BuildingEnum building;
-    private boolean built;
+    //private boolean built;
 
     Building(BuildingEnum b) {
         building = b;
-        built = false;
+        //built = false;
     }
 
-    void build() {
+    /*void build() {
         built = true;
     }
 
@@ -21,7 +21,7 @@ public class Building {
 
     boolean getBuilt() {
         return built;
-    }
+    }*/
 
     int getCost() {
         return building.getCost();
@@ -37,7 +37,7 @@ public class Building {
 
     @Override
     public String toString() {
-        return building + ", Construit : " + getBuilt();
+        return String.valueOf(building);
     }
 
     @Override
