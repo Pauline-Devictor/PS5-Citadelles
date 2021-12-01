@@ -4,10 +4,13 @@ public class Assassin extends Character{
     public Assassin(){
         super(1,"Assassin");
     }
+    void power(Character victim){
+        victim.setMurdered();
+        System.out.println("Character "+ victim.getName() +" has been killed");
+    }
     @Override
     public void usePower(){
-        Character c =player.chooseVictim();
-        c.setMurdered();
-        System.out.println("Character "+ c.getName() +" has been killed");
+        Character victim =player.chooseVictim();
+        power(victim);
     }
 }

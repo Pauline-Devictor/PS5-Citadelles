@@ -2,6 +2,7 @@ package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.Character;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -240,5 +241,17 @@ public class Player {
 
     public void setTaxes(int number) {
         taxes = number;
+    }
+    //For tests
+    public void setRole(int number){
+        role = board.getCharactersInfos(number);
+        board.getCharactersInfos(number).isTaken();
+    }
+    //Architect
+    public void draw2Cards(){
+        Optional<Building> b1 = board.getPile().drawACard();
+        Optional<Building> b2 = board.getPile().drawACard();
+        b1.ifPresent(buildings::add);
+        b2.ifPresent(buildings::add);
     }
 }
