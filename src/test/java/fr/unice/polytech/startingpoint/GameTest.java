@@ -65,7 +65,7 @@ class GameTest {
         List<Player> players = g.getPlayers();
         int count = 0 ;
         for (Player p: players) {
-            if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8)
+            if(p.getCity().size()>=8)
                 count++;
         }
         assertTrue(count>0 ||

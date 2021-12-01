@@ -1,5 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -33,7 +34,7 @@ public class Main {
             System.out.println("Combien voulez-vous de joueurs ?");
             nb_players = sc.nextInt();
             }while(nb_players>6  || nb_players<2);
-        for(int i=0;i<100;i++)
+        //for(int i=0;i<100;i++)
             new Game(nb_players).run();
     }
 }

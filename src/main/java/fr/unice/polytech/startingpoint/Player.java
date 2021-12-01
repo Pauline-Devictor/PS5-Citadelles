@@ -2,6 +2,7 @@ package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.Character;
 
+import javax.management.relation.Role;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,23 +16,25 @@ public class Player {
     private final String name;
     private int gold;
     private int goldScore;
-    private final ArrayList<Building> buildings;
     private final Board board;
     private Character role;
     private boolean crown = false;
     private int nbBuildable = 1;
     private int taxes;
     private final Strategies strat;
+    private final ArrayList<Building> cardHand;
+    private final ArrayList<Building> city;
 
 
     Player(Board b, String name, Strategies strat) {
         this.name = name;
         board = b;
         gold = board.getBank().withdrawGold(2);
-        buildings = new ArrayList<>();
+        cardHand = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            buildings.add(board.getPile().drawACard().get());
+            cardHand.add(board.getPile().drawACard().get());
         }
+        city = new ArrayList<>();
         goldScore = 0;
         taxes = 0;
         this.strat = strat;
@@ -41,10 +44,11 @@ public class Player {
         this.name = "undefined";
         board = b;
         gold = board.getBank().withdrawGold(2);
-        buildings = new ArrayList<>();
+        cardHand = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            buildings.add(board.getPile().drawACard().get());
+            cardHand.add(board.getPile().drawACard().get());
         }
+        city = new ArrayList<>();
         goldScore = 0;
         strat = Strategies.balanced;
     }
@@ -55,25 +59,18 @@ public class Player {
             board.getBank().refundGold(b.getCost());
             gold -= b.getCost();
             goldScore += b.getCost();
-            b.build();
+            cardHand.remove(b);
+            city.add(b);
         }
-    }
-
-    boolean alreadyBuilt(Building b) {
-        for (Building tmp : getBuildings()) {
-            if (tmp.getBuilding().equals(b.getBuilding()) && tmp.getBuilt())
-                return true;
-        }
-        return false;
     }
 
     boolean isBuildable(Building b) {
-        return getGold() >= b.getCost() && !b.getBuilt() && !alreadyBuilt(b);
+        return gold >= b.getCost() && !city.contains(b);
     }
 
     void play() {
         int goldDraw = getGold();
-        boolean draw = !board.getPile().isEmpty() && buildings.stream().allMatch(this::alreadyBuilt);
+        boolean draw = !board.getPile().isEmpty() && cardHand.stream().allMatch(this::isBuildable);
         ArrayList<Building> checkBuilding = new ArrayList<>();
         Building checkDraw = null;
         if (getRole().gotMurdered()) {
@@ -105,7 +102,7 @@ public class Player {
             Optional<Building> b2 = board.getPile().drawACard();
             if (b2.isPresent()) {
                 Building x = chooseBuilding(b1.get(), b2.get());
-                buildings.add(x);
+                cardHand.add(x);
                 b = Optional.of(x);
             }
         }
@@ -119,17 +116,19 @@ public class Player {
             case lowGold -> costMax = 3;
             case highGold -> costMin = 3;
         }
-        for (Building b : buildings) {
+        for (Building b : cardHand) {
             if (isBuildable(b) && nbBuildable > 0) {
                 //TODO Modif Conditions
                 if ((b.getCost() <= costMax && b.getCost() >= costMin)
                         || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
-                    build(b);
-                    nbBuildable -= 1;
+                    nbBuildable--;
                     checkBuilding.add(b);
                 }
             }
         }
+        for(Building build : checkBuilding)
+            build(build);
+
     }
 
     /**
@@ -144,9 +143,9 @@ public class Player {
             return b2;
         else if (isNull(b2))
             return b1;
-        else if(getBuildings().contains(b1))
+        else if(getCardHand().contains(b1))
             return b2;
-        else if(getBuildings().contains(b2))
+        else if(getCardHand().contains(b2))
             return b1;
         return switch (strat) {
             case lowGold -> (b1.getCost() < b2.getCost()) ? b1 : b2;
@@ -197,7 +196,7 @@ public class Player {
                 " avec la stratégie " + ANSI_RED + strat + ANSI_RESET +
                 " et " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_CYAN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
-        for (Building b : buildings) {
+        for (Building b : city) {
             res.append("\n\t").append(b.toString()).append(" ");
         }
         return res.toString();
@@ -219,8 +218,8 @@ public class Player {
         return role;
     }
 
-    public ArrayList<Building> getBuildings() {
-        return (ArrayList<Building>) buildings.clone();
+    public ArrayList<Building> getCardHand() {
+        return (ArrayList<Building>) cardHand.clone();
     }
 
     boolean getCrown() {
@@ -242,19 +241,24 @@ public class Player {
     public void setTaxes(int number) {
         taxes = number;
     }
-    //For tests
-    public void setRole(int number){
-        role = board.getCharactersInfos(number);
-        board.getCharactersInfos(number).isTaken();
+
+    public ArrayList<Building> getCity() {
+        return (ArrayList<Building>) city.clone();
     }
+
     //Architect
     public void draw2Cards(){
         Optional<Building> b1 = board.getPile().drawACard();
         Optional<Building> b2 = board.getPile().drawACard();
-        b1.ifPresent(buildings::add);
-        b2.ifPresent(buildings::add);
+        b1.ifPresent(cardHand::add);
+        b2.ifPresent(cardHand::add);
     }
     public int getTaxes(){
         return taxes;
+    }
+
+    public void setRole(int number){
+        role = board.getCharactersInfos(number);
+        board.getCharactersInfos(number).isTaken();
     }
 }

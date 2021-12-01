@@ -76,7 +76,7 @@ public class Game {
 
             //TODO Corriger Game Freeze
             for(Player p : players){
-                if(p.getBuildings().stream().filter(Building::getBuilt).count()>=8 || turn>50)
+                if(p.getCity().size()>=8 || turn>50)
                     endOfGame=true;
             }
         }

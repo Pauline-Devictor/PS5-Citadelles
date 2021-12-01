@@ -10,7 +10,7 @@ public class King extends Character{
     @Override
     public void usePower(){
         int taxes=0;
-        for (Building b:getPlayer().getBuildings()) {
+        for (Building b:getPlayer().getCardHand()) {
             if (b.getBuilding().getDistrict() == District.Noble){
             taxes++;
             }
