@@ -36,5 +36,4 @@ public class Main {
         for(int i=0;i<100;i++)
             new Game(nb_players).run();
     }
-
 }

@@ -20,7 +20,7 @@ public class TestDeck {
     void drawADeckTest(){
         while (!d.isEmpty())
             d.drawACard();
-        assertNull(d.drawACard());
+        assertEquals(Optional.empty(),d.drawACard());
     }
     @Test
     void drawADeck(){

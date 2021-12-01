@@ -30,4 +30,8 @@ public class Bank {
     int getGold(){
         return currentAmount;
     }
+
+    boolean isEmpty(){
+        return currentAmount==0;
+    }
 }

@@ -3,7 +3,11 @@ package fr.unice.polytech.startingpoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class TestPlayer {
     Player p;
@@ -16,8 +20,10 @@ public class TestPlayer {
     @BeforeEach
     void setUp(){
         p = new Player(new Board());
-        pLow = new Player(new Board()," ",Strategies.lowGold);
-        pHigh = new Player(new Board(),"",Strategies.highGold);
+        pLow = spy(new Player(new Board()," ",Strategies.lowGold));
+        pHigh = spy(new Player(new Board(),"",Strategies.highGold));
+        when(pLow.getBuildings()).thenReturn(new ArrayList<>());
+        when(pHigh.getBuildings()).thenReturn(new ArrayList<>());
         eglise = new Building(BuildingEnum.Eglise);
         caserne = new Building(BuildingEnum.Caserne);
         tourDeGuet = new Building(BuildingEnum.TourDeGuet);
@@ -73,16 +79,23 @@ public class TestPlayer {
     }
     @Test
     void chooseBuildingLow(){
-        assertEquals(eglise,p.chooseBuilding(eglise,caserne));
+        System.out.println(pLow);
+        assertEquals(eglise,pLow.chooseBuilding(eglise,caserne));
 
     }
     @Test
     void chooseBuildingHigh(){
+        System.out.println(pHigh);
         assertEquals(caserne,pHigh.chooseBuilding(eglise,caserne));
     }
+
     @Test
     void chooseBuildingNull1(){
         assertEquals(eglise,p.chooseBuilding(eglise,null));
+    }
+    @Test
+    void chooseBuildingNull2(){
+        assertEquals(eglise,p.chooseBuilding(null,eglise));
     }
     @Test
     void chooseBuildingNull(){

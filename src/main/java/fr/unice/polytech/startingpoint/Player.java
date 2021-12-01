@@ -3,6 +3,8 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static fr.unice.polytech.startingpoint.Main.*;
@@ -27,7 +29,7 @@ public class Player {
         gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            buildings.add(board.getPile().drawACard());
+            buildings.add(board.getPile().drawACard().get());
         }
         goldScore = 0;
         taxes = 0;
@@ -40,7 +42,7 @@ public class Player {
         gold = board.getBank().withdrawGold(2);
         buildings = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            buildings.add(board.getPile().drawACard());
+            buildings.add(board.getPile().drawACard().get());
         }
         goldScore = 0;
         strat = Strategies.balanced;
@@ -76,20 +78,14 @@ public class Player {
         if (getRole().gotMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
         } else {
-            //TODO Code Propre ?
-
-            // chooses to draw a card because there is nothing buildable
-            if (draw)
-                checkDraw = drawDecision();
-                // chooses to get 2 golds because nothing can be built
-            else {
-                if (board.getBank().getGold() > 0) {
-                    gold += board.getBank().withdrawGold(2);
-                } else {
-                    checkDraw = drawDecision();
-                }
-            }
+            // chooses to draw a card because there is nothing buildable or bank is empty
+            if (draw || board.getBank().isEmpty())
+                checkDraw = drawDecision().orElse(null);
+            // chooses to get 2 golds because nothing can be built
+            else
+                gold += board.getBank().withdrawGold(2);
             getRole().usePower();
+            //TODO Board ?
             int goldTaxes = getGold();
             gold += board.getBank().withdrawGold(taxes);
             goldTaxes = getGold() - goldTaxes;
@@ -100,32 +96,22 @@ public class Player {
 
     }
 
-   /* private Building drawDecision1() {
-        Building checkDraw;
-        checkDraw = board.getPile().drawACard();
-        if (!isNull(checkDraw))
-            buildings.add(checkDraw);
-        return checkDraw;
-    }*/
-
-   private Building drawDecision() {
-        Building b1 = board.getPile().drawACard();
-        if (!isNull(b1)) {
-            Building b2 = board.getPile().drawACard();
-            if (isNull(b2)){
-                buildings.add(b1);
-                return b1;
-            }
-            else{
-                Building b = chooseBuilding(b1,b2);
-                buildings.add(b);
-                return b;
+    private Optional<Building> drawDecision() {
+        Optional<Building> b1 = board.getPile().drawACard();
+        Optional<Building> b = b1;
+        //Si la premiere Carte est nulle, la seconde aussi
+        if (b1.isPresent()) {
+            Optional<Building> b2 = board.getPile().drawACard();
+            if (b2.isPresent()) {
+                Building x = chooseBuilding(b1.get(), b2.get());
+                buildings.add(x);
+                b = Optional.of(x);
             }
         }
-        return b1;
+        return b;
     }
 
-   private void buildDecision(ArrayList<Building> checkBuilding) {
+    private void buildDecision(ArrayList<Building> checkBuilding) {
         int costMin = 0;
         int costMax = 6;
         switch (strat) {
@@ -147,19 +133,23 @@ public class Player {
 
     /**
      * Choose the best building according to the strategies of the player
-      * @param b1 First Building to compare
+     *
+     * @param b1 First Building to compare
      * @param b2 Second Building to compare
      */
-    Building chooseBuilding(Building b1,Building b2) {
+    Building chooseBuilding(Building b1, Building b2) {
         //TODO 1/3 Parties infinis, a verif aux tests
-        System.out.println(b1+" "+b2);
-        if (buildings.contains(b1))
+        if(isNull(b1))
             return b2;
-        if(buildings.contains(b2))
+        else if (isNull(b2))
             return b1;
-        return switch (strat){
-            case lowGold -> b1.getCost()<b2.getCost() ? b1 : b2;
-            case highGold -> b1.getCost()>b2.getCost() ? b1 : b2;
+        else if(getBuildings().contains(b1))
+            return b2;
+        else if(getBuildings().contains(b2))
+            return b1;
+        return switch (strat) {
+            case lowGold -> (b1.getCost() < b2.getCost()) ? b1 : b2;
+            case highGold -> (b1.getCost() > b2.getCost()) ? b1 : b2;
             default -> b1;
         };
     }

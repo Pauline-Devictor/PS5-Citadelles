@@ -1,5 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -46,15 +47,14 @@ public class Deck {
         }
     }
 
-    Building drawACard(){
-        //TODO Optional Method ?
+    Optional<Building> drawACard(){
         if (buildings.size()>0) {
             int index = new Random().nextInt(buildings.size());
-            Building b = buildings.get(index);
+            Optional<Building> b = Optional.of(buildings.get(index));
             buildings.remove(index);
-            return (b);
+            return b;
         }
-        return null;
+        return Optional.empty();
     }
 
     boolean isEmpty(){
