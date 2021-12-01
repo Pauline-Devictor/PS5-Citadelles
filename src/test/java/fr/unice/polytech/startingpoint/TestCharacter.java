@@ -1,13 +1,16 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.BuildingEnum;
 
-import fr.unice.polytech.startingpoint.characters.Character;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,10 +23,15 @@ public class TestCharacter {
    Merchant merchant;
    Architect architect;
    Condottiere condottiere;
-   Player p1;
+   Player architectOne;
    Player p2;
-   Player p3;
+   Player assassinOne;
+   Player merchantOne;
+   Player kingOne;
+   Player bishopOne;
+   Player condottiereOne;
    Board b;
+   BuildingEnum build;
 
     @BeforeEach
     void setUp(){
@@ -36,16 +44,51 @@ public class TestCharacter {
         architect = new Architect();
         condottiere = new Condottiere();
         b = new Board();
-        p1 = new Player(b);
+
+        architectOne = spy(new Player(b));
+        architectOne.setRole(6);
+        when(architectOne.getGold()).thenReturn(26);
+        b.getCharacters().get(6).setPlayer(architectOne);
         p2 = new Player(b);
-        p3 = spy(new Player(b));
-        p3.setRole(0);
-        b.getCharacters().get(0).setPlayer(p3);
-        when(p3.chooseVictim()).thenReturn(b.getCharacters().get(6));
-        p2.chooseRole();
-        p1.setRole(6);//Become Achitect
-        b.getCharacters().get(6).setPlayer(p1);
+
+        assassinOne = spy(new Player(b));
+        assassinOne.setRole(0);
+        b.getCharacters().get(0).setPlayer(assassinOne);
+        when(assassinOne.chooseVictim()).thenReturn(b.getCharacters().get(6));
+
         condottiere.isTaken();
+
+        kingOne= spy(new Player(b));
+        kingOne.setRole(3);//Become King
+        b.getCharacters().get(3).setPlayer(kingOne);
+        ArrayList<Building> buildings = new ArrayList<>();
+        buildings.add(new Building(BuildingEnum.Manoir));//Noble
+        buildings.add(new Building(BuildingEnum.Temple));//Religion
+        buildings.add(new Building(BuildingEnum.Eglise));
+        buildings.add(new Building(BuildingEnum.Taverne));//Commercial
+        buildings.add(new Building(BuildingEnum.Echoppe));
+        buildings.add(new Building(BuildingEnum.Marche));
+        buildings.add(new Building(BuildingEnum.TourDeGuet));//Military
+        buildings.add(new Building(BuildingEnum.Prison));
+        buildings.add(new Building(BuildingEnum.Caserne));
+        buildings.add(new Building(BuildingEnum.Forteresse));
+
+        when(kingOne.getBuildings()).thenReturn(buildings);
+
+        bishopOne = spy(new Player(b));
+        bishopOne.setRole(4);//Become King
+        b.getCharacters().get(4).setPlayer(bishopOne);
+        when(bishopOne.getBuildings()).thenReturn(buildings);
+
+        merchantOne = spy(new Player(b));
+        merchantOne.setRole(5);//Become King
+        b.getCharacters().get(5).setPlayer(merchantOne);
+        when(merchantOne.getBuildings()).thenReturn(buildings);
+
+        condottiereOne = spy(new Player(b));
+        condottiereOne.setRole(7);//Become King
+        b.getCharacters().get(7).setPlayer(condottiereOne);
+        when(condottiereOne.getBuildings()).thenReturn(buildings);
     }
     @Test
     void assassinGetOrder(){
@@ -96,8 +139,8 @@ public class TestCharacter {
     }
     @Test
     void setPlayer(){
-        bishop.setPlayer(p1);
-        assertEquals(p1,bishop.getPlayer());
+        bishop.setPlayer(architectOne);
+        assertEquals(architectOne,bishop.getPlayer());
     }
     @Test
     void setPlayerNull(){
@@ -107,24 +150,44 @@ public class TestCharacter {
     }
     @Test
     void build3(){//test that the Architect can build up to 3 buildings
-        p1.setTaxes(18);//to allow p1 to build every 3 buildings he wants
-        p1.play();
-        int count=0;
-        for (Building b:p1.getBuildings()) {
+        architectOne.play();
+        verify(architectOne, times(3)).build(any());
+        /*int count=0;
+        for (Building b: architectOne.getBuildings()) {
             if (b.getBuilt()){count+=1;}
         }
-        assertEquals(3,count);
+        assertEquals(3,count);*/
     }
+
     @Test
     void draw2Cards(){
-        int numberBuild = p1.getBuildings().size();
-        p1.draw2Cards();
-        assertEquals(numberBuild+2,p1.getBuildings().size());
+        int numberBuild = architectOne.getBuildings().size();
+        architectOne.draw2Cards();
+        assertEquals(numberBuild+2, architectOne.getBuildings().size());
     }
     @Test
     public void murder(){
-        p3.getRole().usePower();
-        assertTrue(p1.getRole().gotMurdered());
-
+        assassinOne.getRole().usePower();
+        assertTrue(architectOne.getRole().gotMurdered());
+    }
+    @Test
+    public void taxesKing(){
+        kingOne.play();
+        assertEquals(kingOne.getTaxes(),1);
+    }
+    @Test
+    public void taxesBishop(){
+        bishopOne.play();
+        assertEquals(bishopOne.getTaxes(),2);
+    }
+    @Test
+    public void taxesMerchant(){
+        merchantOne.play();
+        assertEquals(merchantOne.getTaxes(),3);
+    }
+    @Test
+    public void taxesCondottiere(){
+        condottiereOne.play();
+        assertEquals(condottiereOne.getTaxes(),4);
     }
 }

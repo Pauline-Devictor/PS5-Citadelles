@@ -68,7 +68,7 @@ public class Player {
     }
 
     boolean isBuildable(Building b) {
-        return gold >= b.getCost() && !b.getBuilt() && !alreadyBuilt(b);
+        return getGold() >= b.getCost() && !b.getBuilt() && !alreadyBuilt(b);
     }
 
     void play() {
@@ -253,5 +253,8 @@ public class Player {
         Optional<Building> b2 = board.getPile().drawACard();
         b1.ifPresent(buildings::add);
         b2.ifPresent(buildings::add);
+    }
+    public int getTaxes(){
+        return taxes;
     }
 }
