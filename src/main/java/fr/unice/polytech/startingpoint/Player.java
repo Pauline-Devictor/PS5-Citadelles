@@ -4,7 +4,11 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
 
+import javax.management.relation.Role;
+import javax.swing.text.html.Option;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 

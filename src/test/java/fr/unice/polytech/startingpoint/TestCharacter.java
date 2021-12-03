@@ -44,21 +44,25 @@ public class TestCharacter {
         b = new Board();
 
         architectOne = spy(new Player(b));
-        architectOne.setRole(6);
+        when(architectOne.getRole()).thenReturn(architect);
         when(architectOne.getGold()).thenReturn(26);
+        architect.setPlayer(architectOne);
         b.getCharacters().get(6).setPlayer(architectOne);
         p2 = new Player(b);
 
         assassinOne = spy(new Player(b));
-        assassinOne.setRole(0);
+        when(assassinOne.getRole()).thenReturn(assassin);
+        assassin.setPlayer(assassinOne);
         b.getCharacters().get(0).setPlayer(assassinOne);
         when(assassinOne.chooseVictim()).thenReturn(b.getCharacters().get(6));
 
         condottiere.isTaken();
 
         kingOne= spy(new Player(b));
-        kingOne.setRole(3);//Become King
+        when(kingOne.getRole()).thenReturn(king);
         b.getCharacters().get(3).setPlayer(kingOne);
+        king.setPlayer(kingOne);
+
         ArrayList<Building> buildings = new ArrayList<>();
         buildings.add(new Building(BuildingEnum.Manoir));//Noble
         buildings.add(new Building(BuildingEnum.Temple));//Religion
@@ -74,18 +78,21 @@ public class TestCharacter {
         when(kingOne.getCardHand()).thenReturn(buildings);
 
         bishopOne = spy(new Player(b));
-        bishopOne.setRole(4);//Become King
+        when(bishopOne.getRole()).thenReturn(bishop);
         b.getCharacters().get(4).setPlayer(bishopOne);
+        bishop.setPlayer(bishopOne);
         when(bishopOne.getCardHand()).thenReturn(buildings);
 
         merchantOne = spy(new Player(b));
-        merchantOne.setRole(5);//Become King
+        when(merchantOne.getRole()).thenReturn(merchant);
         b.getCharacters().get(5).setPlayer(merchantOne);
+        merchant.setPlayer(merchantOne);
         when(merchantOne.getCardHand()).thenReturn(buildings);
 
         condottiereOne = spy(new Player(b));
-        condottiereOne.setRole(7);//Become King
+        when(condottiereOne.getRole()).thenReturn(condottiere);
         b.getCharacters().get(7).setPlayer(condottiereOne);
+        condottiere.setPlayer(condottiereOne);
         when(condottiereOne.getCardHand()).thenReturn(buildings);
     }
     @Test
@@ -166,12 +173,12 @@ public class TestCharacter {
     @Test
     public void murder(){
         assassinOne.getRole().usePower();
-        assertTrue(architectOne.getRole().gotMurdered());
+        assertTrue(b.getCharactersInfos(6).gotMurdered());
     }
     @Test
     public void taxesKing(){
         kingOne.play();
-        assertEquals(kingOne.getTaxes(),1);
+        assertEquals(b.getCharactersInfos(3).getPlayer().getTaxes(),1);
     }
     @Test
     public void taxesBishop(){
