@@ -10,6 +10,6 @@ public class Architect extends Character{
         //Architect allow to build 2 more buildings total =3
         //pioche 2 cartes
         getPlayer().setNbBuildable(3);
-        getPlayer().draw2Cards();
+        getPlayer().drawCards(2);
     }
 }

@@ -1,14 +1,12 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TestBuilding {
     Building eglise;
@@ -19,7 +17,7 @@ public class TestBuilding {
     }
         @Test
     void testToString(){
-        assertEquals("Eglise, Cout : 2, Quartier : Religion, Construit : false", eglise.toString());
+        assertEquals("Eglise, Cout : 2, Quartier : Religion", eglise.toString());
     }
 
 }

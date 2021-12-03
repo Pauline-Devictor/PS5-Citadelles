@@ -1,5 +1,10 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
+import fr.unice.polytech.startingpoint.buildings.Laboratory;
+import fr.unice.polytech.startingpoint.buildings.Manufacture;
+import fr.unice.polytech.startingpoint.characters.Architect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +17,16 @@ public class TestPlayer {
     Player p;
     Player pLow;
     Player pHigh;
+    Player pBuildings;
     Building eglise;
     Building caserne;
     Building tourDeGuet;
+    Board board;
 
     @BeforeEach
     void setUp(){
+        board = new Board();
+        pBuildings = spy(new Player(board));
         p = new Player(new Board());
         pLow = spy(new Player(new Board()," ",Strategies.lowGold));
         pHigh = spy(new Player(new Board(),"",Strategies.highGold));
@@ -32,12 +41,7 @@ public class TestPlayer {
     void buildGold(){
         p.build(eglise);
         assertEquals(2,p.getGoldScore());
-    }/*
-    @Test
-    void buildBuilt(){
-        p.build(eglise);
-        assertTrue(eglise.getBuilt());
-    }*/
+    }
 
     @Test
     void buildScore(){
@@ -96,5 +100,37 @@ public class TestPlayer {
         assertNull(p.chooseBuilding(null,null));
     }
 
+    @Test
+    void drawCards(){
+        int size = p.getCardHand().size();
+        p.drawCards(3);
+        assertEquals(3,p.getCardHand().size()-size);
+    }
+
+    @Test
+    void drawCardsNeg(){
+        int size = p.getCardHand().size();
+        p.drawCards(-1);
+        assertEquals(0,p.getCardHand().size()-size);
+    }
+
+    @Test
+    void drawCardsZero(){
+        int size = p.getCardHand().size();
+        p.drawCards(0);
+        assertEquals(0,p.getCardHand().size()-size);
+    }
+
+    @Test
+    void effectPrestige(){
+        ArrayList<Building> b = new ArrayList<>();
+        b.add(new Laboratory(BuildingEnum.Laboratoire));
+        b.add(new Manufacture(BuildingEnum.Manufacture));
+       when(pBuildings.getCity()).thenReturn(b);
+       pBuildings.setRole(0);
+       board.getCharacters().get(0).setPlayer(pBuildings);
+       pBuildings.play();
+
+    }
 
 }

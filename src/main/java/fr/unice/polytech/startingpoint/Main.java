@@ -1,6 +1,5 @@
 package fr.unice.polytech.startingpoint;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {

@@ -1,11 +1,10 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
 
-import javax.management.relation.Role;
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -87,6 +86,12 @@ public class Player {
             int goldTaxes = getGold();
             gold += board.getBank().withdrawGold(taxes);
             goldTaxes = getGold() - goldTaxes;
+
+            getCity().forEach(e -> {
+                if(e instanceof Prestige)
+                    ((Prestige) e).useEffect(this);
+            } );
+
             //build firsts buildings available
             buildDecision(checkBuilding);
             showPlay(goldDraw, goldTaxes, checkDraw, checkBuilding);
@@ -202,7 +207,7 @@ public class Player {
         return res.toString();
     }
 
-    int getGold() {
+    public int getGold() {
         return gold;
     }
 
@@ -219,7 +224,7 @@ public class Player {
     }
 
     public ArrayList<Building> getCardHand() {
-        return (ArrayList<Building>) cardHand.clone();
+        return cardHand;
     }
 
     boolean getCrown() {
@@ -243,15 +248,14 @@ public class Player {
     }
 
     public ArrayList<Building> getCity() {
-        return (ArrayList<Building>) city.clone();
+        return city;
     }
 
-    //Architect
-    public void draw2Cards(){
-        Optional<Building> b1 = board.getPile().drawACard();
-        Optional<Building> b2 = board.getPile().drawACard();
-        b1.ifPresent(cardHand::add);
-        b2.ifPresent(cardHand::add);
+    public void drawCards(int nbCards){
+        for(int i=0;i<nbCards;i++){
+            Optional<Building> b1 = board.getPile().drawACard();
+            b1.ifPresent(cardHand::add);
+        }
     }
     public int getTaxes(){
         return taxes;
@@ -260,5 +264,27 @@ public class Player {
     public void setRole(int number){
         role = board.getCharactersInfos(number);
         board.getCharactersInfos(number).isTaken();
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public boolean isCrown() {
+        return crown;
+    }
+
+    public int getNbBuildable() {
+        return nbBuildable;
+    }
+
+    public Strategies getStrat() {
+        return strat;
+    }
+
+    public void discardCard(Optional<Building> buildingOptional) {
+        Building b = buildingOptional.orElse(getCardHand().get(0));
+        cardHand.remove(b);
+        board.getPile().putCard(b);
     }
 }

@@ -1,6 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
-import javax.swing.text.html.Option;
+import fr.unice.polytech.startingpoint.buildings.*;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -10,12 +11,12 @@ public class Deck {
 
     Deck(){
         buildings = new ArrayList<>();
-        buildings.add(new Building(BuildingEnum.CourDesMiracles));
-        buildings.add(new Building(BuildingEnum.Laboratoire));
-        buildings.add(new Building(BuildingEnum.Manufacture));
+        buildings.add(new CourDesMiracles(BuildingEnum.CourDesMiracles));
+        buildings.add(new Laboratory(BuildingEnum.Laboratoire));
+        buildings.add(new Manufacture(BuildingEnum.Manufacture));
         buildings.add(new Building(BuildingEnum.Observatoire));
         buildings.add(new Building(BuildingEnum.Cimetiere));
-        buildings.add(new Building(BuildingEnum.Bibiliotheque));
+        buildings.add(new Bibliotheque(BuildingEnum.Bibiliotheque));
         buildings.add(new Building(BuildingEnum.EcoleDeMagie));
         buildings.add(new Building(BuildingEnum.Universite));
         buildings.add(new Building(BuildingEnum.Dracoport));
@@ -61,7 +62,11 @@ public class Deck {
         return buildings.size()<=0;
     }
 
-    int numberOfCards() {
+    public int numberOfCards() {
         return buildings.size();
+    }
+
+    public void putCard(Building b){
+        buildings.add(b);
     }
 }

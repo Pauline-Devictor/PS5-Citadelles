@@ -24,6 +24,7 @@ public abstract class Character {
         this.order=order;
         this.name=name;
         this.available =true;
+
     }
 
     public void resetRole(){

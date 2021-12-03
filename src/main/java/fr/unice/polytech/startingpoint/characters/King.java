@@ -1,6 +1,6 @@
 package fr.unice.polytech.startingpoint.characters;
 
-import fr.unice.polytech.startingpoint.Building;
+import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.District;
 
 public class King extends Character{

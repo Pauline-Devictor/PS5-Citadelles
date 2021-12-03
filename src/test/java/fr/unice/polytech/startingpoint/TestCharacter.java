@@ -1,14 +1,13 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.BuildingEnum;
+import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -31,7 +30,6 @@ public class TestCharacter {
    Player bishopOne;
    Player condottiereOne;
    Board b;
-   BuildingEnum build;
 
     @BeforeEach
     void setUp(){
@@ -162,7 +160,7 @@ public class TestCharacter {
     @Test
     void draw2Cards(){
         int numberBuild = architectOne.getCardHand().size();
-        architectOne.draw2Cards();
+        architectOne.drawCards(2);
         assertEquals(numberBuild+2, architectOne.getCardHand().size());
     }
     @Test

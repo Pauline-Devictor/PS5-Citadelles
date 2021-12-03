@@ -1,29 +1,13 @@
-package fr.unice.polytech.startingpoint;
-
-
+package fr.unice.polytech.startingpoint.buildings;
 
 public class Building {
     private final BuildingEnum building;
-    //private boolean built;
 
-    Building(BuildingEnum b) {
+    public Building(BuildingEnum b) {
         building = b;
-        //built = false;
     }
 
-    /*void build() {
-        built = true;
-    }
-
-    void destroy() {
-        built = false;
-    }
-
-    boolean getBuilt() {
-        return built;
-    }*/
-
-    int getCost() {
+    public int getCost() {
         return building.getCost();
     }
 
@@ -31,7 +15,7 @@ public class Building {
         return building;
     }
 
-    String getName() {
+    public String getName() {
         return building.getName();
     }
 
@@ -47,4 +31,5 @@ public class Building {
         Building building1 = (Building) o;
         return building == building1.building;
     }
+
 }

@@ -1,7 +1,10 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.buildings;
+
+import fr.unice.polytech.startingpoint.District;
+import fr.unice.polytech.startingpoint.Player;
 
 public enum BuildingEnum {
-    Temple("Temple",1,District.Religion),
+    Temple("Temple",1, District.Religion),
     Eglise("Eglise",2,District.Religion),
     Cathedrale("Cathédrale",5,District.Religion),
     Monastere("Monastère",3,District.Religion),
@@ -56,6 +59,9 @@ public enum BuildingEnum {
         return name+", Cout : "+cost+", Quartier : "+district;
     }
 
+    public void useEffect(Player p){
+
+    }
 
 
 }
