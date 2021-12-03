@@ -21,7 +21,7 @@ class GameTest {
         g = spy(new Game(6));
         p = mock(Player.class);
         p1 = mock(Player.class);
-        p1.takeCrown();
+        p1.setCrown(false);
     }
 
     @AfterEach

@@ -9,26 +9,24 @@ import java.util.List;
 public class Board {
     private final Deck pile;
     private final Bank bank;
-    private final List<Character> characters = new ArrayList<>();
+    private final List<Character> characters;
 
     Board() {
         this.bank = new Bank(30);
         this.pile = new Deck();
-        characters.add(new Assassin());
-        characters.add(new Thief());
-        characters.add(new Magician());
-        characters.add(new King());
-        characters.add(new Bishop());
-        characters.add(new Merchant());
-        characters.add(new Architect());
-        characters.add(new Condottiere());
+        characters = List.of(new Assassin(),
+                new Thief(),
+                new Magician(),
+                new King(),
+                new Bishop(),
+                new Merchant(),
+                new Architect(),
+                new Condottiere());
     }
 
     //Libere tous les roles et vide la liste des roles pris
     void setAllFree() {
-        for (Character character : characters) {
-            character.resetRole();
-        }
+        characters.forEach(Character::resetRole);
     }
 
     public Deck getPile() {
@@ -46,6 +44,7 @@ public class Board {
     public Character getCharactersInfos(int index) {
         return characters.get(index);
     }
+
     /*String showBoard(List<Player> players){
         StringBuilder res = new StringBuilder();
         for (Player player : players) {

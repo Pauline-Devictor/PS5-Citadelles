@@ -1,15 +1,16 @@
 package fr.unice.polytech.startingpoint.characters;
 
-public class Architect extends Character{
-    public Architect(){
-        super(7,"Architect");
+import fr.unice.polytech.startingpoint.Player;
+
+public class Architect extends Character {
+    public Architect() {
+        super(7, "Architect");
     }
 
     @Override
-    public void usePower(){
-        //Architect allow to build 2 more buildings total =3
-        //pioche 2 cartes
-        getPlayer().setNbBuildable(3);
-        getPlayer().drawCards(2);
+    public void usePower(Player p) {
+        //Architect allow building 2 more buildings total =3
+        p.setNbBuildable(3);
+        p.drawCards(2);
     }
 }

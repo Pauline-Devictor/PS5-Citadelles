@@ -1,10 +1,10 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.characters.Character;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static fr.unice.polytech.startingpoint.Main.*;
 
@@ -21,7 +21,7 @@ public class Game {
         for(int i=1;i<=nb_players;i++){
             players.add(new Player(board, String.valueOf(i),Strategies.pickAStrat(r.nextInt(3))));
         }
-        players.get(0).takeCrown();
+        players.get(0).setCrown(true);
     }
 
     public List<Player> getPlayers() {
@@ -51,48 +51,55 @@ public class Game {
         winners.forEach(System.out::println);
     }
 
-    List<Player> newGame(){
+    List<Player> newGame() {
         boolean endOfGame = false;
-        int turn=0;
-        while (!endOfGame){
-            System.out.println(ANSI_RED_BACKGROUND+ANSI_BLACK+"Tour "+(++turn) +":"+ANSI_RESET +
-                    " Cartes Restantes : "+ board.getPile().numberOfCards() +" Or Dans la Banque : "+board.getBank().getGold());
-            List<Player> roleOrder = getOrderPlayer();
+        int turn = 0;
+        while (!endOfGame) {
+            AtomicInteger res = new AtomicInteger();
+            players.forEach(e -> res.addAndGet(e.getGold()));
+            System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (++turn) + ":" + ANSI_RESET +
+                    " Cartes Restantes : " + board.getPile().numberOfCards() + " Or Dans la Banque : " + board.getBank().getGold() + " Or Joueurs :" + res);
 
-            for (Player p:roleOrder) {
-                p.chooseRole();
-                p.getRole().setPlayer(p);
-            }
-            for(Character c: board.getCharacters()){
-                if (c.getPlayer() != null){
-                    c.getPlayer().play();
-                    //crown -> selection des roles (le dernier roi la recupere)
-                    if (c.getPlayer().getRole().getName().equals("King")){
-                        resetPlayer();
-                        c.getPlayer().takeCrown();}
+            List<Player> roleOrder = getOrderPlayer();
+            roleOrder.forEach(Player::chooseRole);
+
+            players.sort(Player.RoleOrder);
+            //System.out.println(roleOrder+" \n Players :"+players);
+
+            for (Player p : players) {
+                if (p.getRole().isPresent()) {
+                    p.play();
+                    //crown → selection des roles (le dernier roi la récupère)
+                    if (p.getRole().get().getName().equals("King"))
+                        p.setCrown(true);
                 }
             }
+            resetPlayer();
             board.setAllFree();
 
-            //TODO Corriger Game Freeze
-            for(Player p : players){
-                if(p.getCity().size()>=8 || turn>50)
-                    endOfGame=true;
+            for (Player p : players) {
+                if (p.getCity().size() >= 8 || turn > 50) {
+                    endOfGame = true;
+                    break;
+                }
             }
         }
         return determineWinner();
     }
 
+    //TODO Ordre des Choix, Couronne puis a gauche du joueur actuel
     List<Player> getOrderPlayer() {
         int index = 0;
         List<Player> alternateList = new ArrayList<>();
-        for (int j=0;j<nb_players;j++){
-            if (players.get(j).getCrown()){index =j;}
+        for (int j = 0; j < nb_players; j++) {
+            if (players.get(j).getCrown()) {
+                index = j;
+            }
         }
-        for (int i=index;i<nb_players;i++){
-         alternateList.add(players.get(i));
+        for (int i = index; i < nb_players; i++) {
+            alternateList.add(players.get(i));
         }
-        for (int i=0;i<index;i++){
+        for (int i = 0; i < index; i++) {
             alternateList.add(players.get(i));
         }
         return alternateList;
@@ -100,9 +107,10 @@ public class Game {
 
     void resetPlayer(){
         for (Player p : players){
-            p.leaveCrown();
+            p.setCrown(false);
             p.setNbBuildable(1);
             p.setTaxes(0);
+            p.removeRole();
         }
     }
     void run(){

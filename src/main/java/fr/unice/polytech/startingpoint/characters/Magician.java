@@ -1,9 +1,13 @@
 package fr.unice.polytech.startingpoint.characters;
 
-public class Magician extends Character{
-    public Magician(){
-        super(3,"Magician");
+import fr.unice.polytech.startingpoint.Player;
+
+public class Magician extends Character {
+    public Magician() {
+        super(3, "Magician");
     }
+
     @Override
-    public void usePower(){}
+    public void usePower(Player p) {
+    }
 }

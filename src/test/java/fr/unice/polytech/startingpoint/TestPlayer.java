@@ -128,7 +128,7 @@ public class TestPlayer {
         b.add(new Manufacture(BuildingEnum.Manufacture));
        when(pBuildings.getCity()).thenReturn(b);
        pBuildings.setRole(0);
-       board.getCharacters().get(0).setPlayer(pBuildings);
+       //board.getCharacters().get(0).setPlayer(pBuildings);
        pBuildings.play();
 
     }

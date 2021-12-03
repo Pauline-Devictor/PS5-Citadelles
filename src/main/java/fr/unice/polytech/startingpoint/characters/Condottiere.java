@@ -1,20 +1,22 @@
 package fr.unice.polytech.startingpoint.characters;
 
+import fr.unice.polytech.startingpoint.Player;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.District;
 
-public class Condottiere extends Character{
-    public Condottiere(){
-        super(8,"Condottiere");
-   }
+public class Condottiere extends Character {
+    public Condottiere() {
+        super(8, "Condottiere");
+    }
+
     @Override
-    public void usePower(){
-        int taxes=0;
-        for (Building b:getPlayer().getCardHand()) {
-            if (b.getBuilding().getDistrict() == District.Military){
+    public void usePower(Player p) {
+        int taxes = 0;
+        for (Building b : p.getCardHand()) {
+            if (b.getBuilding().getDistrict() == District.Military) {
                 taxes++;
             }
-            getPlayer().setTaxes(taxes);
+            p.setTaxes(taxes);
         }
     }
 }

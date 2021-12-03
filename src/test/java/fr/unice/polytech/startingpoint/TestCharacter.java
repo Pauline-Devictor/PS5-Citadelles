@@ -8,177 +8,101 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCharacter {
-   Assassin assassin;
-   Thief thief;
-   Magician magician;
-   King king;
-   Bishop bishop;
-   Merchant merchant;
-   Architect architect;
-   Condottiere condottiere;
-   Player architectOne;
-   Player p2;
-   Player assassinOne;
-   Player merchantOne;
-   Player kingOne;
-   Player bishopOne;
-   Player condottiereOne;
-   Board b;
+    Player architectOne;
+    Player architectTwo;
+    Player p2;
+    Player assassinOne;
+    Player merchantOne;
+    Player kingOne;
+    Player bishopOne;
+    Player condottiereOne;
+    Board b;
+    List<Building> buildings;
 
     @BeforeEach
-    void setUp(){
-        assassin = new Assassin();
-        thief = new Thief();
-        magician = new Magician();
-        king = new King();
-        bishop = new Bishop();
-        merchant = new Merchant();
-        architect = new Architect();
-        condottiere = new Condottiere();
+    void setUp() {
         b = new Board();
+        buildings = List.of(
+                new Building(BuildingEnum.Manoir),
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Eglise),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.Echoppe),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.TourDeGuet),//Military
+                new Building(BuildingEnum.Prison),
+                new Building(BuildingEnum.Caserne),
+                new Building(BuildingEnum.Forteresse)
+        );
 
         architectOne = spy(new Player(b));
-        when(architectOne.getRole()).thenReturn(architect);
+        when(architectOne.getRole()).thenReturn(Optional.of(new Architect()));
         when(architectOne.getGold()).thenReturn(26);
-        architect.setPlayer(architectOne);
-        b.getCharacters().get(6).setPlayer(architectOne);
+        when(architectOne.getCardHand()).thenReturn(new ArrayList<>());
         p2 = new Player(b);
 
         assassinOne = spy(new Player(b));
-        when(assassinOne.getRole()).thenReturn(assassin);
-        assassin.setPlayer(assassinOne);
-        b.getCharacters().get(0).setPlayer(assassinOne);
+        when(assassinOne.getRole()).thenReturn(Optional.of(new Assassin()));
         when(assassinOne.chooseVictim()).thenReturn(b.getCharacters().get(6));
 
-        condottiere.isTaken();
-
-        kingOne= spy(new Player(b));
-        when(kingOne.getRole()).thenReturn(king);
-        b.getCharacters().get(3).setPlayer(kingOne);
-        king.setPlayer(kingOne);
-
-        ArrayList<Building> buildings = new ArrayList<>();
-        buildings.add(new Building(BuildingEnum.Manoir));//Noble
-        buildings.add(new Building(BuildingEnum.Temple));//Religion
-        buildings.add(new Building(BuildingEnum.Eglise));
-        buildings.add(new Building(BuildingEnum.Taverne));//Commercial
-        buildings.add(new Building(BuildingEnum.Echoppe));
-        buildings.add(new Building(BuildingEnum.Marche));
-        buildings.add(new Building(BuildingEnum.TourDeGuet));//Military
-        buildings.add(new Building(BuildingEnum.Prison));
-        buildings.add(new Building(BuildingEnum.Caserne));
-        buildings.add(new Building(BuildingEnum.Forteresse));
-
+        kingOne = spy(new Player(b));
+        when(kingOne.getRole()).thenReturn(Optional.of(new King()));
         when(kingOne.getCardHand()).thenReturn(buildings);
 
         bishopOne = spy(new Player(b));
-        when(bishopOne.getRole()).thenReturn(bishop);
-        b.getCharacters().get(4).setPlayer(bishopOne);
-        bishop.setPlayer(bishopOne);
+        when(bishopOne.getRole()).thenReturn(Optional.of(new Bishop()));
         when(bishopOne.getCardHand()).thenReturn(buildings);
 
         merchantOne = spy(new Player(b));
-        when(merchantOne.getRole()).thenReturn(merchant);
-        b.getCharacters().get(5).setPlayer(merchantOne);
-        merchant.setPlayer(merchantOne);
+        when(merchantOne.getRole()).thenReturn(Optional.of(new Merchant()));
         when(merchantOne.getCardHand()).thenReturn(buildings);
 
         condottiereOne = spy(new Player(b));
-        when(condottiereOne.getRole()).thenReturn(condottiere);
-        b.getCharacters().get(7).setPlayer(condottiereOne);
-        condottiere.setPlayer(condottiereOne);
+        when(condottiereOne.getRole()).thenReturn(Optional.of(new Condottiere()));
         when(condottiereOne.getCardHand()).thenReturn(buildings);
+        //condottiere.isTaken();
+
+
+        architectTwo = spy(new Player(b));
+        when(architectTwo.getRole()).thenReturn(Optional.of(new Architect()));
     }
-    @Test
-    void assassinGetOrder(){
-        assertEquals(1,assassin.getOrder());
-    }
-    @Test
-    void thiefGetOrder(){
-        assertEquals(2,thief.getOrder());
-    }
-    @Test
-    void magicianGetOrder(){
-        assertEquals(3,magician.getOrder());
-    }
-    @Test
-    void kingGetOrder(){
-        assertEquals(4,king.getOrder());
-    }
-    @Test
-    void bishopGetOrder(){
-        assertEquals(5,bishop.getOrder());
-    }
-    @Test
-    void merchantGetOrder(){
-        assertEquals(6,merchant.getOrder());
-    }
-    @Test
-    void architectGetOrder(){
-        assertEquals(7,architect.getOrder());
-    }
-    @Test
-    void condottiereGetOrder(){
-        assertEquals(8,condottiere.getOrder());
-    }
-    @Test
-    void isAvailableTrue(){assertTrue(king.isAvailable());}
-    @Test
-    void isNotAvailable(){
-        king.isTaken();
-        assertFalse(king.isAvailable());}
-    @Test
-    void is_free(){
-        condottiere.resetRole();
-        assertTrue(condottiere.isAvailable());
-    }
-    @Test
-    void roleName(){
-        assertEquals("Assassin",assassin.getName());
-    }
-    @Test
-    void setPlayer(){
-        bishop.setPlayer(architectOne);
-        assertEquals(architectOne,bishop.getPlayer());
-    }
-    @Test
-    void setPlayerNull(){
-        assassin.setPlayer(p2);
-        assassin.resetRole();
-        assertNull(assassin.getPlayer());
-    }
-    @Test
+
+    /*@Test
     void build3(){//test that the Architect can build up to 3 buildings
         architectOne.play();
         verify(architectOne, times(3)).build(any());
-        /*int count=0;
-        for (Building b: architectOne.getBuildings()) {
-            if (b.getBuilt()){count+=1;}
-        }
-        assertEquals(3,count);*/
+    }*/
+
+    @Test
+    void build3() {//test that the Architect can build up to 3 buildings
+        architectOne.play();
+        assertEquals(3, architectOne.getNbBuildable());
     }
 
     @Test
-    void draw2Cards(){
-        int numberBuild = architectOne.getCardHand().size();
-        architectOne.drawCards(2);
-        assertEquals(numberBuild+2, architectOne.getCardHand().size());
+    void draw2Cards() {
+        int numberBuild = architectTwo.getCardHand().size();
+        architectTwo.drawCards(2);
+        assertEquals(numberBuild + 2, architectTwo.getCardHand().size());
     }
+
     @Test
-    public void murder(){
-        assassinOne.getRole().usePower();
+    public void murder() {
+        assassinOne.getRole().get().usePower(assassinOne);
         assertTrue(b.getCharactersInfos(6).gotMurdered());
     }
     @Test
     public void taxesKing(){
         kingOne.play();
-        assertEquals(b.getCharactersInfos(3).getPlayer().getTaxes(),1);
+        assertEquals(kingOne.getTaxes(), 1);
     }
     @Test
     public void taxesBishop(){

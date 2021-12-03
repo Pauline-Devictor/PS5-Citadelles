@@ -9,10 +9,7 @@ public class Bibliotheque extends Prestige{
     }
 
     public void useEffect(Player p){
-        if(p.getGold()>=3 && p.getBoard().getPile().numberOfCards()>=3){
-            System.out.println("Effect Bibliotheque");
-            p.getBoard().getBank().refundGold(3);
-            p.drawCards(3);
-        }
+        System.out.println("Effect Bibliotheque");
+        p.drawCards(1);
     }
 }

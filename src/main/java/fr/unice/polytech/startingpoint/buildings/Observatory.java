@@ -2,17 +2,14 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.Player;
 
-public class Observatory extends Building{
+public class Observatory extends Prestige {
 
     public Observatory(BuildingEnum b) {
         super(b);
     }
 
-    public void useEffect(Player p){
-        if(p.getGold()>=3 && p.getBoard().getPile().numberOfCards()>=3){
-            //System.out.println("Effect Manufacture");
-            p.getBoard().getBank().refundGold(3);
-            p.drawCards(3);
-        }
+    public void useEffect(Player p) {
+        System.out.println("Effect Observatoire");
+        p.drawCards(1);
     }
 }
