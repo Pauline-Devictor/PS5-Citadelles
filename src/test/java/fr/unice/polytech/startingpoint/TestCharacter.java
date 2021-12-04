@@ -4,6 +4,7 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 
+import fr.unice.polytech.startingpoint.characters.Character;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +25,11 @@ public class TestCharacter {
     Player kingOne;
     Player bishopOne;
     Player condottiereOne;
+    Player magicianOne;
+    Player thiefOne;
     Board b;
     List<Building> buildings;
+    Character magician = new Magician();
 
     @BeforeEach
     void setUp() {
@@ -69,6 +73,16 @@ public class TestCharacter {
         when(condottiereOne.getRole()).thenReturn(Optional.of(new Condottiere()));
         when(condottiereOne.getCardHand()).thenReturn(buildings);
         //condottiere.isTaken();
+
+        thiefOne = spy(new Player(b));
+        when(thiefOne.getRole()).thenReturn(Optional.of(new Thief()));
+        when(thiefOne.chooseRob()).thenReturn(b.getCharacters().get(2));
+        b.getCharacters().get(1).setPlayer(thiefOne);
+
+        magicianOne = spy(new Player(b));
+        magician.setStolen();
+        when(magicianOne.getRole()).thenReturn(Optional.of(magician));
+
 
 
         architectTwo = spy(new Player(b));
@@ -118,5 +132,11 @@ public class TestCharacter {
     public void taxesCondottiere(){
         condottiereOne.play();
         assertEquals(condottiereOne.getTaxes(),4);
+    }
+    @Test
+    public void steal(){
+        thiefOne.getRole().get().usePower(thiefOne);
+        magicianOne.play();
+        assertEquals(thiefOne.getAmountStolen(),2);
     }
 }

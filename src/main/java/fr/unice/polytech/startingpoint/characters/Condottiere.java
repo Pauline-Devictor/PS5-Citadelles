@@ -9,8 +9,7 @@ public class Condottiere extends Character {
         super(8, "Condottiere");
     }
 
-    @Override
-    public void usePower(Player p) {
+    public void collectTaxes(Player p){
         int taxes = 0;
         for (Building b : p.getCardHand()) {
             if (b.getBuilding().getDistrict() == District.Military) {
@@ -18,5 +17,14 @@ public class Condottiere extends Character {
             }
             p.setTaxes(taxes);
         }
+    }
+
+    public void destroyBuilding(Player victim){
+
+    }
+
+    @Override
+    public void usePower(Player p) {
+        collectTaxes(p);
     }
 }

@@ -7,12 +7,15 @@ public abstract class Character {
     protected boolean available;
     private final String name;
     private boolean isMurdered;
+    private boolean isStolen;
+    protected Player player;
 
     public Character(int order, String name) {
         this.order = order;
         this.name = name;
         available = true;
         isMurdered = false;
+        isStolen = false;
 
     }
 
@@ -42,6 +45,9 @@ public abstract class Character {
         isMurdered = false;
         //Free the character after each turn
         available = true;
+        //Not stolen anymore
+        isStolen = false;
+        //No thiefplayer anymore
     }
 
     public void setMurdered() {
@@ -51,6 +57,14 @@ public abstract class Character {
     public boolean gotMurdered() {
         return isMurdered;
     }
+
+    public void setStolen(){isStolen = true;}
+
+    public boolean gotStolen(){return isStolen;}
+
+    public void setPlayer(Player p){player = p;}
+
+    public Player getPlayer(){return player;}
 
     public abstract void usePower(Player p);
 }

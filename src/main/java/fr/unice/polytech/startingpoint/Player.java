@@ -22,7 +22,7 @@ public class Player {
     private final Strategies strat;
     private final List<Building> cardHand;
     private final List<Building> city;
-
+    private int amountStolen;
 
     Player(Board b, String name, Strategies strat) {
         this.name = name;
@@ -36,6 +36,7 @@ public class Player {
         goldScore = 0;
         taxes = 0;
         this.strat = strat;
+        amountStolen =0;
     }
 
     Player(Board b) {
@@ -49,6 +50,7 @@ public class Player {
         city = new ArrayList<>();
         goldScore = 0;
         strat = Strategies.balanced;
+        amountStolen = 0;
     }
 
     void build(Building b) {
@@ -73,7 +75,10 @@ public class Player {
         Building checkDraw = null;
         if (getRole().orElse(null).gotMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
-        } else {
+        }
+
+        else {
+            stolen();
             // chooses to draw a card because there is nothing buildable or bank is empty
             if (draw || board.getBank().isEmpty())
                 checkDraw = drawDecision().orElse(null);
@@ -211,11 +216,11 @@ public class Player {
         return goldScore;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    Optional<Character> getRole() {
+    public Optional<Character> getRole() {
         return role;
     }
 
@@ -293,5 +298,32 @@ public class Player {
     public void refundGold(int i) {
         gold -= i;
         board.getBank().refundGold(i);
+    }
+
+    public Character chooseRob(){
+        Random random = new Random();
+        int victim = random.nextInt(6) + 2;
+        return board.getCharacters().get(victim);
+    }
+
+    public void takeMoney(int amount) {
+        gold += amount;
+    }
+
+    public void setAmountStolen(int amount){
+        amountStolen = amount;
+    }
+
+    public int getAmountStolen(){
+        return amountStolen;
+    }
+
+    public void stolen(){
+        if (getRole().orElse(null).gotStolen()){//TODO Affichage ?
+            board.getBank().transferGold(getGold(),board.getCharactersInfos(1).getPlayer());
+            System.out.println(ANSI_ITALIC + getName() + " has been robbed."+ getGold() +" gold has been stolen." + ANSI_RESET);
+            board.getCharactersInfos(1).getPlayer().setAmountStolen(getGold());
+            gold = 0;
+        }
     }
 }
