@@ -20,7 +20,7 @@ public class Player {
     private int nbBuildable = 1;
     private int taxes;
     private final Strategies strat;
-    private final List<Building> cardHand;
+    private List<Building> cardHand;
     private final List<Building> city;
     private int amountStolen;
 
@@ -327,8 +327,32 @@ public class Player {
             gold = 0;
         }
     }
-
+    //Condo
     public void chooseTargetToDestroy(){
 
+    }
+
+    public void deckAfterMagician(){
+        Random random = new Random();
+        int number = random.nextInt(2);
+        if(number ==0){//Remplacement des cartes
+            System.out.println("Le Magicien change ses cartes");
+            int n = cardHand.size();
+            for (Building cards:cardHand) {board.getPile().putCard(cards);}
+            drawCards(n);
+            }
+        else {
+            System.out.println("Le Magicien echange ses cartes");
+            Random random2 = new Random();
+            int number2 = random2.nextInt(board.getNbPlayer());
+            Player p = board.getPlayers().get(number2);// echange de la main avec un autre joueur
+            List<Building> tempHand = cardHand;
+            cardHand = p.getCardHand();
+            p.swapHand( tempHand);
+        }
+    }
+
+    public void swapHand(List<Building> cards){
+        cardHand = cards;
     }
 }

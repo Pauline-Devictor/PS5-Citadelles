@@ -21,6 +21,7 @@ public class Game {
         for(int i=1;i<=nb_players;i++){
             players.add(new Player(board, String.valueOf(i),Strategies.pickAStrat(r.nextInt(3))));
         }
+        board.setPlayers(players,nb_players);
         players.get(0).setCrown(true);
     }
 

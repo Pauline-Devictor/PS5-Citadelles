@@ -10,6 +10,8 @@ public class Board {
     private final Deck pile;
     private final Bank bank;
     private final List<Character> characters;
+    private List<Player> players;
+    private int nbPlayer;
 
     Board() {
         this.bank = new Bank(30);
@@ -52,4 +54,15 @@ public class Board {
         }
         return String.valueOf(res);
     }*/
+    public List<Player> getPlayers(){
+        return players;
+    }
+    public void setPlayers(List<Player> players,int nbPlayer){
+        this.players = players;
+        this.nbPlayer = nbPlayer;
+    }
+
+    public int getNbPlayer(){
+        return nbPlayer;
+    }
 }
