@@ -30,6 +30,7 @@ public class TestCharacter {
     Board b;
     List<Building> buildings;
     Character magician = new Magician();
+    Character merchant = new Merchant();
 
     @BeforeEach
     void setUp() {
@@ -66,8 +67,9 @@ public class TestCharacter {
         when(bishopOne.getCardHand()).thenReturn(buildings);
 
         merchantOne = spy(new Player(b));
-        when(merchantOne.getRole()).thenReturn(Optional.of(new Merchant()));
+        when(merchantOne.getRole()).thenReturn(Optional.of(merchant));
         when(merchantOne.getCardHand()).thenReturn(buildings);
+        b.getCharacters().get(6).setPlayer(merchantOne);
 
         condottiereOne = spy(new Player(b));
         when(condottiereOne.getRole()).thenReturn(Optional.of(new Condottiere()));
@@ -138,5 +140,11 @@ public class TestCharacter {
         thiefOne.getRole().get().usePower(thiefOne);
         magicianOne.play();
         assertEquals(thiefOne.getAmountStolen(),2);
+    }
+    @Test
+    public void merchantGetOneGold(){
+        System.out.println(merchantOne.getGold());
+        merchant.usePower(merchantOne);
+        assertEquals(merchantOne.getGold(),3);
     }
 }

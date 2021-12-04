@@ -307,7 +307,7 @@ public class Player {
     }
 
     public void takeMoney(int amount) {
-        gold += amount;
+        gold += board.getBank().withdrawGold(amount);
     }
 
     public void setAmountStolen(int amount){
@@ -323,7 +323,12 @@ public class Player {
             board.getBank().transferGold(getGold(),board.getCharactersInfos(1).getPlayer());
             System.out.println(ANSI_ITALIC + getName() + " has been robbed."+ getGold() +" gold has been stolen." + ANSI_RESET);
             board.getCharactersInfos(1).getPlayer().setAmountStolen(getGold());
+            board.getBank().refundGold(gold);
             gold = 0;
         }
+    }
+
+    public void chooseTargetToDestroy(){
+
     }
 }

@@ -23,5 +23,6 @@ public class Merchant extends Character {
     public void usePower(Player p) {
         setPlayer(p);
         collectTaxes(p);
+        p.takeMoney(1);
     }
 }

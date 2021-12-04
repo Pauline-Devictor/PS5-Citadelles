@@ -20,12 +20,13 @@ public class Condottiere extends Character {
     }
 
     public void destroyBuilding(Player victim){
-
+        victim.getCardHand();
     }
 
     @Override
     public void usePower(Player p) {
         setPlayer(p);
         collectTaxes(p);
+
     }
 }
