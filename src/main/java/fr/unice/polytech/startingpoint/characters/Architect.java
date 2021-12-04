@@ -9,6 +9,7 @@ public class Architect extends Character {
 
     @Override
     public void usePower(Player p) {
+        setPlayer(p);
         //Architect allow building 2 more buildings total =3
         p.setNbBuildable(3);
         p.drawCards(2);

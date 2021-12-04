@@ -25,6 +25,7 @@ public class Condottiere extends Character {
 
     @Override
     public void usePower(Player p) {
+        setPlayer(p);
         collectTaxes(p);
     }
 }

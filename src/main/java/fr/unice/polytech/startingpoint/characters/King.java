@@ -8,9 +8,7 @@ public class King extends Character {
     public King() {
         super(4, "King");
     }
-
-    @Override
-    public void usePower(Player p) {
+    public void collectTaxes(Player p){
         int taxes = 0;
         for (Building b : p.getCardHand()) {
             if (b.getBuilding().getDistrict() == District.Noble) {
@@ -18,5 +16,11 @@ public class King extends Character {
             }
             p.setTaxes(taxes);
         }
+    }
+
+    @Override
+    public void usePower(Player p) {
+        setPlayer(p);
+        collectTaxes(p);
     }
 }

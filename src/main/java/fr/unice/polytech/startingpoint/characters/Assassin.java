@@ -14,6 +14,7 @@ public class Assassin extends Character {
 
     @Override
     public void usePower(Player p) {
+        setPlayer(p);
         Character victim = p.chooseVictim();
         power(victim);
     }

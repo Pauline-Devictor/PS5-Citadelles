@@ -9,5 +9,6 @@ public class Magician extends Character {
 
     @Override
     public void usePower(Player p) {
+        setPlayer(p);
     }
 }

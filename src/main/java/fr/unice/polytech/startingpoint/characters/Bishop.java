@@ -8,9 +8,7 @@ public class Bishop extends Character {
     public Bishop() {
         super(5, "Bishop");
     }
-
-    @Override
-    public void usePower(Player p) {
+    public void collectTaxes(Player p){
         int taxes = 0;
         for (Building b : p.getCardHand()) {
             if (b.getBuilding().getDistrict() == District.Religion) {
@@ -18,5 +16,12 @@ public class Bishop extends Character {
             }
             p.setTaxes(taxes);
         }
+    }
+
+    @Override
+    public void usePower(Player p) {
+        setPlayer(p);
+        collectTaxes(p);
+
     }
 }
