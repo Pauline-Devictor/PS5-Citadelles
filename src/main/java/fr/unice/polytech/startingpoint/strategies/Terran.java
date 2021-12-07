@@ -11,9 +11,9 @@ import java.util.Random;
 
 import static java.util.Objects.isNull;
 
-public class Zerg extends Player {
+public class Terran extends Player {
 
-    public Zerg(Board b, String name) {
+    public Terran(Board b, String name) {
         super(b, name);
     }
 
@@ -33,7 +33,7 @@ public class Zerg extends Player {
 
     public List<Building> buildDecision() {
         //Scale of cost ok for building
-        return buildDecision(0, 3);
+        return buildDecision(3, 6);
     }
 
     public Building chooseBuilding(Building b1, Building b2) {
@@ -45,7 +45,7 @@ public class Zerg extends Player {
             return b2;
         else if (getCardHand().contains(b2))
             return b1;
-        return (b1.getCost() > b2.getCost()) ? b2 : b1;
+        return (b1.getCost() < b2.getCost()) ? b2 : b1;
     }
 
     public Character chooseVictim() {

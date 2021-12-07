@@ -7,12 +7,35 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static fr.unice.polytech.startingpoint.Main.*;
-import static fr.unice.polytech.startingpoint.Main.ANSI_RESET;
+import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 import static java.util.Objects.isNull;
 
 public class Board {
+    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
+    public static final String ANSI_BOLD = "\u001B[1m";
+    public static final String ANSI_ITALIC = "\u001B[3m";
+    public static final String ANSI_UNDERLINE = "\u001B[4m";
+
     private final Deck pile;
     private final Bank bank;
     private final List<Character> characters;
@@ -97,12 +120,27 @@ public class Board {
         System.out.println(res);
     }
 
-    /*String showBoard(List<Player> players){
+    void showRanking() {
+        players.sort(PointsOrder);
+        for (int i = 1; i <= players.size(); i++) {
+            System.out.println(i + ". Avec " + players.get(i - 1).getGoldScore() + " points, c'est " + players.get(i - 1).getName());
+        }
+    }
+
+    String showBoard() {
         StringBuilder res = new StringBuilder();
         for (Player player : players) {
             res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
         }
+        System.out.println(res);
         return String.valueOf(res);
-    }*/
+    }
+
+    void showVariables(int turn) {
+        AtomicInteger res = new AtomicInteger();
+        players.forEach(e -> res.addAndGet(e.getGold()));
+        System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (turn) + ":" + ANSI_RESET +
+                " Cartes Restantes : " + pile.numberOfCards() + " Or Dans la Banque : " + bank.getGold() + " Or Joueurs :" + res);
+    }
 
 }

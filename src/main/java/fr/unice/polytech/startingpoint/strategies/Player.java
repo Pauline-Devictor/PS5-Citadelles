@@ -5,10 +5,9 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
-import static fr.unice.polytech.startingpoint.Main.*;
+import static fr.unice.polytech.startingpoint.Board.*;
 import static java.util.Objects.isNull;
 
 public class Player {
@@ -79,22 +78,33 @@ public class Player {
                 // chooses to get 2 golds because nothing can be built
             else
                 gold += board.getBank().withdrawGold(2);
-            getRole().orElse(null).usePower(board);
-            int goldTaxes = getGold();
-            gold += board.getBank().withdrawGold(taxes);
-            goldTaxes = getGold() - goldTaxes;
-
-            getCity().forEach(e -> {
-                if (e instanceof Prestige)
-                    ((Prestige) e).useEffect(this);
-            });
+            //Decide for the use of power of his character
+            int goldTaxes = roleEffects();
+            //Decide for the use of wonders
+            cityEffects();
+            //Decide what to build
             List<Building> checkBuilding = buildDecision();
+            //show the move in the console
             board.showPlay(this, goldDraw, goldTaxes, checkDraw, checkBuilding);
         }
 
     }
 
-    private void checkStolen() {
+    void cityEffects() {
+        getCity().forEach(e -> {
+            if (e instanceof Prestige)
+                ((Prestige) e).useEffect(this);
+        });
+    }
+
+    int roleEffects() {
+        getRole().orElse(null).usePower(board);
+        int goldTaxes = getGold();
+        gold += board.getBank().withdrawGold(taxes);
+        return getGold() - goldTaxes;
+    }
+
+    void checkStolen() {
         Optional<Player> thief = getRole().get().getThief();
         if (thief.isPresent()) {
             int save = gold;
@@ -119,16 +129,11 @@ public class Player {
     }
 
     public List<Building> buildDecision() {
-        int costMin = 0;
-        int costMax = 6;
-        return getBuildings(costMin, costMax);
+        //Scale of cost ok for building
+        return buildDecision(0, 6);
     }
 
     public List<Building> buildDecision(int costMin, int costMax) {
-        return getBuildings(costMin, costMax);
-    }
-
-    private List<Building> getBuildings(int costMin, int costMax) {
         List<Building> checkBuilding = new ArrayList<>();
         for (Building b : getCardHand()) {
             if (isBuildable(b) && nbBuildable > 0) {
@@ -182,11 +187,56 @@ public class Player {
         board.getCharactersInfos(index).setAvailable(false);
     }
 
+    public void drawCards(int nbCards) {
+        for (int i = 0; i < nbCards; i++) {
+            Optional<Building> b1 = board.getPile().drawACard();
+            b1.ifPresent(cardHand::add);
+        }
+    }
+
+    public void discardCard(Optional<Building> buildingOptional) {
+        if (!getCardHand().isEmpty()) {
+            Building b = buildingOptional.orElse(getCardHand().get(0));
+            cardHand.remove(b);
+            board.getPile().putCard(b);
+        }
+    }
+
+    public static Comparator<Player> RoleOrder = (e1, e2) -> {
+        //Positive if e2 > e1
+        int res = 1;
+        if (e1.getRole().isPresent() && e2.getRole().isPresent()) {
+            res = e1.getRole().get().getOrder() - e2.getRole().get().getOrder();
+        } else if (e1.getRole().isPresent())
+            res = -1;
+        return res;
+    };
+
+    public static Comparator<Player> PointsOrder = (e1, e2) -> {
+        //Positive if e2 > e1
+        return e2.getGoldScore() - e1.getGoldScore();
+    };
+
+    public void refundGold(int amount) {
+        gold -= board.getBank().refundGold(amount);
+    }
+
+    public void takeMoney(int amount) {
+        gold += board.getBank().withdrawGold(amount);
+    }
+
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(ANSI_PURPLE + name + "  " + role + ANSI_RESET +
-                " et " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
-        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_CYAN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
+        StringBuilder res = new StringBuilder(ANSI_PURPLE + name);
+        if (role.isPresent())
+            res.append(", " + role);
+        res.append(ANSI_RESET + " avec " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
+        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_GREEN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
+        res.append("\n" + ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Batiments Non Construits :" + ANSI_RESET);
+        for (Building b : cardHand) {
+            res.append("\n\t").append(b.toString()).append(" ");
+        }
+        res.append("\n" + ANSI_CYAN_BACKGROUND + ANSI_BLACK + "Batiments Construits :" + ANSI_RESET);
         for (Building b : city) {
             res.append("\n\t").append(b.toString()).append(" ");
         }
@@ -225,12 +275,6 @@ public class Player {
         return city;
     }
 
-    public void drawCards(int nbCards) {
-        for (int i = 0; i < nbCards; i++) {
-            Optional<Building> b1 = board.getPile().drawACard();
-            b1.ifPresent(cardHand::add);
-        }
-    }
 
     public int getTaxes() {
         return taxes;
@@ -249,34 +293,8 @@ public class Player {
         return board;
     }
 
-    public void discardCard(Optional<Building> buildingOptional) {
-        if (!getCardHand().isEmpty()) {
-            Building b = buildingOptional.orElse(getCardHand().get(0));
-            cardHand.remove(b);
-            board.getPile().putCard(b);
-        }
-    }
-
     public int getNbBuildable() {
         return nbBuildable;
-    }
-
-    public static Comparator<Player> RoleOrder = (e1, e2) -> {
-        //Positive if e2 > e1
-        int res = 1;
-        if (e1.getRole().isPresent() && e2.getRole().isPresent()) {
-            res = e1.getRole().get().getOrder() - e2.getRole().get().getOrder();
-        } else if (e1.getRole().isPresent())
-            res = -1;
-        return res;
-    };
-
-    public void refundGold(int amount) {
-        gold -= board.getBank().refundGold(amount);
-    }
-
-    public void takeMoney(int amount) {
-        gold += board.getBank().withdrawGold(amount);
     }
 
     public void setCardHand(List<Building> cards) {

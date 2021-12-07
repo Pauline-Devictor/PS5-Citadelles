@@ -4,10 +4,8 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static fr.unice.polytech.startingpoint.Main.*;
+import static fr.unice.polytech.startingpoint.Board.*;
 
 public class Game {
     private final Board board;
@@ -26,37 +24,24 @@ public class Game {
         return players;
     }
 
-    List<Player> determineWinner() {
-        List<Player> list_players = getPlayers();
-        if (list_players.size() > 0) {
-            int max = list_players.get(0).getGoldScore();
-            for (Player p : list_players) {
-                if (max < p.getGoldScore())
-                    max = p.getGoldScore();
-            }
-            int finalMax = max;
-            list_players = list_players.stream().filter(e -> e.getGoldScore() == finalMax).toList();
-        }
-        return list_players;
+    void showEndOfGame() {
+        System.out.println(ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Le classement de fin de partie est le suivant :" + ANSI_RESET);
+        board.showRanking();
+        System.out.println(ANSI_ITALIC + ANSI_YELLOW + "Pour plus de details sur la fin de partie :" + ANSI_RESET);
+        board.showBoard();
     }
 
-    void showWinner(List<Player> winners ){
-        //TODO Affichage Classement
-        if(winners.size()>1)
-            System.out.println(ANSI_BLUE_BACKGROUND+ANSI_BLACK+"Les gagnants sont :"+ANSI_RESET);
-        else
-            System.out.println(ANSI_BLUE_BACKGROUND+ANSI_BLACK+"Le gagnant est :"+ANSI_RESET);
-        winners.forEach(System.out::println);
+    void run() {
+        newGame();
+        showEndOfGame();
     }
 
-    List<Player> newGame() {
+    void newGame() {
         boolean endOfGame = false;
         int turn = 0;
         while (!endOfGame) {
-            AtomicInteger res = new AtomicInteger();
-            players.forEach(e -> res.addAndGet(e.getGold()));
-            System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (++turn) + ":" + ANSI_RESET +
-                    " Cartes Restantes : " + board.getPile().numberOfCards() + " Or Dans la Banque : " + board.getBank().getGold() + " Or Joueurs :" + res);
+            turn++;
+            board.showVariables(turn);
 
             getOrderPlayer();
             orderPlayers.forEach(Player::chooseRole);
@@ -81,10 +66,8 @@ public class Game {
                 }
             }
         }
-        return determineWinner();
     }
 
-    //TODO Ordre des Choix, Couronne puis a gauche du joueur actuel
     void getOrderPlayer() {
         List<Player> alternateList = new ArrayList<>();
         int index = orderPlayers.indexOf(first);
@@ -93,15 +76,12 @@ public class Game {
         orderPlayers = List.copyOf(alternateList);
     }
 
-    void resetPlayer(){
-        for (Player p : players){
+    void resetPlayer() {
+        for (Player p : players) {
             p.setNbBuildable(1);
             p.setTaxes(0);
             p.removeRole();
         }
-    }
-    void run(){
-        showWinner(newGame());
     }
 
     public Board getBoard() {
