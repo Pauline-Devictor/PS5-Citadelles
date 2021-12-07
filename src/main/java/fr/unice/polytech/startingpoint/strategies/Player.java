@@ -301,4 +301,5 @@ public class Player {
     public void setRole(Optional<Character> role) {
         this.role = role;
     }
+
 }

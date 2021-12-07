@@ -127,13 +127,12 @@ public class Board {
         }
     }
 
-    String showBoard() {
+    void showBoard() {
         StringBuilder res = new StringBuilder();
         for (Player player : players) {
             res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
         }
         System.out.println(res);
-        return String.valueOf(res);
     }
 
     void showVariables(int turn) {

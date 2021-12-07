@@ -74,13 +74,11 @@ public class TestPlayer {
     }
     @Test
     void chooseBuildingLow(){
-        System.out.println(pLow);
         assertEquals(eglise,pLow.chooseBuilding(eglise,caserne));
 
     }
     @Test
     void chooseBuildingHigh(){
-        System.out.println(pHigh);
         assertEquals(caserne,pHigh.chooseBuilding(eglise,caserne));
     }
 

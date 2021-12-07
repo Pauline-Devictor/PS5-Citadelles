@@ -12,10 +12,6 @@ public class Condottiere extends Character {
         super(CharacterEnum.Condottiere);
     }
 
-    /*public void destroyBuilding(Player victim) {
-        victim.getCardHand();
-    }*/
-
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
