@@ -4,7 +4,7 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.Laboratory;
 import fr.unice.polytech.startingpoint.buildings.Manufacture;
-import fr.unice.polytech.startingpoint.characters.Architect;
+import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,12 +24,12 @@ public class TestPlayer {
     Board board;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         board = new Board();
         pBuildings = spy(new Player(board));
         p = new Player(new Board());
-        pLow = spy(new Player(new Board()," ",Strategies.lowGold));
-        pHigh = spy(new Player(new Board(),"",Strategies.highGold));
+        pLow = spy(new Player(new Board(), " "));
+        pHigh = spy(new Player(new Board(), ""));
         when(pLow.getCardHand()).thenReturn(new ArrayList<>());
         when(pHigh.getCardHand()).thenReturn(new ArrayList<>());
         eglise = new Building(BuildingEnum.Eglise);

@@ -27,7 +27,7 @@ public class Deck {
             buildings.add(new Building(BuildingEnum.Forteresse));
             buildings.add(new Building(BuildingEnum.Donjon));
         }
-        for(int i=0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             buildings.add(new Building(BuildingEnum.Temple));
             buildings.add(new Building(BuildingEnum.Monastere));
             buildings.add(new Building(BuildingEnum.Echoppe));
@@ -37,19 +37,19 @@ public class Deck {
             buildings.add(new Building(BuildingEnum.Prison));
             buildings.add(new Building(BuildingEnum.Caserne));
         }
-        for(int i=0;i<4;i++){
+        for (int i = 0; i < 4; i++) {
             buildings.add(new Building(BuildingEnum.Eglise));
             buildings.add(new Building(BuildingEnum.Chateau));
             buildings.add(new Building(BuildingEnum.Marche));
         }
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             buildings.add(new Building(BuildingEnum.Manoir));
             buildings.add(new Building(BuildingEnum.Taverne));
         }
     }
 
-    Optional<Building> drawACard(){
-        if (buildings.size()>0) {
+    public Optional<Building> drawACard() {
+        if (buildings.size() > 0) {
             int index = new Random().nextInt(buildings.size());
             Optional<Building> b = Optional.of(buildings.get(index));
             buildings.remove(index);
@@ -58,15 +58,15 @@ public class Deck {
         return Optional.empty();
     }
 
-    boolean isEmpty(){
-        return buildings.size()<=0;
+    public boolean isEmpty() {
+        return buildings.size() <= 0;
     }
 
     public int numberOfCards() {
         return buildings.size();
     }
 
-    public void putCard(Building b){
+    public void putCard(Building b) {
         buildings.add(b);
     }
 }

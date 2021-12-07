@@ -1,39 +1,29 @@
 package fr.unice.polytech.startingpoint.characters;
-import fr.unice.polytech.startingpoint.Player;
 
+
+import fr.unice.polytech.startingpoint.Board;
+import fr.unice.polytech.startingpoint.District;
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.strategies.Player;
+
+import java.util.Optional;
 
 public abstract class Character {
     private final int order;
     protected boolean available;
     private final String name;
     private boolean isMurdered;
-    private boolean isStolen;
-    protected Player player;
+    //empty si le personnage n'est pas volé, le voleur sinon
+    private Optional<Player> thief;
 
     public Character(int order, String name) {
         this.order = order;
         this.name = name;
         available = true;
         isMurdered = false;
-        isStolen = false;
+        thief = Optional.empty();
 
     }
-
-    public int getOrder() {
-        return order;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void isTaken() {
-        available = false;
-    }//un bot prend le personnage
 
     @Override
     public String toString() {
@@ -46,25 +36,60 @@ public abstract class Character {
         //Free the character after each turn
         available = true;
         //Not stolen anymore
-        isStolen = false;
+        thief = Optional.empty();
         //No thiefplayer anymore
     }
 
-    public void setMurdered() {
-        isMurdered = true;
+    public abstract void usePower(Board board);
+
+    public Optional<Player> findPlayer(Board board) {
+        Optional<Player> p = Optional.empty();
+        for (Player player : board.getPlayers()) {
+            if (player.getRole().get().getClass().equals(getClass()))
+                p = Optional.of(player);
+        }
+        return p;
     }
 
-    public boolean gotMurdered() {
+    public void collectTaxes(Player p, District d) {
+        int taxes = 0;
+        for (Building b : p.getCardHand()) {
+            if (b.getBuilding().getDistrict() == d) {
+                taxes++;
+            }
+            p.setTaxes(taxes);
+        }
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isMurdered() {
         return isMurdered;
     }
 
-    public void setStolen(){isStolen = true;}
+    public void setMurdered(boolean murdered) {
+        isMurdered = murdered;
+    }
 
-    public boolean gotStolen(){return isStolen;}
+    public Optional<Player> getThief() {
+        return thief;
+    }
 
-    public void setPlayer(Player p){player = p;}
-
-    public Player getPlayer(){return player;}
-
-    public abstract void usePower(Player p);
+    public void setThief(Optional<Player> thief) {
+        this.thief = thief;
+    }
 }

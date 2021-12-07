@@ -1,28 +1,29 @@
 package fr.unice.polytech.startingpoint.characters;
 
-import fr.unice.polytech.startingpoint.Player;
-import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.District;
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.strategies.Player;
+
+import java.util.Optional;
+
+import static fr.unice.polytech.startingpoint.District.Commercial;
+import static fr.unice.polytech.startingpoint.District.Noble;
 
 public class Merchant extends Character {
     public Merchant() {
         super(6, "Merchant");
     }
 
-    public void collectTaxes(Player p){
-        int taxes = 0;
-        for (Building b : p.getCardHand()) {
-            if (b.getBuilding().getDistrict() == District.Commercial) {
-                taxes++;
-            }
-            p.setTaxes(taxes);
-        }
+    @Override
+    public void usePower(Board b) {
+        Optional<Player> p = findPlayer(b);
+        if (p.isPresent()) {
+            collectTaxes(p.get(), Commercial);
+            p.get().takeMoney(1);
+        } else
+            throw new IllegalArgumentException("No Role " + getName() + " in this board");
+
     }
 
-    @Override
-    public void usePower(Player p) {
-        setPlayer(p);
-        collectTaxes(p);
-        p.takeMoney(1);
-    }
 }

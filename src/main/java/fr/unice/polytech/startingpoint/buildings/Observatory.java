@@ -1,6 +1,6 @@
 package fr.unice.polytech.startingpoint.buildings;
 
-import fr.unice.polytech.startingpoint.Player;
+import fr.unice.polytech.startingpoint.strategies.Player;
 
 public class Observatory extends Prestige {
 

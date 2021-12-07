@@ -1,5 +1,6 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.strategies;
 
+import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
@@ -11,20 +12,17 @@ import static fr.unice.polytech.startingpoint.Main.*;
 import static java.util.Objects.isNull;
 
 public class Player {
-    private final String name;
-    private int gold;
-    private int goldScore;
-    private final Board board;
-    private Optional<Character> role = Optional.empty();
-    private boolean crown = false;
-    private int nbBuildable = 1;
-    private int taxes;
-    private final Strategies strat;
-    private List<Building> cardHand;
-    private final List<Building> city;
-    private int amountStolen;
+    protected final String name;
+    protected int gold;
+    protected int goldScore;
+    protected final Board board;
+    protected Optional<Character> role;
+    protected int nbBuildable = 1;
+    protected int taxes;
+    protected List<Building> cardHand;
+    protected final List<Building> city;
 
-    Player(Board b, String name, Strategies strat) {
+    public Player(Board b, String name) {
         this.name = name;
         board = b;
         gold = board.getBank().withdrawGold(2);
@@ -35,11 +33,10 @@ public class Player {
         city = new ArrayList<>();
         goldScore = 0;
         taxes = 0;
-        this.strat = strat;
-        amountStolen =0;
+        role = Optional.empty();
     }
 
-    Player(Board b) {
+    public Player(Board b) {
         this.name = "undefined";
         board = b;
         gold = board.getBank().withdrawGold(2);
@@ -49,11 +46,11 @@ public class Player {
         }
         city = new ArrayList<>();
         goldScore = 0;
-        strat = Strategies.balanced;
-        amountStolen = 0;
+        //amountStolen = 0;
+        role = Optional.empty();
     }
 
-    void build(Building b) {
+    public void build(Building b) {
         boolean buildable = isBuildable(b);
         if (buildable) {
             board.getBank().refundGold(b.getCost());
@@ -64,44 +61,49 @@ public class Player {
         }
     }
 
-    boolean isBuildable(Building b) {
+    public boolean isBuildable(Building b) {
         return gold >= b.getCost() && !city.contains(b);
     }
 
-    void play() {
+    public void play() {
         int goldDraw = getGold();
         boolean draw = !board.getPile().isEmpty() && cardHand.stream().allMatch(this::isBuildable);
-        ArrayList<Building> checkBuilding = new ArrayList<>();
         Building checkDraw = null;
-        if (getRole().orElse(null).gotMurdered()) {
+        if (getRole().orElse(null).isMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
-        }
-
-        else {
-            stolen();
+        } else {
+            checkStolen();
             // chooses to draw a card because there is nothing buildable or bank is empty
             if (draw || board.getBank().isEmpty())
                 checkDraw = drawDecision().orElse(null);
                 // chooses to get 2 golds because nothing can be built
             else
                 gold += board.getBank().withdrawGold(2);
-            getRole().orElse(null).usePower(this);
-            //TODO Board ?
+            getRole().orElse(null).usePower(board);
             int goldTaxes = getGold();
             gold += board.getBank().withdrawGold(taxes);
             goldTaxes = getGold() - goldTaxes;
 
             getCity().forEach(e -> {
-                if(e instanceof Prestige)
+                if (e instanceof Prestige)
                     ((Prestige) e).useEffect(this);
-            } );
-            buildDecision(checkBuilding);
-            showPlay(goldDraw, goldTaxes, checkDraw, checkBuilding);
+            });
+            List<Building> checkBuilding = buildDecision();
+            board.showPlay(this, goldDraw, goldTaxes, checkDraw, checkBuilding);
         }
 
     }
 
-    private Optional<Building> drawDecision() {
+    private void checkStolen() {
+        Optional<Player> thief = getRole().get().getThief();
+        if (thief.isPresent()) {
+            int save = gold;
+            refundGold(gold);
+            thief.get().takeMoney(save);
+        }
+    }
+
+    Optional<Building> drawDecision() {
         Optional<Building> b1 = board.getPile().drawACard();
         Optional<Building> b = b1;
         //Si la premiere Carte est nulle, la seconde aussi
@@ -116,13 +118,18 @@ public class Player {
         return b;
     }
 
-    private void buildDecision(ArrayList<Building> checkBuilding) {
+    public List<Building> buildDecision() {
         int costMin = 0;
         int costMax = 6;
-        switch (strat) {
-            case lowGold -> costMax = 3;
-            case highGold -> costMin = 3;
-        }
+        return getBuildings(costMin, costMax);
+    }
+
+    public List<Building> buildDecision(int costMin, int costMax) {
+        return getBuildings(costMin, costMax);
+    }
+
+    private List<Building> getBuildings(int costMin, int costMax) {
+        List<Building> checkBuilding = new ArrayList<>();
         for (Building b : getCardHand()) {
             if (isBuildable(b) && nbBuildable > 0) {
                 if ((b.getCost() <= costMax && b.getCost() >= costMin)
@@ -132,9 +139,8 @@ public class Player {
                 }
             }
         }
-        //TODO Iterator
-        for(Building build : checkBuilding)
-            build(build);
+        checkBuilding.forEach(this::build);
+        return checkBuilding;
     }
 
     /**
@@ -143,21 +149,16 @@ public class Player {
      * @param b1 First Building to compare
      * @param b2 Second Building to compare
      */
-    Building chooseBuilding(Building b1, Building b2) {
-        //TODO 1/3 Parties infinis, a verif aux tests
-        if(isNull(b1))
+    public Building chooseBuilding(Building b1, Building b2) {
+        if (isNull(b1))
             return b2;
         else if (isNull(b2))
             return b1;
-        else if(getCardHand().contains(b1))
+        else if (getCardHand().contains(b1))
             return b2;
-        else if(getCardHand().contains(b2))
+        else if (getCardHand().contains(b2))
             return b1;
-        return switch (strat) {
-            case lowGold -> (b1.getCost() < b2.getCost()) ? b1 : b2;
-            case highGold -> (b1.getCost() > b2.getCost()) ? b1 : b2;
-            default -> b1;
-        };
+        return b1;
     }
 
     public Character chooseVictim() {
@@ -166,40 +167,24 @@ public class Player {
         return board.getCharacters().get(victim);
     }
 
-    void chooseRole() {
+    public Optional<Player> chooseTarget() {
+        Random random = new Random();
+        int victim = random.nextInt(board.getPlayers().size());
+        return Optional.of(board.getPlayers().get(victim));
+    }
+
+    public void chooseRole() {
         int index;
         do {
             index = new Random().nextInt(8);
         } while (!board.getCharactersInfos(index).isAvailable());
         role = Optional.of(board.getCharactersInfos(index));
-        board.getCharactersInfos(index).isTaken();
-    }
-
-    //TODO Dans le Board ?
-    void showPlay(int goldDraw, int goldCollect, Building checkDraw, ArrayList<Building> checkBuilding) {
-        int showGold = (getGold() - goldDraw);
-        String signe = ANSI_RED + "";
-        if (showGold > 0)
-            signe = ANSI_GREEN + "+";
-        StringBuilder res = new StringBuilder(ANSI_CYAN + name + ANSI_RESET + " (" + ANSI_ITALIC + strat + ", " + role + ANSI_RESET + ") possede " + ANSI_YELLOW + getGold() + ANSI_RESET
-                + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
-        if (!isNull(checkDraw))
-            res.append(", a pioché " + ANSI_UNDERLINE).append(checkDraw.getName()).append(ANSI_RESET);
-        if (checkBuilding.size() > 0) {
-            res.append(" et a construit ");
-            for (Building e : checkBuilding) {
-                res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
-            }
-        }
-        if (goldCollect > 0)
-            res.append(" et a recupere ").append(goldCollect).append(" pieces des impôts");
-        System.out.println(res);
+        board.getCharactersInfos(index).setAvailable(false);
     }
 
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder(ANSI_PURPLE + name + "  " + role + ANSI_RESET +
-                " avec la stratégie " + ANSI_RED + strat + ANSI_RESET +
                 " et " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_CYAN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
         for (Building b : city) {
@@ -212,7 +197,7 @@ public class Player {
         return gold;
     }
 
-    int getGoldScore() {
+    public int getGoldScore() {
         return goldScore;
     }
 
@@ -226,14 +211,6 @@ public class Player {
 
     public List<Building> getCardHand() {
         return cardHand;
-    }
-
-    boolean getCrown() {
-        return crown;
-    }
-
-    void setCrown(boolean c) {
-        crown = c;
     }
 
     public void setNbBuildable(int number) {
@@ -259,13 +236,12 @@ public class Player {
         return taxes;
     }
 
-    //TODO Changer methode atttribution Role
     public void setRole(int number) {
         role = Optional.of(board.getCharactersInfos(number));
-        board.getCharactersInfos(number).isTaken();
+        board.getCharactersInfos(number).setAvailable(false);
     }
 
-    void removeRole() {
+    public void removeRole() {
         role = Optional.empty();
     }
 
@@ -295,64 +271,16 @@ public class Player {
         return res;
     };
 
-    public void refundGold(int i) {
-        gold -= i;
-        board.getBank().refundGold(i);
-    }
-
-    public Character chooseRob(){
-        Random random = new Random();
-        int victim = random.nextInt(6) + 2;
-        return board.getCharacters().get(victim);
+    public void refundGold(int amount) {
+        gold -= board.getBank().refundGold(amount);
     }
 
     public void takeMoney(int amount) {
         gold += board.getBank().withdrawGold(amount);
     }
 
-    public void setAmountStolen(int amount){
-        amountStolen = amount;
-    }
-
-    public int getAmountStolen(){
-        return amountStolen;
-    }
-
-    public void stolen(){
-        if (getRole().orElse(null).gotStolen()){//TODO Affichage ?
-            board.getBank().transferGold(getGold(),board.getCharactersInfos(1).getPlayer());
-            System.out.println(ANSI_ITALIC + getName() + " has been robbed."+ getGold() +" gold has been stolen." + ANSI_RESET);
-            board.getCharactersInfos(1).getPlayer().setAmountStolen(getGold());
-            board.getBank().refundGold(gold);
-            gold = 0;
-        }
-    }
-    //Condo
-    public void chooseTargetToDestroy(){
-
-    }
-
-    public void deckAfterMagician(){
-        Random random = new Random();
-        int number = random.nextInt(2);
-        if(number ==0){//Remplacement des cartes
-            System.out.println("Le Magicien change ses cartes");
-            int n = cardHand.size();
-            for (Building cards:cardHand) {board.getPile().putCard(cards);}
-            drawCards(n);
-            }
-        else {
-            System.out.println("Le Magicien echange ses cartes");
-            Random random2 = new Random();
-            int number2 = random2.nextInt(board.getNbPlayer());
-            Player p = board.getPlayers().get(number2);// echange de la main avec un autre joueur
-            List<Building> tempHand = cardHand;
-            cardHand = p.getCardHand();
-            p.swapHand( tempHand);
-        }
-    }
-
-    public void swapHand(List<Building> cards){
+    public void setCardHand(List<Building> cards) {
         cardHand = cards;
     }
+
 }

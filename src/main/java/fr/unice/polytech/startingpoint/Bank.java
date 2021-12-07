@@ -1,10 +1,12 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.strategies.Player;
+
 public class Bank {
     private final int bankLimit;
     private int currentAmount;
 
-    Bank(int bankLimit){
+    Bank(int bankLimit) {
         this.bankLimit = bankLimit;
         currentAmount = bankLimit;
     }
@@ -19,29 +21,29 @@ public class Bank {
         return Math.abs(gold);
     }
 
-    public void refundGold(int gold) {
+    public int refundGold(int gold) {
         gold = Math.abs(gold);
-        if(currentAmount+gold > bankLimit){
+        if (currentAmount + gold > bankLimit) {
             throw new IllegalArgumentException("The bank is richer than it should be.");
         }
-        currentAmount+=gold;
+        currentAmount += gold;
+        return Math.abs(gold);
     }
 
-    public int getGold(){
+    public int getGold() {
         return currentAmount;
     }
 
-    boolean isEmpty(){
-        return currentAmount==0;
+    public boolean isEmpty() {
+        return currentAmount == 0;
     }
 
-    public void transferGold(int amount,Player receiver){
-        if (bankLimit - amount <0){
+    public void transferGold(int amount, Player receiver) {
+        if (bankLimit - amount < 0) {
             currentAmount += amount;
             receiver.takeMoney(amount);
             currentAmount -= amount;
-        }
-        else{
+        } else {
             receiver.takeMoney(amount);
         }
     }

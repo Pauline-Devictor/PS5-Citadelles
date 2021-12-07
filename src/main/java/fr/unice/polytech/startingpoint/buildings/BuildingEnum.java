@@ -1,7 +1,7 @@
 package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.District;
-import fr.unice.polytech.startingpoint.Player;
+import fr.unice.polytech.startingpoint.strategies.Player;
 
 public enum BuildingEnum {
     Temple("Temple",1, District.Religion),

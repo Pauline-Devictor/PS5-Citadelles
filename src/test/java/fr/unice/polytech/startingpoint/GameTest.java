@@ -1,5 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ class GameTest {
         g = spy(new Game(6));
         p = mock(Player.class);
         p1 = mock(Player.class);
-        p1.setCrown(false);
     }
 
     @AfterEach
@@ -72,9 +72,9 @@ class GameTest {
                 (g.getBoard().getPile().isEmpty() &&
                         g.getBoard().getBank().getGold()==0) );
     }
+
     @Test
-    void clearCrown(){
-        g.resetPlayer();
-        assertFalse(p1.getCrown());
+    void orderPLayer() {
+        //TODO cf signature
     }
 }
