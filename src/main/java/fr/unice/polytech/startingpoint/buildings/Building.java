@@ -19,6 +19,8 @@ public class Building {
         return building.getName();
     }
 
+    public District getDistrict() {return building.getDistrict();}
+
     @Override
     public String toString() {
         return String.valueOf(building);
