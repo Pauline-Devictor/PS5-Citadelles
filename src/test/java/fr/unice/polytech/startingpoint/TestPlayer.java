@@ -1,10 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
-import fr.unice.polytech.startingpoint.buildings.Laboratory;
-import fr.unice.polytech.startingpoint.buildings.Manufacture;
-import fr.unice.polytech.startingpoint.strategies.Player;
+import fr.unice.polytech.startingpoint.buildings.*;
+import fr.unice.polytech.startingpoint.strategies.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +25,8 @@ public class TestPlayer {
         board = new Board();
         pBuildings = spy(new Player(board));
         p = new Player(new Board());
-        pLow = spy(new Player(new Board(), " "));
-        pHigh = spy(new Player(new Board(), ""));
+        pLow = spy(new RushMerch(new Board(), " "));
+        pHigh = spy(new HighScoreThief(new Board(), ""));
         when(pLow.getCardHand()).thenReturn(new ArrayList<>());
         when(pHigh.getCardHand()).thenReturn(new ArrayList<>());
         eglise = new Building(BuildingEnum.Eglise);
@@ -122,15 +119,12 @@ public class TestPlayer {
     }
 
     @Test
-    void effectPrestige(){
-        ArrayList<Building> b = new ArrayList<>();
-        b.add(new Laboratory(BuildingEnum.Laboratoire));
-        b.add(new Manufacture(BuildingEnum.Manufacture));
-       when(pBuildings.getCity()).thenReturn(b);
-       pBuildings.setRole(0);
-       //board.getCharacters().get(0).setPlayer(pBuildings);
-       pBuildings.play();
-
+    void collectTaxesEmptyBank() {
+        Board b = spy(new Board());
+        Bank bankEmpty = spy(new Bank(30));
+        when(bankEmpty.getGold()).thenReturn(0);
+        when(b.getBank()).thenReturn(bankEmpty);
+        Player p = new Player(b);
+        assertEquals(0, p.collectTaxes());
     }
-
 }

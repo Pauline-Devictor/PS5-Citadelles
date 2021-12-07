@@ -38,7 +38,7 @@ public class Bank {
         return currentAmount == 0;
     }
 
-    public void transferGold(int amount, Player receiver) {
+    /*public void transferGold(int amount, Player receiver) {
         if (bankLimit - amount < 0) {
             currentAmount += amount;
             receiver.takeMoney(amount);
@@ -46,5 +46,5 @@ public class Bank {
         } else {
             receiver.takeMoney(amount);
         }
-    }
+    }*/
 }

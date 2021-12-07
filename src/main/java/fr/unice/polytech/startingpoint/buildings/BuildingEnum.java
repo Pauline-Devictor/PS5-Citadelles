@@ -1,6 +1,5 @@
 package fr.unice.polytech.startingpoint.buildings;
 
-import fr.unice.polytech.startingpoint.District;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 public enum BuildingEnum {
@@ -58,10 +57,5 @@ public enum BuildingEnum {
     public String toString() {
         return name+", Cout : "+cost+", Quartier : "+district;
     }
-
-    public void useEffect(Player p){
-
-    }
-
 
 }

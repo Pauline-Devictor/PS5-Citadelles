@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class Magician extends Character {
     public Magician() {
-        super(3, "Magician");
+        super(CharacterEnum.Magician);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Magician extends Character {
         System.out.println("Le Magicien change ses cartes");
         int n = magician.getCardHand().size();
         for (int i = 0; i < n; i++)
-            magician.discardCard(Optional.empty());
+            magician.discardCard();
         magician.drawCards(n);
     }
 
@@ -43,29 +43,4 @@ public class Magician extends Character {
         swapPerson.setCardHand(tempHand);
     }
 
-
-    public void deckAfterMagician(int choice, Player magician, Optional<Player> target) {
-        if (choice == 1) {
-            swapHandDeck(magician);
-        } else if (choice == 2) {
-            target.ifPresent(player -> swapHandPlayer(magician, player));
-        }
-        /*Random random = new Random();
-        int number = random.nextInt(2);
-        if(number == 0){//Remplacement des cartes
-            System.out.println("Le Magicien change ses cartes");
-            int n = cardHand.size();
-            for (Building cards:cardHand) {board.getPile().putCard(cards);}
-            drawCards(n);
-        }
-        else {
-            System.out.println("Le Magicien echange ses cartes");
-            Random random2 = new Random();
-            int number2 = random2.nextInt(board.getNbPlayer());
-            Player p = board.getPlayers().get(number2);// echange de la main avec un autre joueur
-            List<Building> tempHand = cardHand;
-            cardHand = p.getCardHand();
-            p.setCardHand( tempHand);
-        }*/
-    }
 }

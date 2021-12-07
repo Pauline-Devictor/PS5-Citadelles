@@ -2,17 +2,14 @@ package fr.unice.polytech.startingpoint.characters;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.strategies.Player;
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.District;
 
 import java.util.Optional;
 
-import static fr.unice.polytech.startingpoint.District.Military;
-import static fr.unice.polytech.startingpoint.District.Religion;
+import static fr.unice.polytech.startingpoint.buildings.District.Military;
 
 public class Condottiere extends Character {
     public Condottiere() {
-        super(8, "Condottiere");
+        super(CharacterEnum.Condottiere);
     }
 
     /*public void destroyBuilding(Player victim) {

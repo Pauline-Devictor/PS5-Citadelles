@@ -24,39 +24,10 @@ class GameTest {
         p1 = mock(Player.class);
     }
 
-    @AfterEach
-    void tearDown() {
-
-    }
-
-    @Test
-    void determineWinner() {
-        when(p.getGoldScore()).thenReturn(81);
-        when(p1.getGoldScore()).thenReturn(8);
-        when(g.getPlayers()).thenReturn(Arrays.asList(p,p1));
-        //assertEquals(Arrays.asList(p),g.determineWinner());
-    }
-
-    @Test
-    void determineWinnerTie(){
-        when(p.getGoldScore()).thenReturn(8);
-        when(p1.getGoldScore()).thenReturn(8);
-        when(g.getPlayers()).thenReturn(Arrays.asList(p,p1));
-        //assertEquals(Arrays.asList(p,p1),g.determineWinner());
-    }
-
-    @Test
-    void determineNoWinner(){
-        when(g.getPlayers()).thenReturn(new ArrayList<>());
-        //assertEquals(new ArrayList<>(), g.determineWinner());
-    }
-
-
     @Test
     void runTest() {
         g.run();
-        //verify(g,times(1)).determineWinner();
-        //verify(g,times(1)).showWinner(anyList());
+        verify(g, times(1)).showEndOfGame();
     }
 
     @Test
@@ -73,8 +44,11 @@ class GameTest {
                         g.getBoard().getBank().getGold()==0) );
     }
 
-    @Test
+    //@Test
     void orderPLayer() {
+        when(p.getGoldScore()).thenReturn(15);
+        when(p1.getGoldScore()).thenReturn(13);
+        when(g.getPlayers()).thenReturn(List.of(p, p1));
         //TODO cf signature
     }
 }

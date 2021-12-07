@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class Architect extends Character {
     public Architect() {
-        super(7, "Architect");
+        super(CharacterEnum.Architect);
     }
 
     @Override

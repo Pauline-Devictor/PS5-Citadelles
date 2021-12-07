@@ -4,11 +4,9 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
-import java.util.Random;
-
 public class Thief extends Character {
     public Thief() {
-        super(2, "Thief");
+        super(CharacterEnum.Thief);
     }
 
     @Override
@@ -20,15 +18,5 @@ public class Thief extends Character {
                 c.setThief(p);
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
-    }
-
-    public void stolen() {
-        /*if (getRole().orElse(null).gotStolen()){
-            board.getBank().transferGold(getGold(),board.getCharactersInfos(1).getPlayer());
-            System.out.println(ANSI_ITALIC + getName() + " has been robbed."+ getGold() +" gold has been stolen." + ANSI_RESET);
-            board.getCharactersInfos(1).getPlayer().setAmountStolen(getGold());
-            board.getBank().refundGold(gold);
-            gold = 0;
-        }*/
     }
 }

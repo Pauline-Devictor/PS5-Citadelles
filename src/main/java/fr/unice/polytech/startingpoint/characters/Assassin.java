@@ -7,13 +7,8 @@ import java.util.Optional;
 
 public class Assassin extends Character {
     public Assassin() {
-        super(1, "Assassin");
+        super(CharacterEnum.Assassin);
     }
-
-    /* void power(Character victim) {
-        victim.setMurdered(true);
-        System.out.println("Character " + victim.getName() + " has been killed");
-    }*/
 
     @Override
     public void usePower(Board b) {

@@ -2,23 +2,21 @@ package fr.unice.polytech.startingpoint.characters;
 
 
 import fr.unice.polytech.startingpoint.Board;
-import fr.unice.polytech.startingpoint.District;
+import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
 
 public abstract class Character {
-    private final int order;
+    protected final CharacterEnum character;
     protected boolean available;
-    private final String name;
     private boolean isMurdered;
     //empty si le personnage n'est pas volé, le voleur sinon
     private Optional<Player> thief;
 
-    public Character(int order, String name) {
-        this.order = order;
-        this.name = name;
+    public Character(CharacterEnum character) {
+        this.character = character;
         available = true;
         isMurdered = false;
         thief = Optional.empty();
@@ -27,7 +25,7 @@ public abstract class Character {
 
     @Override
     public String toString() {
-        return name;
+        return character.toString();
     }
 
     public void resetRole() {
@@ -45,24 +43,22 @@ public abstract class Character {
     public Optional<Player> findPlayer(Board board) {
         Optional<Player> p = Optional.empty();
         for (Player player : board.getPlayers()) {
-            if (player.getRole().get().getClass().equals(getClass()))
-                p = Optional.of(player);
+            if (player.getRole().isPresent()) {
+                if (player.getRole().get().getClass().equals(getClass()))
+                    p = Optional.of(player);
+            }
         }
         return p;
     }
 
     public void collectTaxes(Player p, District d) {
         int taxes = 0;
-        for (Building b : p.getCardHand()) {
+        for (Building b : p.getCity()) {
             if (b.getBuilding().getDistrict() == d) {
                 taxes++;
             }
             p.setTaxes(taxes);
         }
-    }
-
-    public int getOrder() {
-        return order;
     }
 
     public boolean isAvailable() {
@@ -71,10 +67,6 @@ public abstract class Character {
 
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean isMurdered() {
@@ -89,7 +81,15 @@ public abstract class Character {
         return thief;
     }
 
-    public void setThief(Optional<Player> thief) {
+    protected void setThief(Optional<Player> thief) {
         this.thief = thief;
+    }
+
+    public String getName() {
+        return character.getName();
+    }
+
+    public int getOrder() {
+        return character.getOrder();
     }
 }

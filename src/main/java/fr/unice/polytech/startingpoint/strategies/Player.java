@@ -79,7 +79,7 @@ public class Player {
             else
                 gold += board.getBank().withdrawGold(2);
             //Decide for the use of power of his character
-            int goldTaxes = roleEffects();
+            int goldTaxes = collectTaxes();
             //Decide for the use of wonders
             cityEffects();
             //Decide what to build
@@ -97,10 +97,15 @@ public class Player {
         });
     }
 
-    int roleEffects() {
-        getRole().orElse(null).usePower(board);
+    public void roleEffects() {
+        if (getRole().isPresent()) {
+            getRole().get().usePower(board);
+        }
+    }
+
+    public int collectTaxes() {
         int goldTaxes = getGold();
-        gold += board.getBank().withdrawGold(taxes);
+        gold += board.getBank().withdrawGold(getTaxes());
         return getGold() - goldTaxes;
     }
 
@@ -194,12 +199,10 @@ public class Player {
         }
     }
 
-    public void discardCard(Optional<Building> buildingOptional) {
-        if (!getCardHand().isEmpty()) {
-            Building b = buildingOptional.orElse(getCardHand().get(0));
-            cardHand.remove(b);
-            board.getPile().putCard(b);
-        }
+    public void discardCard() {
+        Building b = getCardHand().get(0);
+        cardHand.remove(b);
+        board.getPile().putCard(b);
     }
 
     public static Comparator<Player> RoleOrder = (e1, e2) -> {
@@ -229,8 +232,8 @@ public class Player {
     public String toString() {
         StringBuilder res = new StringBuilder(ANSI_PURPLE + name);
         if (role.isPresent())
-            res.append(", " + role);
-        res.append(ANSI_RESET + " avec " + ANSI_YELLOW + gold + ANSI_RESET + " pieces d'or");
+            res.append(", ").append(role);
+        res.append(ANSI_RESET + " avec " + ANSI_YELLOW).append(gold).append(ANSI_RESET).append(" pieces d'or");
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_GREEN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
         res.append("\n" + ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Batiments Non Construits :" + ANSI_RESET);
         for (Building b : cardHand) {
@@ -275,14 +278,8 @@ public class Player {
         return city;
     }
 
-
     public int getTaxes() {
         return taxes;
-    }
-
-    public void setRole(int number) {
-        role = Optional.of(board.getCharactersInfos(number));
-        board.getCharactersInfos(number).setAvailable(false);
     }
 
     public void removeRole() {
@@ -301,4 +298,7 @@ public class Player {
         cardHand = cards;
     }
 
+    public void setRole(Optional<Character> role) {
+        this.role = role;
+    }
 }
