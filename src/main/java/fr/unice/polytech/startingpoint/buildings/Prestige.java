@@ -4,7 +4,6 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 public abstract class Prestige extends Building {
 
-
     public Prestige(BuildingEnum b) {
         super(b);
     }

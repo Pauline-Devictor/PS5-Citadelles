@@ -17,7 +17,7 @@ public class HighScoreArchi extends Player {
         super(b, name);
     }
 
-    void cityEffects() {
+    public void cityEffects() {
         getCity().forEach(e -> {
             if (e instanceof Prestige)
                 ((Prestige) e).useEffect(this);

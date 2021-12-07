@@ -90,10 +90,12 @@ public class Player {
 
     }
 
-    void cityEffects() {
+    public void cityEffects() {
         getCity().forEach(e -> {
-            if (e instanceof Prestige)
+            System.out.println(e);
+            if (e instanceof Prestige) {
                 ((Prestige) e).useEffect(this);
+            }
         });
     }
 
@@ -200,9 +202,11 @@ public class Player {
     }
 
     public void discardCard() {
-        Building b = getCardHand().get(0);
-        cardHand.remove(b);
-        board.getPile().putCard(b);
+        if (getCardHand().size() > 0) {
+            Building b = getCardHand().get(0);
+            cardHand.remove(b);
+            board.getPile().putCard(b);
+        }
     }
 
     public static Comparator<Player> RoleOrder = (e1, e2) -> {

@@ -11,6 +11,6 @@ public class Main {
             nb_players = sc.nextInt();
         } while (nb_players > 6 || nb_players < 2);
         for (int i = 0; i < 100; i++)
-            new Game(8).run();
+            new Game(nb_players).run();
     }
 }

@@ -9,7 +9,6 @@ public class Observatory extends Prestige {
     }
 
     public void useEffect(Player p) {
-        System.out.println("Effect Observatoire");
         p.drawCards(1);
     }
 }
