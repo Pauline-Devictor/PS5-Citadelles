@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -64,15 +65,21 @@ public class TestBuilding {
     }
 
     @Test
-    void testBibliotheque() {
+    void testLibrary() {
         when(p.getCity()).thenReturn(List.of(new Library()));
+        int taille = p.getCardHand().size();
+        for (int i = 0; i < taille; i++)
+            p.discardCard();
         List<Building> res = p.drawDecision();
         assertEquals(2, res.size());
     }
 
     @Test
-    void testBibliothequeReturn() {
+    void testLibraryReturn() {
         when(p.getCity()).thenReturn(List.of(new Library()));
+        int taille = p.getCardHand().size();
+        for (int i = 0; i < taille; i++)
+            p.discardCard();
         p.drawDecision();
         assertEquals(2, p.getCardHand().size());
     }

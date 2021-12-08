@@ -9,7 +9,6 @@ public class Library extends Prestige {
     }
 
     public void useEffect(Player p) {
-        System.out.println("Effect Bibliotheque");
         p.drawCards(2);
     }
 }
