@@ -13,7 +13,7 @@ public class BankTest {
     @Test
     void withDrawGold2(){
         Bank b = new Bank(30);
-        assertEquals(0, b.withdrawGold(32));
+        assertEquals(30, b.withdrawGold(32));
     }
 
     @Test

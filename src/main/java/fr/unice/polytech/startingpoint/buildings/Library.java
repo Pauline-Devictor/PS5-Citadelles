@@ -23,13 +23,13 @@ public class Library extends Prestige {
 
     @Override
     public String printEffect(Player p) {
-        StringBuilder res = Optional.ofNullable(super.printEffect(p)).map(StringBuilder::new).orElse(null);
+        StringBuilder res = new StringBuilder(super.printEffect(p));
         if (!cards.isEmpty()) {
-            res = (res == null ? new StringBuilder("null") : res).append(" Il a pioché ");
+            res.append(" Il a pioché ");
             for (Building b : cards) {
                 res.append(b.getName()).append(", ");
             }
         }
-        return res == null ? null : res.toString();
+        return res.toString();
     }
 }

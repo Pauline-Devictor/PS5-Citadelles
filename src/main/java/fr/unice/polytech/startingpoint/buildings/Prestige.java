@@ -13,4 +13,5 @@ public abstract class Prestige extends Building {
     public String printEffect(Player p) {
         return p.getName() + " a utilisé : " + getName() + ".";
     }
+
 }
