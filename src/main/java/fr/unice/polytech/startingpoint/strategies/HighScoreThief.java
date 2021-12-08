@@ -2,7 +2,9 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.List;
@@ -45,18 +47,6 @@ public class HighScoreThief extends Player {
         else if (getCardHand().contains(b2))
             return b1;
         return (b1.getCost() < b2.getCost()) ? b2 : b1;
-    }
-
-    public Character chooseVictim() {
-        Random random = new Random();
-        int victim = random.nextInt(7) + 1;
-        return board.getCharacters().get(victim);
-    }
-
-    public Optional<Player> chooseTarget() {
-        Random random = new Random();
-        int victim = random.nextInt(board.getPlayers().size());
-        return Optional.of(board.getPlayers().get(victim));
     }
 
     public void chooseRole() {

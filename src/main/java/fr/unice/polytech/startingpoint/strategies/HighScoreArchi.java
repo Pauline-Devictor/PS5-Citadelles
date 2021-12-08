@@ -4,9 +4,8 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
-import fr.unice.polytech.startingpoint.characters.Assassin;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
-import fr.unice.polytech.startingpoint.characters.Magician;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class HighScoreArchi extends Player {
         return buildDecision(costMin, costMax);
     }
 
-    public List<Building> buildDecision(int costMin, int costMax){
+    public List<Building> buildDecision(int costMin, int costMax) {
         List<Building> checkBuilding = new ArrayList<>();
         for (Building b : getCardHand()) {
             if (isBuildable(b) && nbBuildable > 0) {
@@ -52,7 +51,7 @@ public class HighScoreArchi extends Player {
                 }
             }
         }
-        if(!checkBuilding.isEmpty()){
+        if (!checkBuilding.isEmpty()) {
             checkBuilding.forEach(this::build);
             return checkBuilding;
         }
@@ -78,38 +77,21 @@ public class HighScoreArchi extends Player {
             return b2;
         else if (getCardHand().contains(b2))
             return b1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b1.getDistrict() == District.Noble)
-            return b1;
-        else if (b2.getCost() <= costMax && b2.getCost() >= costMin && b2.getDistrict() == District.Noble)
-            return b2;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b1.getDistrict() == District.Religion)
-            return b1;
-        else if (b2.getCost() <= costMax && b2.getCost() >= costMin && b2.getDistrict() == District.Religion)
-            return b2;
+        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin){
+            if(b1.getDistrict() == District.Commercial) return b1;
+            if(b2.getDistrict() == District.Commercial) return b2;
+            if(b1.getDistrict() == District.Noble) return b1;
+            if(b2.getDistrict() == District.Noble) return b2;
+            if(b1.getDistrict() == District.Religion) return b1;
+            if(b2.getDistrict() == District.Religion) return b2;
+        }
+        else if(b1.getCost() <= costMax && b1.getCost() >= costMin) return b1;
+        else if(b2.getCost() <= costMax && b2.getCost() >= costMin) return b2;
+
         return (b1.getCost() < b2.getCost()) ? b2 : b1;
     }
 
-    public Character chooseVictim() {
-        //Random random = new Random();
-        //int victim = random.nextInt(7) + 1;
-        //return board.getCharacters().get(victim);
-        if(role.isPresent()) {
-            if (role.get().getClass() != Assassin.class) {
-                if(cardHand.size() > 3) return new Magician();
-                for (Player player : board.getPlayers()){
-                   // if(player.getCity().size() > 5)
-                }
-        }
-        return null;
-    }
-
-    public Optional<Player> chooseTarget() {
-        Random random = new Random();
-        int victim = random.nextInt(board.getPlayers().size());
-        return Optional.of(board.getPlayers().get(victim));
-    }
-
-    public void chooseRole() {
+    public void chooseRole () {
         int index;
         do {
             index = new Random().nextInt(8);

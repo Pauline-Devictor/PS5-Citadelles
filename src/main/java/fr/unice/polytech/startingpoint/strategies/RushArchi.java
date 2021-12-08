@@ -47,18 +47,6 @@ public class RushArchi extends Player {
         return (b1.getCost() > b2.getCost()) ? b2 : b1;
     }
 
-    public Character chooseVictim() {
-        Random random = new Random();
-        int victim = random.nextInt(7) + 1;
-        return board.getCharacters().get(victim);
-    }
-
-    public Optional<Player> chooseTarget() {
-        Random random = new Random();
-        int victim = random.nextInt(board.getPlayers().size());
-        return Optional.of(board.getPlayers().get(victim));
-    }
-
     public void chooseRole() {
         int index;
         do {

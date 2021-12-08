@@ -2,7 +2,9 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.*;
@@ -174,15 +176,61 @@ public class Player {
     }
 
     public Character chooseVictim() {
-        Random random = new Random();
-        int victim = random.nextInt(7) + 1;
-        return board.getCharacters().get(victim);
+        if (role.isPresent()) {
+            if (role.get().getClass() == Assassin.class) {
+                if (cardHand.size() > 4) return new Magician();
+                for (Player player : board.getPlayers()) {
+                    if (player.getCity().size() > 5) {
+                        District colour = getMajority(player);
+                        switch (colour){
+                            case Commercial -> {return new Merchant();}
+                            case Noble ->  {return new King();}
+                            case Military -> {return new Condottiere();}
+                            case Religion -> {return new Bishop();}
+                        }
+                    }
+                }
+                Random random = new Random();
+                int victim = random.nextInt(7) + 1;
+                return board.getCharacters().get(victim);
+            }
+            if (role.get().getClass() == Thief.class) {
+                Random random = new Random();
+                //exclu l'indice de l'assassin
+                int victim = random.nextInt(9)+1;
+                if(victim > 7) victim = 6;
+                return board.getCharacters().get(victim);
+            }
+        }
+        return null;
     }
 
     public Optional<Player> chooseTarget() {
-        Random random = new Random();
-        int victim = random.nextInt(board.getPlayers().size());
-        return Optional.of(board.getPlayers().get(victim));
+        if (role.isPresent()) {
+            if (role.get().getClass() == Magician.class) {
+                Player biggestCity = board.getPlayers().get(0);
+                if(cardHand.size() < 3){
+                    for (Player p : board.getPlayers()) {
+                        if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
+                    }
+                    if(biggestCity.getCity().size() > 5) return Optional.ofNullable(biggestCity);
+                }
+                Player biggestHand = board.getPlayers().get(0);
+                for (Player p : board.getPlayers()) {
+                    if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
+                }
+                return Optional.ofNullable(biggestHand);
+            }
+
+            if (role.get().getClass() == Condottiere.class){
+                Player biggestCity = board.getPlayers().get(0);
+                for (Player p : board.getPlayers()) {
+                    if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
+                }
+                return Optional.ofNullable(biggestCity);
+            }
+        }
+        return null;
     }
 
     public void chooseRole() {
@@ -304,6 +352,17 @@ public class Player {
 
     public void setRole(Optional<Character> role) {
         this.role = role;
+    }
+
+    public District getMajority(Player p){
+        HashMap<District, Integer> majority = new HashMap<District, Integer>();
+        for (District d : District.values()) {
+            majority.put(d, 0);
+        }
+        for (Building b : p.getCity()) {
+            majority.put(b.getDistrict(), majority.get(b.getDistrict())+1);
+        }
+        return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
 }
