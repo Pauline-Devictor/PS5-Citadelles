@@ -4,7 +4,6 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
-import fr.unice.polytech.startingpoint.characters.*;
 
 import java.util.*;
 
@@ -13,10 +12,10 @@ import static java.util.Objects.isNull;
 public class HighScoreArchi extends Player {
     private final int costMax = 6;
     private final int costMin = 3;
-    private final ArrayList<Integer> priority = new ArrayList<Integer>(Arrays.asList(5, 3, 4, 6, 1, 0, 7, 2));
+    private final ArrayList<Integer> priority = new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 0, 7, 2));
 
-    public HighScoreArchi(Board b, String name) {
-        super(b, name);
+    public HighScoreArchi(Board b) {
+        super(b, "HautScoreArchitect");
     }
 
     public void cityEffects() {

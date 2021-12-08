@@ -258,19 +258,24 @@ public class Player {
         board.getCharactersInfos(index).setAvailable(false);
     }
 
-    public void drawCards(int nbCards) {
+    public List<Building> drawCards(int nbCards) {
+        List<Building> res = new ArrayList<>();
         for (int i = 0; i < nbCards; i++) {
             Optional<Building> b1 = board.getPile().drawACard();
             b1.ifPresent(cardHand::add);
+            b1.ifPresent(res::add);
         }
+        return res;
     }
 
-    public void discardCard() {
+    public Building discardCard() {
         if (getCardHand().size() > 0) {
             Building b = cardHand.get(0);
             cardHand.remove(b);
             board.getPile().putCard(b);
+            return b;
         }
+        return null;
     }
 
     public void discardCard(Building b) {

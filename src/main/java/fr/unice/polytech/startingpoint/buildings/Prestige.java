@@ -10,5 +10,7 @@ public abstract class Prestige extends Building {
 
     public abstract void useEffect(Player p);
 
-    //TODO Board.useBuilgidn()
+    public String printEffect(Player p) {
+        return p.getName() + " a utilisé : " + getName() + ".";
+    }
 }

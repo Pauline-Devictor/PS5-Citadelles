@@ -26,12 +26,4 @@ public class Building {
         return String.valueOf(building);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Building building1 = (Building) o;
-        return building == building1.building;
-    }
-
 }

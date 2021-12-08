@@ -15,5 +15,6 @@ public class Observatory extends Prestige {
     public void useEffect(Player p) {
         Optional<Building> tmp = p.drawAndChoose(3);
         tmp.ifPresent(building -> p.getCardHand().add(building));
+        System.out.println(printEffect(p));
     }
 }

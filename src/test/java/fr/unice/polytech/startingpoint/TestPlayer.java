@@ -5,7 +5,6 @@ import fr.unice.polytech.startingpoint.strategies.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +27,8 @@ public class TestPlayer {
         board = spy(new Board());
         pSpy = spy(new Player(board));
         p = new Player(new Board());
-        pLow = spy(new RushMerch(new Board(), " "));
-        pHigh = spy(new HighScoreThief(new Board(), ""));
+        pLow = spy(new RushMerch(new Board()));
+        pHigh = spy(new HighScoreThief(new Board()));
         when(pLow.getCardHand()).thenReturn(new ArrayList<>());
         when(pHigh.getCardHand()).thenReturn(new ArrayList<>());
         eglise = new Building(BuildingEnum.Eglise);

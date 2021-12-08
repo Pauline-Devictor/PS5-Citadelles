@@ -3,7 +3,6 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
-import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +12,8 @@ import static java.util.Objects.isNull;
 
 public class RushArchi extends Player {
 
-    public RushArchi(Board b, String name) {
-        super(b, name);
+    public RushArchi(Board b) {
+        super(b, "RushArchitect");
     }
 
     public void cityEffects() {

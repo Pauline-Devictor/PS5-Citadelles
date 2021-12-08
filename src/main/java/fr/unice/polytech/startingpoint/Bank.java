@@ -11,12 +11,13 @@ public class Bank {
 
     public int withdrawGold(int gold) {
         gold = Math.abs(gold);
+        int res = Math.abs(gold);
         if (currentAmount < gold) {
+            res = currentAmount;
             currentAmount = 0;
-            return currentAmount;
-        }
-        currentAmount -= gold;
-        return Math.abs(gold);
+        } else
+            currentAmount -= gold;
+        return res;
     }
 
     public int refundGold(int gold) {

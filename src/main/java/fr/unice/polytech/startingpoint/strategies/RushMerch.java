@@ -13,8 +13,8 @@ import static java.util.Objects.isNull;
 
 public class RushMerch extends Player {
 
-    public RushMerch(Board b, String name) {
-        super(b, name);
+    public RushMerch(Board b) {
+        super(b, "RushMarchand");
     }
 
     public void cityEffects() {

@@ -3,7 +3,7 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.strategies.Player;
+import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,27 +52,20 @@ public class Board {
                 new Merchant(),
                 new Architect(),
                 new Condottiere());
-        players = new ArrayList<>();
-        for (int i = 1; i <= nbPlayers; i++) {
-            players.add(new Player(this, String.valueOf(i)));
-        }
+        players = generatePlayers(nbPlayers);
     }
 
     Board() {
-        this.bank = new Bank(30);
-        this.pile = new Deck();
-        characters = List.of(new Assassin(),
-                new Thief(),
-                new Magician(),
-                new King(),
-                new Bishop(),
-                new Merchant(),
-                new Architect(),
-                new Condottiere());
-        players = new ArrayList<>();
-        for (int i = 1; i <= 6; i++) {
-            players.add(new Player(this, String.valueOf(i)));
-        }
+        this(4);
+    }
+
+    public List<Player> generatePlayers(int nbPlayers) {
+        List<Player> players = new ArrayList<>();
+        players.add(new RushMerch(this));
+        players.add(new RushArchi(this));
+        players.add(new HighScoreThief(this));
+        players.add(new HighScoreArchi(this));
+        return players;
     }
 
     public List<Player> getPlayers() {
@@ -105,9 +98,11 @@ public class Board {
         String signe = ANSI_RED + "";
         if (showGold > 0)
             signe = ANSI_GREEN + "+";
-        StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().get().getName() + ANSI_RESET + ") possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET
-                + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
-        if (!isNull(checkDraw)) {
+        StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET);
+        if (p.getRole().isPresent())
+            res.append(" (" + ANSI_ITALIC).append(p.getRole().get().getName()).append(ANSI_RESET).append(") ");
+        res.append(" possède " + ANSI_YELLOW).append(p.getGold()).append(ANSI_RESET).append("(").append(signe).append(showGold).append(ANSI_RESET).append(") pieces d'or");
+        if (checkDraw.size() > 0) {
             res.append(", a pioché " + ANSI_UNDERLINE);
             checkDraw.forEach(e -> res.append(e.getName()).append(", "));
             res.append(ANSI_RESET);
@@ -121,7 +116,7 @@ public class Board {
         }
         if (goldCollect > 0)
             res.append(" et a récupéré ").append(goldCollect).append(" pieces des impôts");
-        System.out.println(res);
+        System.out.println(res + "\n");
     }
 
     void showRanking() {

@@ -2,10 +2,7 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
-import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +12,8 @@ import static java.util.Objects.isNull;
 
 public class HighScoreThief extends Player {
 
-    public HighScoreThief(Board b, String name) {
-        super(b, name);
+    public HighScoreThief(Board b) {
+        super(b, "HautScoreVoleur");
     }
 
     public void cityEffects() {
