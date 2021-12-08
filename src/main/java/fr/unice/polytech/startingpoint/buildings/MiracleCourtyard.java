@@ -2,9 +2,9 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-public class CourDesMiracles extends Prestige {
+public class MiracleCourtyard extends Prestige {
 
-    public CourDesMiracles(BuildingEnum courDesMiracles) {
+    public MiracleCourtyard(BuildingEnum courDesMiracles) {
         super(courDesMiracles);
     }
 

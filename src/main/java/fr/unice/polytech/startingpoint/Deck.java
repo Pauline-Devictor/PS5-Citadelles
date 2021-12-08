@@ -11,16 +11,16 @@ public class Deck {
 
     Deck(){
         buildings = new ArrayList<>();
-        buildings.add(new CourDesMiracles(BuildingEnum.CourDesMiracles));
-        buildings.add(new Laboratory(BuildingEnum.Laboratoire));
-        buildings.add(new Manufacture(BuildingEnum.Manufacture));
-        buildings.add(new Observatory(BuildingEnum.Observatoire));
+        buildings.add(new MiracleCourtyard(BuildingEnum.CourDesMiracles));
+        buildings.add(new Laboratory());
+        buildings.add(new Manufactory());
+        buildings.add(new Observatory());
         buildings.add(new Building(BuildingEnum.Cimetiere));
-        buildings.add(new Bibliotheque(BuildingEnum.Bibiliotheque));
+        buildings.add(new Library());
         buildings.add(new Building(BuildingEnum.EcoleDeMagie));
         buildings.add(new Building(BuildingEnum.Universite));
         buildings.add(new Building(BuildingEnum.Dracoport));
-        for(int i=0;i<2;i++){
+        for (int i = 0; i < 2; i++) {
             buildings.add(new Building(BuildingEnum.Cathedrale));
             buildings.add(new Building(BuildingEnum.Palais));
             buildings.add(new Building(BuildingEnum.HotelDeVille));

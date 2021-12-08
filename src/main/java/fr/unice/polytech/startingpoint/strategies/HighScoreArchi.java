@@ -5,7 +5,6 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.ArrayList;
 import java.util.List;

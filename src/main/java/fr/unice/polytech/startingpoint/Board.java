@@ -100,15 +100,19 @@ public class Board {
         return characters.get(index);
     }
 
-    public void showPlay(Player p, int goldDraw, int goldCollect, Building checkDraw, List<Building> checkBuilding) {
+    public void showPlay(Player p, int goldDraw, int goldCollect, List<Building> checkDraw, List<Building> checkBuilding) {
         int showGold = (p.getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
             signe = ANSI_GREEN + "+";
         StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole() + ANSI_RESET + ") possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET
                 + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
-        if (!isNull(checkDraw))
-            res.append(", a pioché " + ANSI_UNDERLINE).append(checkDraw.getName()).append(ANSI_RESET);
+        if (!isNull(checkDraw)) {
+            res.append(", a pioché " + ANSI_UNDERLINE);
+            checkDraw.forEach(e -> res.append(e.getName()));
+            res.append(ANSI_RESET);
+        }
+
         if (checkBuilding.size() > 0) {
             res.append(" et a construit ");
             for (Building e : checkBuilding) {

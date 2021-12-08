@@ -9,4 +9,6 @@ public abstract class Prestige extends Building {
     }
 
     public abstract void useEffect(Player p);
+
+    //TODO Board.useBuilgidn()
 }

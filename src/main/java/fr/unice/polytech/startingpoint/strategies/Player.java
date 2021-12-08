@@ -1,9 +1,7 @@
 package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.District;
-import fr.unice.polytech.startingpoint.buildings.Prestige;
+import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
@@ -13,10 +11,11 @@ import static fr.unice.polytech.startingpoint.Board.*;
 import static java.util.Objects.isNull;
 
 public class Player {
-    protected final String name;
+    protected String name;
     protected int gold;
     protected int goldScore;
     protected final Board board;
+    //TODO Ecraser la valeur/Faire sauter Optional
     protected Optional<Character> role;
     protected int nbBuildable = 1;
     protected int taxes;
@@ -24,17 +23,8 @@ public class Player {
     protected final List<Building> city;
 
     public Player(Board b, String name) {
+        this(b);
         this.name = name;
-        board = b;
-        gold = board.getBank().withdrawGold(2);
-        cardHand = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            cardHand.add(board.getPile().drawACard().get());
-        }
-        city = new ArrayList<>();
-        goldScore = 0;
-        taxes = 0;
-        role = Optional.empty();
     }
 
     public Player(Board b) {
@@ -42,9 +32,7 @@ public class Player {
         board = b;
         gold = board.getBank().withdrawGold(2);
         cardHand = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            cardHand.add(board.getPile().drawACard().get());
-        }
+        drawCards(4);
         city = new ArrayList<>();
         goldScore = 0;
         //amountStolen = 0;
@@ -69,14 +57,15 @@ public class Player {
     public void play() {
         int goldDraw = getGold();
         boolean draw = !board.getPile().isEmpty() && cardHand.stream().allMatch(this::isBuildable);
-        Building checkDraw = null;
-        if (getRole().orElse(null).isMurdered()) {
+        List<Building> checkDraw = new ArrayList<>();
+        if (getRole().isPresent() && getRole().get().isMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
         } else {
             checkStolen();
+            roleEffects();
             // chooses to draw a card because there is nothing buildable or bank is empty
             if (draw || board.getBank().isEmpty())
-                checkDraw = drawDecision().orElse(null);
+                checkDraw = drawDecision();
                 // chooses to get 2 golds because nothing can be built
             else
                 gold += board.getBank().withdrawGold(2);
@@ -89,12 +78,10 @@ public class Player {
             //show the move in the console
             board.showPlay(this, goldDraw, goldTaxes, checkDraw, checkBuilding);
         }
-
     }
 
     public void cityEffects() {
         getCity().forEach(e -> {
-            System.out.println(e);
             if (e instanceof Prestige) {
                 ((Prestige) e).useEffect(this);
             }
@@ -114,27 +101,14 @@ public class Player {
     }
 
     void checkStolen() {
-        Optional<Player> thief = getRole().get().getThief();
-        if (thief.isPresent()) {
-            int save = gold;
-            refundGold(gold);
-            thief.get().takeMoney(save);
-        }
-    }
-
-    Optional<Building> drawDecision() {
-        Optional<Building> b1 = board.getPile().drawACard();
-        Optional<Building> b = b1;
-        //Si la premiere Carte est nulle, la seconde aussi
-        if (b1.isPresent()) {
-            Optional<Building> b2 = board.getPile().drawACard();
-            if (b2.isPresent()) {
-                Building x = chooseBuilding(b1.get(), b2.get());
-                cardHand.add(x);
-                b = Optional.of(x);
+        if (getRole().isPresent()) {
+            Optional<Player> thief = getRole().get().getThief();
+            if (thief.isPresent()) {
+                int save = gold;
+                refundGold(gold);
+                thief.get().takeMoney(save);
             }
         }
-        return b;
     }
 
     public List<Building> buildDecision() {
@@ -155,6 +129,48 @@ public class Player {
         }
         checkBuilding.forEach(this::build);
         return checkBuilding;
+    }
+
+    public List<Building> drawDecision() {
+        List<Building> res, tmp;
+        if (getCity().contains(new Library())) {
+            tmp = List.copyOf(getCardHand());
+            new Library().useEffect(this);
+            res = cardHand;
+            res.removeAll(tmp);
+        } else if (getCity().contains(new Observatory())) {
+            tmp = List.copyOf(getCardHand());
+            new Observatory().useEffect(this);
+            res = cardHand;
+            res.removeAll(tmp);
+        } else {
+            Optional<Building> save = drawAndChoose(2);
+            res = save.map(List::of).orElseGet(ArrayList::new);
+        }
+        return res;
+    }
+
+    public Optional<Building> drawAndChoose(int nbCards) {
+        List<Building> builds = new ArrayList<>();
+        Optional<Building> b1;
+        for (int i = 0; i < nbCards; i++) {
+            b1 = getBoard().getPile().drawACard();
+            b1.ifPresent(builds::add);
+        }
+        return chooseBuilding(builds);
+    }
+
+    public Optional<Building> chooseBuilding(List<Building> builds) {
+        //TODO Fonction Recursive sur la liste ?
+        //CompareTo + sort probablement
+        if (builds.size() > 0) {
+            Building res = builds.get(0);
+            for (Building b : builds) {
+                res = chooseBuilding(res, b);
+            }
+            return Optional.of(res);
+        }
+        return Optional.empty();
     }
 
     /**
@@ -213,7 +229,7 @@ public class Player {
                     for (Player p : board.getPlayers()) {
                         if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
                     }
-                    if(biggestCity.getCity().size() > 5) return Optional.ofNullable(biggestCity);
+                    if (biggestCity.getCity().size() > 5) return Optional.of(biggestCity);
                 }
                 Player biggestHand = board.getPlayers().get(0);
                 for (Player p : board.getPlayers()) {
@@ -230,7 +246,7 @@ public class Player {
                 return Optional.ofNullable(biggestCity);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void chooseRole() {
@@ -251,7 +267,14 @@ public class Player {
 
     public void discardCard() {
         if (getCardHand().size() > 0) {
-            Building b = getCardHand().get(0);
+            Building b = cardHand.get(0);
+            cardHand.remove(b);
+            board.getPile().putCard(b);
+        }
+    }
+
+    public void discardCard(Building b) {
+        if (getCardHand().size() > 0) {
             cardHand.remove(b);
             board.getPile().putCard(b);
         }
@@ -355,7 +378,7 @@ public class Player {
     }
 
     public District getMajority(Player p){
-        HashMap<District, Integer> majority = new HashMap<District, Integer>();
+        HashMap<District, Integer> majority = new HashMap<>();
         for (District d : District.values()) {
             majority.put(d, 0);
         }

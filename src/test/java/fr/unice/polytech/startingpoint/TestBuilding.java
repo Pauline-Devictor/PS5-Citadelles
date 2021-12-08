@@ -1,7 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
+import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,11 @@ import static org.mockito.Mockito.*;
 
 public class TestBuilding {
     Building eglise;
+    Player p;
 
     @BeforeEach
     void setUp() {
+        p = spy(new Player(new Board()));
         eglise = new Building(BuildingEnum.Eglise);
     }
 
@@ -26,26 +27,61 @@ public class TestBuilding {
 
     @Test
     void testLaboratory() {
-
+        when(p.getGold()).thenReturn(25);
+        when(p.getCity()).thenReturn(List.of(new Laboratory()));
+        int cardHand = p.getCardHand().size();
+        p.cityEffects();
+        assertEquals(cardHand - 1, p.getCardHand().size());
     }
 
     @Test
-    void testObservatory() {
-
-    }
-    
-    void testManufacture() {
-        Player p = spy(new Player(new Board()));
+    void testLaboratoryEmptyHand() {
         when(p.getGold()).thenReturn(25);
-        when(p.getCity()).thenReturn(List.of(new Building(BuildingEnum.Manufacture)));
-        //System.out.println(p.getCity()+"\n\n"+p.getCardHand());
+        when(p.getCity()).thenReturn(List.of(new Laboratory()));
+        while (p.getCardHand().size() > 0)
+            p.discardCard();
+        p.cityEffects();
+        assertEquals(0, p.getCardHand().size());
+    }
+
+    @Test
+    void testManufacture() {
+        when(p.getGold()).thenReturn(25);
+        when(p.getCity()).thenReturn(List.of(new Manufactory()));
         int cardHand = p.getCardHand().size();
         p.cityEffects();
         assertEquals(3 + cardHand, p.getCardHand().size());
     }
 
     @Test
-    void testBibliotheque() {
-
+    void testManufactureNoGold() {
+        Player p = spy(new Player(new Board()));
+        when(p.getGold()).thenReturn(0);
+        when(p.getCity()).thenReturn(List.of(new Manufactory()));
+        int cardHand = p.getCardHand().size();
+        p.cityEffects();
+        assertEquals(cardHand, p.getCardHand().size());
     }
+
+    @Test
+    void testBibliotheque() {
+        when(p.getCity()).thenReturn(List.of(new Library()));
+        List<Building> res = p.drawDecision();
+        assertEquals(2, res.size());
+    }
+
+    @Test
+    void testBibliothequeReturn() {
+        when(p.getCity()).thenReturn(List.of(new Library()));
+        p.drawDecision();
+        assertEquals(2, p.getCardHand().size());
+    }
+
+    @Test
+    void testObservatory() {
+        when(p.getCity()).thenReturn(List.of(new Observatory()));
+        p.drawDecision();
+        assertEquals(1, p.getCardHand().size());
+    }
+
 }
