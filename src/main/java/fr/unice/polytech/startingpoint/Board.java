@@ -105,11 +105,11 @@ public class Board {
         String signe = ANSI_RED + "";
         if (showGold > 0)
             signe = ANSI_GREEN + "+";
-        StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole() + ANSI_RESET + ") possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET
+        StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().get().getName() + ANSI_RESET + ") possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET
                 + "(" + signe + showGold + ANSI_RESET + ") pieces d'or");
         if (!isNull(checkDraw)) {
             res.append(", a pioché " + ANSI_UNDERLINE);
-            checkDraw.forEach(e -> res.append(e.getName()));
+            checkDraw.forEach(e -> res.append(e.getName()).append(", "));
             res.append(ANSI_RESET);
         }
 
