@@ -20,7 +20,6 @@ public abstract class Character {
         available = true;
         isMurdered = false;
         thief = Optional.empty();
-
     }
 
     @Override
@@ -33,9 +32,10 @@ public abstract class Character {
         isMurdered = false;
         //Free the character after each turn
         available = true;
-        //Not stolen anymore
-        thief = Optional.empty();
         //No thiefplayer anymore
+        thief = Optional.empty();
+        //not immune to Condottiere anymore
+
     }
 
     public abstract void usePower(Board board);

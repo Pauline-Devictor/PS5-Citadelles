@@ -231,17 +231,24 @@ public class Player {
                     }
                     if (biggestCity.getCity().size() > 5) return Optional.of(biggestCity);
                 }
-                Player biggestHand = board.getPlayers().get(0);
+                Player biggestHand;
+                biggestHand = board.getPlayers().get(0);
                 for (Player p : board.getPlayers()) {
-                    if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
+                    if (p.getCardHand().size() > biggestHand.getCardHand().size() ) biggestHand = p;
                 }
                 return Optional.ofNullable(biggestHand);
             }
 
             if (role.get().getClass() == Condottiere.class){
-                Player biggestCity = board.getPlayers().get(0);
+                Player biggestCity;
+                if (board.getPlayers().get(0).getRole().get().getClass() == Bishop.class){
+                     biggestCity = board.getPlayers().get(1);}
+                else{
+                     biggestCity = board.getPlayers().get(0);
+                }
                 for (Player p : board.getPlayers()) {
-                    if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
+                    if (p.getRole().isPresent())
+                    if (p.getCity().size() >= biggestCity.getCity().size() && (p.getRole().get().getClass() != Bishop.class)) biggestCity = p;
                 }
                 return Optional.ofNullable(biggestCity);
             }
@@ -402,4 +409,23 @@ public class Player {
         return b;
     }
 
+    public void chooseBuild(Optional<Player> playerTarget, Player condo){
+        if (playerTarget.isPresent()){
+            Random random = new Random();
+            int nbBuild = playerTarget.get().getCity().size();
+            if (nbBuild>0) {
+                int toDestroy = random.nextInt(nbBuild);
+                //Retire le build de la liste des construit & ajoute le build au deck
+                Building build = playerTarget.get().getCity().get(toDestroy);
+                if (condo.getGold() >= build.getCost()){
+                    board.getPile().putCard(build);
+                    playerTarget.get().getCity().remove(build);
+                    condo.refundGold(build.getCost()-1);
+                    System.out.println("Le batiment " + build.getName() + " du joueur " + playerTarget.get().getName() + " a été détruit.");
+                //TODO affichage
+                }
+
+            }
+        }
+    }
 }

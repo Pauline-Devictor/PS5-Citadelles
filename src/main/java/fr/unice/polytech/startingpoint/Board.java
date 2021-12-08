@@ -139,6 +139,9 @@ public class Board {
         players.forEach(e -> res.addAndGet(e.getGold()));
         System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (turn) + ":" + ANSI_RESET +
                 " Cartes Restantes : " + pile.numberOfCards() + " Or Dans la Banque : " + bank.getGold() + " Or Joueurs :" + res);
+    if (res.get()+ bank.getGold() != 30){
+        throw new IllegalStateException("L'or total n'est plus égal à 30");
+    }
     }
 
 }

@@ -17,12 +17,18 @@ public class Condottiere extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             collectTaxes(p.get(), Military);
+            selectTarget(p.get());
+            p.get().chooseBuild(selectTarget(p.get()),p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
     //Condo
-    public void chooseTargetToDestroy() {
-
+    public Optional<Player> selectTarget(Player p) {
+        Optional<Player> target;
+        target = p.chooseTarget();
+        if (target.get().getRole().get().getClass() == Bishop.class)
+            return Optional.empty();
+        return target;
     }
 }
