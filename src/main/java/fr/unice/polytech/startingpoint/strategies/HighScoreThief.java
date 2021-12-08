@@ -2,11 +2,11 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -47,12 +47,36 @@ public class HighScoreThief extends Player {
     }
 
     public void chooseRole() {
-        int index;
-        do {
-            index = new Random().nextInt(8);
-        } while (!board.getCharactersInfos(index).isAvailable());
-        role = Optional.of(board.getCharactersInfos(index));
-        board.getCharactersInfos(index).setAvailable(false);
+        TreeMap<District,Integer> taxmap = new TreeMap<>();
+        for (District d : District.values()) {
+            taxmap.put(d, 0);
+        }
+        for (Building b : getCity()) {
+            taxmap.put(b.getDistrict(), taxmap.get(b.getDistrict())+1);
+        }
+        taxmap.remove(District.Prestige);
+        taxmap.remove(District.Noble);
+        ArrayList<Integer> taxList = (ArrayList<Integer>) taxmap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .map(District::getTaxCollector)
+                .collect(Collectors.toList());
+
+        taxList.add(0, 3);
+        taxList.add(0, 1);
+        taxList.addAll(List.of(
+                0,2,6
+        ));
+
+        for(int elem : taxList){
+            if(pickRole(elem)){
+                return;
+            }
+        }
+
+
     }
 
 }
