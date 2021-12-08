@@ -388,4 +388,13 @@ public class Player {
         return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
+    public boolean pickRole(int index){
+        boolean b = board.getCharactersInfos(index).isAvailable();
+        if(b) {
+            role = Optional.of(board.getCharactersInfos(index));
+            board.getCharactersInfos(index).setAvailable(false);
+        }
+        return b;
+    }
+
 }
