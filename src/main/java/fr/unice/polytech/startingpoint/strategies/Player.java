@@ -2,15 +2,14 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.*;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
 
 import java.util.*;
 
 import static fr.unice.polytech.startingpoint.Board.*;
-import static java.util.Objects.isNull;
 
-public class Player {
+public class Player implements Comparator<Building> {
     protected String name;
     protected int gold;
     protected int goldScore;
@@ -38,6 +37,21 @@ public class Player {
         //amountStolen = 0;
         role = Optional.empty();
     }
+
+    public static Comparator<Player> RoleOrder = (e1, e2) -> {
+        //Positive if e2 > e1
+        int res = 1;
+        if (e1.getRole().isPresent() && e2.getRole().isPresent()) {
+            res = e1.getRole().get().getOrder() - e2.getRole().get().getOrder();
+        } else if (e1.getRole().isPresent())
+            res--;
+        return res;
+    };
+
+    public static Comparator<Player> PointsOrder = (e1, e2) -> {
+        //Positive if e2 > e1
+        return e2.getGoldScore() - e1.getGoldScore();
+    };
 
     public void build(Building b) {
         boolean buildable = isBuildable(b);
@@ -82,7 +96,7 @@ public class Player {
 
     public void cityEffects() {
         getCity().forEach(e -> {
-            if (e instanceof Prestige) {
+            if (e instanceof Laboratory || e instanceof Manufactory) {
                 ((Prestige) e).useEffect(this);
             }
         });
@@ -133,7 +147,10 @@ public class Player {
 
     public List<Building> drawDecision() {
         List<Building> res, tmp;
-        if (getCity().contains(new Library())) {
+        if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
+            System.out.println("Effect Batiments Combinés");
+            res = cardHand;
+        } else if (getCity().contains(new Library())) {
             tmp = List.copyOf(getCardHand());
             new Library().useEffect(this);
             res = cardHand;
@@ -144,51 +161,25 @@ public class Player {
             res = cardHand;
             res.removeAll(tmp);
         } else {
-            Optional<Building> save = drawAndChoose(2);
-            res = save.map(List::of).orElseGet(ArrayList::new);
+            res = drawAndChoose(2, 1);
         }
         return res;
     }
 
-    public Optional<Building> drawAndChoose(int nbCards) {
+    public List<Building> drawAndChoose(int nbCards, int nbChoose) {
         List<Building> builds = new ArrayList<>();
         Optional<Building> b1;
         for (int i = 0; i < nbCards; i++) {
             b1 = getBoard().getPile().drawACard();
             b1.ifPresent(builds::add);
         }
-        return chooseBuilding(builds);
+        return chooseBuilding(builds, nbChoose);
     }
 
-    public Optional<Building> chooseBuilding(List<Building> builds) {
-        //TODO Fonction Recursive sur la liste ?
-        //CompareTo + sort probablement
-        if (builds.size() > 0) {
-            Building res = builds.get(0);
-            for (Building b : builds) {
-                res = chooseBuilding(res, b);
-            }
-            return Optional.of(res);
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Choose the best building according to the strategies of the player
-     *
-     * @param b1 First Building to compare
-     * @param b2 Second Building to compare
-     */
-    public Building chooseBuilding(Building b1, Building b2) {
-        if (isNull(b1))
-            return b2;
-        else if (isNull(b2))
-            return b1;
-        else if (getCardHand().contains(b1))
-            return b2;
-        else if (getCardHand().contains(b2))
-            return b1;
-        return b1;
+    public List<Building> chooseBuilding(List<Building> builds, int res) {
+        builds.sort(this);
+        builds.removeIf(b -> getCardHand().contains(b) || getCity().contains(b));
+        return builds.size() >= res ? builds.subList(0, res) : builds;
     }
 
     public Character chooseVictim() {
@@ -198,11 +189,19 @@ public class Player {
                 for (Player player : board.getPlayers()) {
                     if (player.getCity().size() > 5) {
                         District colour = getMajority(player);
-                        switch (colour){
-                            case Commercial -> {return new Merchant();}
-                            case Noble ->  {return new King();}
-                            case Military -> {return new Condottiere();}
-                            case Religion -> {return new Bishop();}
+                        switch (colour) {
+                            case Commercial -> {
+                                return new Merchant();
+                            }
+                            case Noble -> {
+                                return new King();
+                            }
+                            case Military -> {
+                                return new Condottiere();
+                            }
+                            case Religion -> {
+                                return new Bishop();
+                            }
                         }
                     }
                 }
@@ -213,8 +212,8 @@ public class Player {
             if (role.get().getClass() == Thief.class) {
                 Random random = new Random();
                 //exclu l'indice de l'assassin
-                int victim = random.nextInt(9)+1;
-                if(victim > 7) victim = 6;
+                int victim = random.nextInt(9) + 1;
+                if (victim > 7) victim = 6;
                 return board.getCharacters().get(victim);
             }
         }
@@ -225,7 +224,7 @@ public class Player {
         if (role.isPresent()) {
             if (role.get().getClass() == Magician.class) {
                 Player biggestCity = board.getPlayers().get(0);
-                if(cardHand.size() < 3){
+                if (cardHand.size() < 3) {
                     for (Player p : board.getPlayers()) {
                         if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
                     }
@@ -234,21 +233,22 @@ public class Player {
                 Player biggestHand;
                 biggestHand = board.getPlayers().get(0);
                 for (Player p : board.getPlayers()) {
-                    if (p.getCardHand().size() > biggestHand.getCardHand().size() ) biggestHand = p;
+                    if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
                 }
                 return Optional.ofNullable(biggestHand);
             }
 
-            if (role.get().getClass() == Condottiere.class){
+            if (role.get().getClass() == Condottiere.class) {
                 Player biggestCity;
-                if (board.getPlayers().get(0).getRole().get().getClass() == Bishop.class){
-                     biggestCity = board.getPlayers().get(1);}
-                else{
-                     biggestCity = board.getPlayers().get(0);
+                if (board.getPlayers().get(0).getRole().get().getClass() == Bishop.class) {
+                    biggestCity = board.getPlayers().get(1);
+                } else {
+                    biggestCity = board.getPlayers().get(0);
                 }
                 for (Player p : board.getPlayers()) {
                     if (p.getRole().isPresent())
-                    if (p.getCity().size() >= biggestCity.getCity().size() && (p.getRole().get().getClass() != Bishop.class)) biggestCity = p;
+                        if (p.getCity().size() >= biggestCity.getCity().size() && (p.getRole().get().getClass() != Bishop.class))
+                            biggestCity = p;
                 }
                 return Optional.ofNullable(biggestCity);
             }
@@ -291,21 +291,6 @@ public class Player {
             board.getPile().putCard(b);
         }
     }
-
-    public static Comparator<Player> RoleOrder = (e1, e2) -> {
-        //Positive if e2 > e1
-        int res = 1;
-        if (e1.getRole().isPresent() && e2.getRole().isPresent()) {
-            res = e1.getRole().get().getOrder() - e2.getRole().get().getOrder();
-        } else if (e1.getRole().isPresent())
-            res = -1;
-        return res;
-    };
-
-    public static Comparator<Player> PointsOrder = (e1, e2) -> {
-        //Positive if e2 > e1
-        return e2.getGoldScore() - e1.getGoldScore();
-    };
 
     public void refundGold(int amount) {
         gold -= board.getBank().refundGold(amount);
@@ -389,43 +374,49 @@ public class Player {
         this.role = role;
     }
 
-    public District getMajority(Player p){
+    public District getMajority(Player p) {
         HashMap<District, Integer> majority = new HashMap<>();
         for (District d : District.values()) {
             majority.put(d, 0);
         }
         for (Building b : p.getCity()) {
-            majority.put(b.getDistrict(), majority.get(b.getDistrict())+1);
+            majority.put(b.getDistrict(), majority.get(b.getDistrict()) + 1);
         }
         return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
-    public boolean pickRole(int index){
+    public boolean pickRole(int index) {
         boolean b = board.getCharactersInfos(index).isAvailable();
-        if(b) {
+        if (b) {
             role = Optional.of(board.getCharactersInfos(index));
             board.getCharactersInfos(index).setAvailable(false);
         }
         return b;
     }
 
-    public void chooseBuild(Optional<Player> playerTarget, Player condo){
-        if (playerTarget.isPresent()){
+    public void chooseBuild(Optional<Player> playerTarget, Player condo) {
+        if (playerTarget.isPresent()) {
             Random random = new Random();
             int nbBuild = playerTarget.get().getCity().size();
-            if (nbBuild>0) {
+            if (nbBuild > 0) {
                 int toDestroy = random.nextInt(nbBuild);
                 //Retire le build de la liste des construit & ajoute le build au deck
                 Building build = playerTarget.get().getCity().get(toDestroy);
-                if (condo.getGold() >= build.getCost()){
+                if (condo.getGold() >= build.getCost()) {
                     board.getPile().putCard(build);
                     playerTarget.get().getCity().remove(build);
-                    condo.refundGold(build.getCost()-1);
+                    condo.refundGold(build.getCost() - 1);
                     System.out.println("Le batiment " + build.getName() + " du joueur " + playerTarget.get().getName() + " a été détruit.");
-                //TODO affichage
+                    //TODO affichage
                 }
 
             }
         }
+    }
+
+    @Override
+    public int compare(Building b1, Building b2) {
+        //Positive if o2>o1
+        return 1;
     }
 }

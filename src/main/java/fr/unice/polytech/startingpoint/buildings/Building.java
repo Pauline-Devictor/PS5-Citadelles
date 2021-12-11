@@ -1,9 +1,5 @@
 package fr.unice.polytech.startingpoint.buildings;
 
-import java.util.Objects;
-
-import static java.util.Objects.isNull;
-
 public class Building {
     private final BuildingEnum building;
 

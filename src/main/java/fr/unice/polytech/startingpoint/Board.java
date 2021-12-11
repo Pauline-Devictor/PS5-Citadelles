@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
-import static java.util.Objects.isNull;
 
 public class Board {
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
@@ -139,9 +138,9 @@ public class Board {
         players.forEach(e -> res.addAndGet(e.getGold()));
         System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (turn) + ":" + ANSI_RESET +
                 " Cartes Restantes : " + pile.numberOfCards() + " Or Dans la Banque : " + bank.getGold() + " Or Joueurs :" + res);
-    if (res.get()+ bank.getGold() != 30){
-        throw new IllegalStateException("L'or total n'est plus égal à 30");
-    }
+        if (res.get() + bank.getGold() != 30) {
+            throw new IllegalStateException("L'or total n'est plus égal à 30");
+        }
     }
 
 }

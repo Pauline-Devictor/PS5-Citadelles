@@ -2,8 +2,6 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.Prestige;
-import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,13 +13,6 @@ public class RushMerch extends Player {
 
     public RushMerch(Board b) {
         super(b, "RushMarchand");
-    }
-
-    public void cityEffects() {
-        getCity().forEach(e -> {
-            if (e instanceof Prestige)
-                ((Prestige) e).useEffect(this);
-        });
     }
 
     public void roleEffects() {
@@ -54,6 +45,12 @@ public class RushMerch extends Player {
         } while (!board.getCharactersInfos(index).isAvailable());
         role = Optional.of(board.getCharactersInfos(index));
         board.getCharactersInfos(index).setAvailable(false);
+    }
+
+    @Override
+    public int compare(Building b1, Building b2) {
+        //Positive if o2>o1
+        return b1.getCost() - b2.getCost();
     }
 
 }

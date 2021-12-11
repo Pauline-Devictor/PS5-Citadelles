@@ -2,8 +2,10 @@ package fr.unice.polytech.startingpoint.characters;
 
 
 import fr.unice.polytech.startingpoint.Board;
-import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
+import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
@@ -57,8 +59,13 @@ public abstract class Character {
             if (b.getBuilding().getDistrict() == d) {
                 taxes++;
             }
-            p.setTaxes(taxes);
+            if (b.getBuilding().equals(BuildingEnum.EcoleDeMagie)) {
+                //TODO Implementation des Taxes
+                taxes++;
+                ((Prestige) b).useEffect(p);
+            }
         }
+        p.setTaxes(taxes);
     }
 
     public boolean isAvailable() {

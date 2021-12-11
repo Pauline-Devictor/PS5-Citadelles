@@ -2,13 +2,10 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.Prestige;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import static java.util.Objects.isNull;
 
 public class RushArchi extends Player {
 
@@ -16,12 +13,6 @@ public class RushArchi extends Player {
         super(b, "RushArchitect");
     }
 
-    public void cityEffects() {
-        getCity().forEach(e -> {
-            if (e instanceof Prestige)
-                ((Prestige) e).useEffect(this);
-        });
-    }
 
     public void roleEffects() {
         if (getRole().isPresent()) {
@@ -34,18 +25,6 @@ public class RushArchi extends Player {
         return buildDecision(0, 3);
     }
 
-    public Building chooseBuilding(Building b1, Building b2) {
-        if (isNull(b1))
-            return b2;
-        else if (isNull(b2))
-            return b1;
-        else if (getCardHand().contains(b1))
-            return b2;
-        else if (getCardHand().contains(b2))
-            return b1;
-        return (b1.getCost() > b2.getCost()) ? b2 : b1;
-    }
-
     public void chooseRole() {
         int index;
         do {
@@ -53,6 +32,12 @@ public class RushArchi extends Player {
         } while (!board.getCharactersInfos(index).isAvailable());
         role = Optional.of(board.getCharactersInfos(index));
         board.getCharactersInfos(index).setAvailable(false);
+    }
+
+    @Override
+    public int compare(Building b1, Building b2) {
+        //Positive if o2>o1
+        return b1.getCost() - b2.getCost();
     }
 
 }

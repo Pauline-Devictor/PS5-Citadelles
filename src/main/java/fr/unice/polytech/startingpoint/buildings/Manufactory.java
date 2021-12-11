@@ -5,8 +5,6 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Objects.isNull;
-
 public class Manufactory extends Prestige {
     private List<Building> cards;
 
@@ -16,6 +14,7 @@ public class Manufactory extends Prestige {
     }
 
     public void useEffect(Player p) {
+        System.out.println("Use Effect Manufacture");
         if (p.getGold() >= 3 && p.getBoard().getPile().numberOfCards() >= 3) {
             p.refundGold(3);
             cards = p.drawCards(3);

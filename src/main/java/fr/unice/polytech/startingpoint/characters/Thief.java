@@ -4,6 +4,7 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
+
 public class Thief extends Character {
     public Thief() {
         super(CharacterEnum.Thief);

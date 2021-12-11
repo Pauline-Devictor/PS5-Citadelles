@@ -4,9 +4,6 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Objects.isNull;
 
 public class Library extends Prestige {
     private List<Building> cards;
@@ -17,7 +14,8 @@ public class Library extends Prestige {
     }
 
     public void useEffect(Player p) {
-        cards = p.drawCards(2);
+        System.out.println("Use Effect Bibliotheque");
+        cards = p.drawAndChoose(2, 2);
         System.out.println(printEffect(p));
     }
 

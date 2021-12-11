@@ -9,7 +9,7 @@ import java.util.Random;
 public class Deck {
     private final ArrayList<Building> buildings;
 
-    Deck(){
+    Deck() {
         buildings = new ArrayList<>();
         buildings.add(new MiracleCourtyard(BuildingEnum.CourDesMiracles));
         buildings.add(new Laboratory());
@@ -17,7 +17,7 @@ public class Deck {
         buildings.add(new Observatory());
         buildings.add(new Building(BuildingEnum.Cimetiere));
         buildings.add(new Library());
-        buildings.add(new Building(BuildingEnum.EcoleDeMagie));
+        buildings.add(new MagicSchool());
         buildings.add(new Building(BuildingEnum.Universite));
         buildings.add(new Building(BuildingEnum.Dracoport));
         for (int i = 0; i < 2; i++) {

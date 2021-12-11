@@ -18,7 +18,7 @@ public class Condottiere extends Character {
         if (p.isPresent()) {
             collectTaxes(p.get(), Military);
             selectTarget(p.get());
-            p.get().chooseBuild(selectTarget(p.get()),p.get());
+            p.get().chooseBuild(selectTarget(p.get()), p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }

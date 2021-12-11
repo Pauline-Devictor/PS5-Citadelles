@@ -5,7 +5,7 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
 
-import static fr.unice.polytech.startingpoint.buildings.District.*;
+import static fr.unice.polytech.startingpoint.buildings.District.Noble;
 
 public class King extends Character {
     public King() {
