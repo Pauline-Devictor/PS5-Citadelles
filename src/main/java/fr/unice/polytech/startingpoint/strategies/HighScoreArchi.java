@@ -74,8 +74,7 @@ public class HighScoreArchi extends Player {
             if (b2.getDistrict() == District.Noble) return b2;
             if (b1.getDistrict() == District.Religion) return b1;
             if (b2.getDistrict() == District.Religion) return b2;
-        } else if (b1.getCost() <= costMax && b1.getCost() >= costMin) return b1;
-        else if (b2.getCost() <= costMax && b2.getCost() >= costMin) return b2;
+        }
 
         return (b1.getCost() < b2.getCost()) ? b2 : b1;
     }

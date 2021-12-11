@@ -31,6 +31,36 @@ public class HighScoreThief extends Player {
         return buildDecision(costMin, costMax);
     }
 
+    public List<Building> buildDecision(int costMin, int costMax) {
+        List<Building> checkBuilding = new ArrayList<>();
+        for (Building b : getCardHand()) {
+            //prioritize noble district buildings
+            if (isBuildable(b) && nbBuildable > 0) {
+                if ((b.getCost() <= costMax && b.getCost() >= costMin && b.getDistrict() == District.Noble)
+                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
+                    nbBuildable--;
+                    checkBuilding.add(b);
+                }
+            }
+        }
+        if (!checkBuilding.isEmpty()) {
+            checkBuilding.forEach(this::build);
+            return checkBuilding;
+        }
+        //else
+        for (Building b : getCardHand()) {
+            if (isBuildable(b) && nbBuildable > 0) {
+                if ((b.getCost() <= costMax && b.getCost() >= costMin)
+                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
+                    nbBuildable--;
+                    checkBuilding.add(b);
+                }
+            }
+        }
+        checkBuilding.forEach(this::build);
+        return checkBuilding;
+    }
+
     public Building chooseBuilding(Building b1, Building b2) {
         if (isNull(b1))
             return b2;
@@ -40,6 +70,11 @@ public class HighScoreThief extends Player {
             return b2;
         else if (getCardHand().contains(b2))
             return b1;
+        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Noble) return b1;
+            if (b2.getDistrict() == District.Noble) return b2;
+        }
+
         return (b1.getCost() < b2.getCost()) ? b2 : b1;
     }
 
