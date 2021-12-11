@@ -4,16 +4,14 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public class HighScoreArchi extends Player {
     private final int costMax = 6;
     private final int costMin = 3;
-    private final ArrayList<Integer> priority = new ArrayList<>(Arrays.asList(5, 3, 4, 6, 1, 0, 7, 2));
 
     public HighScoreArchi(Board b) {
         super(b, "HautScoreArchitect");
@@ -83,44 +81,44 @@ public class HighScoreArchi extends Player {
     }
 
     public void chooseRole() {
-        //if rich, architect
-        if (gold > 5) {
-            if (pickRole(6)) return;
+        //Taxes priority
+        TreeMap<District, Integer> taxmap = new TreeMap<>();
+        for (District d : District.values()) {
+            taxmap.put(d, 0);
         }
+        for (Building b : getCity()) {
+            taxmap.put(b.getDistrict(), taxmap.get(b.getDistrict()) + 1);
+        }
+        taxmap.remove(District.Prestige);
+        taxmap.remove(District.Military);
+        ArrayList<Integer> taxList = (ArrayList<Integer>) taxmap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .map(District::getTaxCollector)
+                .collect(Collectors.toList());
+
+        //if rich, architect
+        if (gold > 5) taxList.add(0, 6);
+        else taxList.add(6);
 
         //if a player has too much advance, condottiere
         Player biggestCity = board.getPlayers().get(0);
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
         }
-        if ((biggestCity.getCity().size() - city.size() > 4)) {
-            if (pickRole(7)) return;
-        }
+        if ((biggestCity.getCity().size() - city.size() > 4)) taxList.add(0, 7);
+        else taxList.add(7);
 
-        //else, district priority
-        District colour = getMajority(this);
-        switch (colour) {
-            //Merchant
-            case Commercial, Prestige -> {
-                if (pickRole(5)) return;
-            }
-            //King
-            case Noble -> {
-                if (pickRole(3)) return;
-            }
-            //Condottiere
-            case Military -> {
-                if (pickRole(7)) return;
-            }
-            //Bishop
-            case Religion -> {
-                if (pickRole(4)) return;
-            }
-        }
+        taxList.addAll(List.of(
+                1, 0, 2
+        ));
 
-        //default priority
-        for (Integer i : priority) {
-            if (pickRole(i)) return;
+        for (int elem : taxList) {
+            if (pickRole(elem)) {
+                return;
+            }
         }
     }
 

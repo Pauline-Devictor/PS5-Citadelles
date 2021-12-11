@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class HighScoreThief extends Player {
+    private final int costMax = 6;
+    private final int costMin = 3;
 
     public HighScoreThief(Board b) {
         super(b, "HautScoreVoleur");
@@ -26,7 +28,7 @@ public class HighScoreThief extends Player {
 
     public List<Building> buildDecision() {
         //Scale of cost ok for building
-        return buildDecision(3, 6);
+        return buildDecision(costMin, costMax);
     }
 
     public Building chooseBuilding(Building b1, Building b2) {
