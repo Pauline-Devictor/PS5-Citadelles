@@ -16,8 +16,14 @@ public class King extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
+            System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Noble);
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
+    }
+
+    @Override
+    public String printEffect(Player p) {
+        return super.printEffect(p) + " Il commencera au prochain tour";
     }
 }

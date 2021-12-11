@@ -54,7 +54,7 @@ public class Board {
         players = generatePlayers(nbPlayers);
     }
 
-    Board() {
+    public Board() {
         this(4);
     }
 
@@ -92,7 +92,7 @@ public class Board {
         return characters.get(index);
     }
 
-    public void showPlay(Player p, int goldDraw, int goldCollect, List<Building> checkDraw, List<Building> checkBuilding) {
+    public void showPlay(Player p, int goldDraw, List<Building> checkDraw, List<Building> checkBuilding) {
         int showGold = (p.getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
@@ -113,8 +113,6 @@ public class Board {
                 res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
             }
         }
-        if (goldCollect > 0)
-            res.append(" et a récupéré ").append(goldCollect).append(" pieces des impôts");
         System.out.println(res + "\n");
     }
 
@@ -143,4 +141,24 @@ public class Board {
         }
     }
 
+    public void showDrawOrGold(boolean emptyDeck, boolean anythingBuildable, boolean emptyBank, boolean isDraw, String name) {
+        String res = "";
+        if (emptyDeck)
+            res += "Le deck ne contient plus de cartes.\n";
+        if (!anythingBuildable)
+            res += name + " ne peut rien construire dans sa main.\n";
+        if (emptyBank)
+            res += "La banque ne contient plus de pieces d'or.\n";
+        if (isDraw)
+            res += name + " decide donc de piocher.";
+        else
+            res += name + " decide donc de prendre 2 pieces d'or.";
+        System.out.println(res);
+    }
+
+    public void showDrawChoice() {
+        String res = "";
+
+        System.out.println(res);
+    }
 }

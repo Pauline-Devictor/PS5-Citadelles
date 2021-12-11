@@ -121,7 +121,7 @@ public class TestPlayer {
         assertEquals(0, p.getCardHand().size() - size);
     }
 
-    @Test
+    /*@Test
     void collectTaxesEmptyBank() {
         Bank bankEmpty = spy(new Bank(30));
         when(bankEmpty.getGold()).thenReturn(0);
@@ -140,7 +140,7 @@ public class TestPlayer {
     void chooseBuildingsListLow() {
         List<Building> b = pLow.chooseBuilding(List.of(new Library(), new Laboratory(), new Building(BuildingEnum.Temple)), 1);
         assertEquals(new Building(BuildingEnum.Temple), b.get(1));
-    }
+    }*/
 
     //TODO Plusieurs Cartes
 }

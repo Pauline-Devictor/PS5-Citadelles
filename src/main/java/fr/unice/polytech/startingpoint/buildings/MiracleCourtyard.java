@@ -10,8 +10,6 @@ public class MiracleCourtyard extends Prestige {
 
     @Override
     public void useEffect(Player p) {
-        System.out.println("Use Effect Cour Des Miracles");
-
         System.out.println(printEffect(p));
     }
 }

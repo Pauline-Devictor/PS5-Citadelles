@@ -16,8 +16,8 @@ public class Condottiere extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
+            System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Military);
-            selectTarget(p.get());
             p.get().chooseBuild(selectTarget(p.get()), p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");

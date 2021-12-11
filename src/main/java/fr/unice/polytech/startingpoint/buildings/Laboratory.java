@@ -14,8 +14,6 @@ public class Laboratory extends Prestige {
 
     @Override
     public void useEffect(Player p) {
-        System.out.println("Use Effect Laboratoire");
-
         if (p.getBoard().getBank().getGold() >= 1 && p.getCardHand().size() > 0) {
             //TODO Test Main vide
             card = p.discardCard();

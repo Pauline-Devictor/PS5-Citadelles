@@ -14,6 +14,7 @@ public class Thief extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
+            System.out.println(printEffect(p.get()));
             Character c = p.get().chooseVictim();
             if (!c.isMurdered() && c.getClass() != Assassin.class)
                 c.setThief(p);

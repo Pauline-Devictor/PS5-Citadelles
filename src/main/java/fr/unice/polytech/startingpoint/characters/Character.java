@@ -65,7 +65,14 @@ public abstract class Character {
                 ((Prestige) b).useEffect(p);
             }
         }
-        p.setTaxes(taxes);
+        p.takeMoney(taxes);
+
+        String res;
+        if (taxes <= p.getBoard().getBank().getGold())
+            res = "Il a récupéré " + taxes + " pieces des quartiers " + d.name();
+        else
+            res = "La banque n'a plus assez de pieces, il a récupéré " + p.getBoard().getBank().getGold() + " pieces d'or";
+        System.out.println(res);
     }
 
     public boolean isAvailable() {
@@ -98,5 +105,9 @@ public abstract class Character {
 
     public int getOrder() {
         return character.getOrder();
+    }
+
+    public String printEffect(Player p) {
+        return p.getName() + " a utilisé l'effet de : " + getName() + ".";
     }
 }

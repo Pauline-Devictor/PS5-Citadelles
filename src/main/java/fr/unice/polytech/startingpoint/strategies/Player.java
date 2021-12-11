@@ -70,28 +70,36 @@ public class Player implements Comparator<Building> {
 
     public void play() {
         int goldDraw = getGold();
-        boolean draw = !board.getPile().isEmpty() && cardHand.stream().allMatch(this::isBuildable);
+        boolean draw = drawOrGold();
         List<Building> checkDraw = new ArrayList<>();
         if (getRole().isPresent() && getRole().get().isMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
         } else {
             checkStolen();
+            //Decide for the use of power of his character
             roleEffects();
             // chooses to draw a card because there is nothing buildable or bank is empty
-            if (draw || board.getBank().isEmpty())
-                checkDraw = drawDecision();
+            if (draw)
+                /*checkDraw = */ drawDecision();
                 // chooses to get 2 golds because nothing can be built
             else
                 gold += board.getBank().withdrawGold(2);
-            //Decide for the use of power of his character
-            int goldTaxes = collectTaxes();
             //Decide for the use of wonders
             cityEffects();
             //Decide what to build
             List<Building> checkBuilding = buildDecision();
             //show the move in the console
-            board.showPlay(this, goldDraw, goldTaxes, checkDraw, checkBuilding);
+            board.showPlay(this, goldDraw, checkDraw, checkBuilding);
         }
+    }
+
+    private boolean drawOrGold() {
+        boolean emptyDeck = board.getPile().isEmpty();
+        boolean anythingBuildable = cardHand.stream().anyMatch(this::isBuildable);
+        boolean emptyBank = board.getBank().isEmpty();
+        boolean isDraw = (!emptyDeck && anythingBuildable) || emptyBank;
+        board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, getName());
+        return isDraw;
     }
 
     public void cityEffects() {
@@ -106,12 +114,6 @@ public class Player implements Comparator<Building> {
         if (getRole().isPresent()) {
             getRole().get().usePower(board);
         }
-    }
-
-    public int collectTaxes() {
-        int goldTaxes = getGold();
-        gold += board.getBank().withdrawGold(getTaxes());
-        return getGold() - goldTaxes;
     }
 
     void checkStolen() {
@@ -145,25 +147,25 @@ public class Player implements Comparator<Building> {
         return checkBuilding;
     }
 
-    public List<Building> drawDecision() {
+    public /*List<Building>*/ void drawDecision() {
         List<Building> res, tmp;
         if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
-            System.out.println("Effect Batiments Combinés");
-            res = cardHand;
+            //TODO Combiné Batiments Effects + Tests
+            res = drawAndChoose(3, 2);
         } else if (getCity().contains(new Library())) {
-            tmp = List.copyOf(getCardHand());
+            //tmp = List.copyOf(getCardHand());
             new Library().useEffect(this);
-            res = cardHand;
-            res.removeAll(tmp);
+            //res = cardHand;
+            //res.removeAll(tmp);
         } else if (getCity().contains(new Observatory())) {
-            tmp = List.copyOf(getCardHand());
+            //tmp = List.copyOf(getCardHand());
             new Observatory().useEffect(this);
-            res = cardHand;
-            res.removeAll(tmp);
+            //res = cardHand;
+            //res.removeAll(tmp);
         } else {
             res = drawAndChoose(2, 1);
         }
-        return res;
+        //return res;
     }
 
     public List<Building> drawAndChoose(int nbCards, int nbChoose) {
@@ -173,13 +175,14 @@ public class Player implements Comparator<Building> {
             b1 = getBoard().getPile().drawACard();
             b1.ifPresent(builds::add);
         }
+        board.showDrawChoice();
         return chooseBuilding(builds, nbChoose);
     }
 
     public List<Building> chooseBuilding(List<Building> builds, int res) {
         builds.sort(this);
         builds.removeIf(b -> getCardHand().contains(b) || getCity().contains(b));
-        return builds.size() >= res ? builds.subList(0, res) : builds;
+        return (builds.size() >= res) ? builds.subList(0, res) : builds;
     }
 
     public Character chooseVictim() {
@@ -417,6 +420,6 @@ public class Player implements Comparator<Building> {
     @Override
     public int compare(Building b1, Building b2) {
         //Positive if o2>o1
-        return 1;
+        return 0;
     }
 }

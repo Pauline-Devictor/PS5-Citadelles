@@ -8,6 +8,7 @@ import java.util.Optional;
 import static fr.unice.polytech.startingpoint.buildings.District.Religion;
 
 public class Bishop extends Character {
+
     public Bishop() {
         super(CharacterEnum.Bishop);
     }
@@ -16,6 +17,7 @@ public class Bishop extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
+            System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Religion);
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");

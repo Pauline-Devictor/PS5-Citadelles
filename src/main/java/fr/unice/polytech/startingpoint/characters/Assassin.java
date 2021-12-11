@@ -16,6 +16,7 @@ public class Assassin extends Character {
         if (p.isPresent()) {
             Character c = p.get().chooseVictim();
             c.setMurdered(true);
+            System.out.println(printEffect(p.get()));
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }

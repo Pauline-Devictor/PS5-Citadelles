@@ -5,7 +5,7 @@ public enum CharacterEnum {
     Assassin("Assassin", 1),
     Thief("Voleur", 2),
     Magician("Magicien", 3),
-    King("King", 4),
+    King("Roi", 4),
     Bishop("Eveque", 5),
     Merchant("Marchand", 6),
     Architect("Architecte", 7),
