@@ -22,8 +22,7 @@ public class Magician extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             if (p.get().getCardHand().size() != 0) {
-                //TODO Changer Implementation
-                Optional<Player> target = p.get().chooseTarget();
+                Optional<Player> target = chooseTarget(b, p);
                 if (target.isPresent()) {
                     swapHandPlayer(p.get(), target.get());
                     this.target = target.get();
@@ -60,5 +59,21 @@ public class Magician extends Character {
         } else
             res.append(" Il echange ses cartes avec ").append(target.getName());
         return res.toString();
+    }
+
+    public Optional<Player> chooseTarget(Board board, Optional<Player> player) {
+        Player biggestCity = board.getPlayers().get(0);
+        if (player.get().getCardHand().size() < 3) {
+            for (Player p : board.getPlayers()) {
+                if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
+            }
+            if (biggestCity.getCity().size() > 5) return Optional.of(biggestCity);
+        }
+        Player biggestHand;
+        biggestHand = board.getPlayers().get(0);
+        for (Player p : board.getPlayers()) {
+            if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
+        }
+        return Optional.of(biggestHand);
     }
 }

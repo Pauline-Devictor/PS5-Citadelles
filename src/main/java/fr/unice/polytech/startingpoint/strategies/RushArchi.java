@@ -18,13 +18,6 @@ public class RushArchi extends Player {
     }
 
     @Override
-    public void roleEffects() {
-        if (getRole().isPresent()) {
-            getRole().get().usePower(board);
-        }
-    }
-
-    @Override
     public void chooseRole() {
         ArrayList<Integer> taxList = new ArrayList<>();
 

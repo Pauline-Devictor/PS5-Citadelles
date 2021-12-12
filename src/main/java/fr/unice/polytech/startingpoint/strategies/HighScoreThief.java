@@ -21,13 +21,6 @@ public class HighScoreThief extends Player {
     }
 
     @Override
-    public void roleEffects() {
-        if (getRole().isPresent()) {
-            getRole().get().usePower(board);
-        }
-    }
-
-    @Override
     public void chooseRole() {
         TreeMap<District, Integer> taxmap = new TreeMap<>();
         for (District d : District.values()) {

@@ -133,7 +133,10 @@ public class Player implements Comparator<Building> {
 
         List<Building> toBuild = new ArrayList<>();
         for (Building b : checkBuilding) {
-            if (isBuildable(b) && nbBuildable > 0) toBuild.add(b);
+            if (isBuildable(b) && nbBuildable > 0) {
+                toBuild.add(b);
+                nbBuildable--;
+            }
         }
         return toBuild;
     }
@@ -174,80 +177,6 @@ public class Player implements Comparator<Building> {
         builds.sort(this);
         builds.removeIf(b -> getCardHand().contains(b) || getCity().contains(b));
         return (builds.size() >= res) ? builds.subList(0, res) : builds;
-    }
-
-    public Character chooseVictim() {
-        if (role.isPresent()) {
-            if (role.get().getClass() == Assassin.class) {
-                if (cardHand.size() > 4) return new Magician();
-                for (Player player : board.getPlayers()) {
-                    if (player.getCity().size() > 5) {
-                        District colour = getMajority(player);
-                        switch (colour) {
-                            case Commercial -> {
-                                return new Merchant();
-                            }
-                            case Noble -> {
-                                return new King();
-                            }
-                            case Military -> {
-                                return new Condottiere();
-                            }
-                            case Religion -> {
-                                return new Bishop();
-                            }
-                        }
-                    }
-                }
-                Random random = new Random();
-                int victim = random.nextInt(7) + 1;
-                return board.getCharacters().get(victim);
-            }
-            if (role.get().getClass() == Thief.class) {
-                Random random = new Random();
-                //exclu l'indice de l'assassin
-                int victim = random.nextInt(9) + 1;
-                if (victim > 7) victim = 6;
-                return board.getCharacters().get(victim);
-            }
-        }
-        return null;
-    }
-
-    public Optional<Player> chooseTarget() {
-        if (role.isPresent()) {
-            if (role.get().getClass() == Magician.class) {
-                Player biggestCity = board.getPlayers().get(0);
-                if (cardHand.size() < 3) {
-                    for (Player p : board.getPlayers()) {
-                        if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
-                    }
-                    if (biggestCity.getCity().size() > 5) return Optional.of(biggestCity);
-                }
-                Player biggestHand;
-                biggestHand = board.getPlayers().get(0);
-                for (Player p : board.getPlayers()) {
-                    if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
-                }
-                return Optional.ofNullable(biggestHand);
-            }
-
-            if (role.get().getClass() == Condottiere.class) {
-                Player biggestCity;
-                if (board.getPlayers().get(0).getRole().get().getClass() == Bishop.class) {
-                    biggestCity = board.getPlayers().get(1);
-                } else {
-                    biggestCity = board.getPlayers().get(0);
-                }
-                for (Player p : board.getPlayers()) {
-                    if (p.getRole().isPresent())
-                        if (p.getCity().size() >= biggestCity.getCity().size() && (p.getRole().get().getClass() != Bishop.class))
-                            biggestCity = p;
-                }
-                return Optional.ofNullable(biggestCity);
-            }
-        }
-        return Optional.empty();
     }
 
     public void chooseRole() {
@@ -368,12 +297,12 @@ public class Player implements Comparator<Building> {
         this.role = role;
     }
 
-    public District getMajority(Player p) {
+    public District getMajority() {
         HashMap<District, Integer> majority = new HashMap<>();
         for (District d : District.values()) {
             majority.put(d, 0);
         }
-        for (Building b : p.getCity()) {
+        for (Building b : getCity()) {
             majority.put(b.getDistrict(), majority.get(b.getDistrict()) + 1);
         }
         return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
@@ -386,26 +315,6 @@ public class Player implements Comparator<Building> {
             board.getCharactersInfos(index).setAvailable(false);
         }
         return b;
-    }
-
-    public void chooseBuild(Optional<Player> playerTarget, Player condo) {
-        if (playerTarget.isPresent()) {
-            Random random = new Random();
-            int nbBuild = playerTarget.get().getCity().size();
-            if (nbBuild > 0) {
-                int toDestroy = random.nextInt(nbBuild);
-                //Retire le build de la liste des construit & ajoute le build au deck
-                Building build = playerTarget.get().getCity().get(toDestroy);
-                if (condo.getGold() >= build.getCost()) {
-                    board.getPile().putCard(build);
-                    playerTarget.get().getCity().remove(build);
-                    condo.refundGold(build.getCost() - 1);
-                    System.out.println("Le batiment " + build.getName() + " du joueur " + playerTarget.get().getName() + " a été détruit.");
-                    //TODO affichage
-                }
-
-            }
-        }
     }
 
     @Override

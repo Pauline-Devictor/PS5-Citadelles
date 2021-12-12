@@ -21,13 +21,6 @@ public class HighScoreArchi extends Player {
     }
 
     @Override
-    public void roleEffects() {
-        if (getRole().isPresent()) {
-            getRole().get().usePower(board);
-        }
-    }
-
-    @Override
     public void chooseRole() {
         //Taxes priority
         TreeMap<District, Integer> taxmap = new TreeMap<>();

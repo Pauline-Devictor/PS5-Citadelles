@@ -17,13 +17,6 @@ public class BalancedFirst extends Player{
     public BalancedFirst(Board b){super(b, "BalancedFisrt");}
 
     @Override
-    public void roleEffects() {
-        if (getRole().isPresent()) {
-            getRole().get().usePower(board);
-        }
-    }
-
-    @Override
     public void chooseRole() {
         //taxes priority
         TreeMap<District, Integer> taxmap = new TreeMap<>();
