@@ -26,8 +26,8 @@ public class Thief extends Character {
     public Character chooseVictim(Board board){
         Random random = new Random();
         //exclu l'indice de l'assassin
-        int victim = random.nextInt(9) + 1;
-        //TODO ne pas se voler soit meme
+        //exclu le voleur
+        int victim = random.nextInt(8) + 2;
         if (victim > 7) victim = 6;
         return board.getCharacters().get(victim);
     }
