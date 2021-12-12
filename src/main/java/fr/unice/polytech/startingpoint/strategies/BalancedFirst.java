@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class BalancedFirst extends Player{
-    private final int costMin = 0;
-    private final int costMax = 6;
 
     public BalancedFirst(Board b){super(b, "BalancedFisrt");}
 
@@ -23,19 +21,6 @@ public class BalancedFirst extends Player{
         if (getRole().isPresent()) {
             getRole().get().usePower(board);
         }
-    }
-
-    @Override
-    public List<Building> buildDecision() {
-        //Scale of cost ok for building
-        return buildDecision(costMin, costMax);
-    }
-
-    @Override
-    public List<Building> buildDecision(int costMin, int costMax) {
-        List<Building> checkBuilding = new ArrayList<>(getCardHand());
-        checkBuilding.sort(this);
-        return checkBuilding;
     }
 
     @Override

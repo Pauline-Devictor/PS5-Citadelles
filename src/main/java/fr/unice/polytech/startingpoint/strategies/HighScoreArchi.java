@@ -28,44 +28,6 @@ public class HighScoreArchi extends Player {
     }
 
     @Override
-    public List<Building> buildDecision() {
-        //Scale of cost ok for building
-        return buildDecision(costMin, costMax);
-    }
-
-    @Override
-    public List<Building> buildDecision(int costMin, int costMax) {
-        List<Building> checkBuilding = new ArrayList<>();
-        for (Building b : getCardHand()) {
-            //prioritize noble, commercial, religious district buildings
-            if (isBuildable(b) && nbBuildable > 0) {
-                if ((b.getCost() <= costMax && b.getCost() >= costMin &&
-                        (b.getDistrict() == District.Noble || b.getDistrict() == District.Religion || b.getDistrict() == District.Commercial))
-                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
-                    nbBuildable--;
-                    checkBuilding.add(b);
-                }
-            }
-        }
-        if (!checkBuilding.isEmpty()) {
-            checkBuilding.forEach(this::build);
-            return checkBuilding;
-        }
-        //else
-        for (Building b : getCardHand()) {
-            if (isBuildable(b) && nbBuildable > 0) {
-                if ((b.getCost() <= costMax && b.getCost() >= costMin)
-                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
-                    nbBuildable--;
-                    checkBuilding.add(b);
-                }
-            }
-        }
-        checkBuilding.forEach(this::build);
-        return checkBuilding;
-    }
-
-    @Override
     public void chooseRole() {
         //Taxes priority
         TreeMap<District, Integer> taxmap = new TreeMap<>();

@@ -128,23 +128,14 @@ public class Player implements Comparator<Building> {
     }
 
     public List<Building> buildDecision() {
-        //Scale of cost ok for building
-        return buildDecision(0, 6);
-    }
+        List<Building> checkBuilding = new ArrayList<>(getCardHand());
+        checkBuilding.sort(this);
 
-    public List<Building> buildDecision(int costMin, int costMax) {
-        List<Building> checkBuilding = new ArrayList<>();
-        for (Building b : getCardHand()) {
-            if (isBuildable(b) && nbBuildable > 0) {
-                if ((b.getCost() <= costMax && b.getCost() >= costMin)
-                        || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
-                    nbBuildable--;
-                    checkBuilding.add(b);
-                }
-            }
+        List<Building> toBuild = new ArrayList<>();
+        for (Building b : checkBuilding) {
+            if (isBuildable(b) && nbBuildable > 0) toBuild.add(b);
         }
-        checkBuilding.forEach(this::build);
-        return checkBuilding;
+        return toBuild;
     }
 
     public /*List<Building>*/ void drawDecision() {

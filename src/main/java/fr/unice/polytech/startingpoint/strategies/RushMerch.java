@@ -28,29 +28,6 @@ public class RushMerch extends Player {
     }
 
     @Override
-    public List<Building> buildDecision() {
-        //Scale of cost ok for building
-        return buildDecision(costMin, costMax);
-    }
-
-    @Override
-    public List<Building> buildDecision(int costMin, int costMax) {
-        TreeMap<Integer, Building> costMap = new TreeMap<>();
-        for (Building b : getCardHand()) {
-            costMap.put(b.getCost(), b);
-        }
-        ArrayList<Building> costList = (ArrayList<Building>) costMap
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-
-        //prio pas cher puis vert? sorted par cost, TODO jsp
-        return costList;
-    }
-
-    @Override
     public void chooseRole() {
         ArrayList<Integer> taxList = new ArrayList<>();
 
