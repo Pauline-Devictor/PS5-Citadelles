@@ -4,8 +4,11 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import static fr.unice.polytech.startingpoint.buildings.District.Military;
 
@@ -21,46 +24,54 @@ public class Condottiere extends Character {
         if (p.isPresent()) {
             System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Military);
-            chooseBuilding(b, chooseTarget(b), p);
+            chooseBuild(b, chooseTarget(b, p), p);
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
-    public Optional<Player> chooseTarget(Board board) {
-        Player biggestCity;
-        if (board.getPlayers().get(0).getRole().get().getClass() == Bishop.class) {
-            biggestCity = board.getPlayers().get(1);
-        } else {
-            biggestCity = board.getPlayers().get(0);
-        }
-        //TODO ne pas peter ses propres batiments
+    public Optional<Player> chooseTarget(Board board, Optional<Player> player) {
+        TreeMap<Integer, Player> cityMap = new TreeMap<>();
         for (Player p : board.getPlayers()) {
-            if (p.getRole().isPresent())
-                if (p.getCity().size() >= biggestCity.getCity().size() && (p.getRole().get().getClass() != Bishop.class))
-                    biggestCity = p;
+            cityMap.put(p.getCity().size(), p);
         }
-        return Optional.ofNullable(biggestCity);
+        ArrayList<Player> cityList = (ArrayList<Player>) cityMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
+
+        for(int i = cityList.size() -1; i >= 0; i--){
+            if (cityList.get(i).getRole().isPresent() && !cityList.get(i).equals(player.get()) &&
+                    (cityList.get(i).getRole().get().getClass() != Bishop.class)) return Optional.ofNullable(cityList.get(i));
+        }
+        return Optional.empty();
     }
 
-    public void chooseBuilding(Board board, Optional<Player> playerTarget, Optional<Player> condo) {
-        if (playerTarget.isPresent()) {
-            //TODO pas un random, si riche (gold > 10) il pète le building le plus cher, sinon, il pète le moins cher
-            //conseil: fait une treemap pour trier :)
-            Random random = new Random();
-            int nbBuild = playerTarget.get().getCity().size();
-            if (nbBuild > 0) {
-                int toDestroy = random.nextInt(nbBuild);
-                //Retire le build de la liste des construit & ajoute le build au deck
-                Building build = playerTarget.get().getCity().get(toDestroy);
-                //TODO boucle jusqu a avoir un building qui peut etre detruit
-                if (condo.get().getGold() >= build.getCost()) {
-                    board.getPile().putCard(build);
-                    playerTarget.get().getCity().remove(build);
-                    condo.get().refundGold(build.getCost() - 1);
-                    System.out.println("Le batiment " + build.getName() + " du joueur " + playerTarget.get().getName() + " a été détruit.");
-                    //TODO affichage
-                }
+    public void chooseBuild(Board board, Optional<Player> target, Optional<Player> condo) {
+        if (target.isPresent()) {
+            TreeMap<Integer, Building> costMap = new TreeMap<>();
+            for (Building b : target.get().getCity()) {
+                costMap.put(b.getCost(), b);
             }
+            ArrayList<Building> costList = (ArrayList<Building>) costMap
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .map(Map.Entry::getValue)
+                    .collect(Collectors.toList());
+
+            Building build;
+            if(condo.get().getGold() > 10) build = costList.get(costList.size() - 1);
+            else build = costList.get(0);
+
+            if (condo.get().getGold() >= build.getCost()) {
+                board.getPile().putCard(build);
+                target.get().getCity().remove(build);
+                condo.get().refundGold(build.getCost() - 1);
+                System.out.println("Le batiment " + build.getName() + " du joueur " + target.get().getName() + " a été détruit.");
+            }
+            //TODO affichage
         }
     }
 }
