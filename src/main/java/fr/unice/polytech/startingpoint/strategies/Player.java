@@ -3,7 +3,6 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
-import fr.unice.polytech.startingpoint.characters.*;
 
 import java.util.*;
 
@@ -54,10 +53,8 @@ public class Player implements Comparator<Building> {
     };
 
     public void build(Building b) {
-        boolean buildable = isBuildable(b);
-        if (buildable) {
-            board.getBank().refundGold(b.getCost());
-            gold -= b.getCost();
+        if (isBuildable(b)) {
+            refundGold(b.getCost());
             goldScore += b.getCost();
             cardHand.remove(b);
             city.add(b);
@@ -71,25 +68,24 @@ public class Player implements Comparator<Building> {
     public void play() {
         int goldDraw = getGold();
         boolean draw = drawOrGold();
-        List<Building> checkDraw = new ArrayList<>();
         if (getRole().isPresent() && getRole().get().isMurdered()) {
-            System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped." + ANSI_RESET);
+            System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped.\n" + ANSI_RESET);
         } else {
             checkStolen();
             //Decide for the use of power of his character
             roleEffects();
             // chooses to draw a card because there is nothing buildable or bank is empty
             if (draw)
-                /*checkDraw = */ drawDecision();
+                drawDecision();
                 // chooses to get 2 golds because nothing can be built
             else
                 gold += board.getBank().withdrawGold(2);
             //Decide for the use of wonders
             cityEffects();
             //Decide what to build
-            List<Building> checkBuilding = buildDecision();
+            buildDecision();
             //show the move in the console
-            board.showPlay(this, goldDraw, checkDraw, checkBuilding);
+            board.showPlay(this, goldDraw);
         }
     }
 
@@ -97,7 +93,7 @@ public class Player implements Comparator<Building> {
         boolean emptyDeck = board.getPile().isEmpty();
         boolean anythingBuildable = cardHand.stream().anyMatch(this::isBuildable);
         boolean emptyBank = board.getBank().isEmpty();
-        boolean isDraw = (!emptyDeck && anythingBuildable) || emptyBank;
+        boolean isDraw = (!emptyDeck && !anythingBuildable) || emptyBank;
         board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, getName());
         return isDraw;
     }
@@ -127,7 +123,7 @@ public class Player implements Comparator<Building> {
         }
     }
 
-    public List<Building> buildDecision() {
+    public void buildDecision() {
         List<Building> checkBuilding = new ArrayList<>(getCardHand());
         checkBuilding.sort(this);
 
@@ -135,48 +131,54 @@ public class Player implements Comparator<Building> {
         for (Building b : checkBuilding) {
             if (isBuildable(b) && nbBuildable > 0) {
                 toBuild.add(b);
+                build(b);
                 nbBuildable--;
             }
+
         }
-        return toBuild;
+        board.showBuilds(checkBuilding, toBuild, name);
     }
 
-    public /*List<Building>*/ void drawDecision() {
-        List<Building> res, tmp;
+    public void drawDecision() {
         if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
             //TODO Combiné Batiments Effects + Tests
-            res = drawAndChoose(3, 2);
+            drawAndChoose(3, 2);
         } else if (getCity().contains(new Library())) {
-            //tmp = List.copyOf(getCardHand());
             new Library().useEffect(this);
-            //res = cardHand;
-            //res.removeAll(tmp);
         } else if (getCity().contains(new Observatory())) {
-            //tmp = List.copyOf(getCardHand());
             new Observatory().useEffect(this);
-            //res = cardHand;
-            //res.removeAll(tmp);
         } else {
-            res = drawAndChoose(2, 1);
+            drawAndChoose(2, 1);
         }
-        //return res;
     }
 
-    public List<Building> drawAndChoose(int nbCards, int nbChoose) {
+    public void drawAndChoose(int nbCards, int nbChoose) {
         List<Building> builds = new ArrayList<>();
         Optional<Building> b1;
         for (int i = 0; i < nbCards; i++) {
             b1 = getBoard().getPile().drawACard();
             b1.ifPresent(builds::add);
         }
-        board.showDrawChoice();
-        return chooseBuilding(builds, nbChoose);
+        chooseBuilding(builds, nbChoose);
     }
 
-    public List<Building> chooseBuilding(List<Building> builds, int res) {
+    public void chooseBuilding(List<Building> builds, int nbBuilds) {
+
         builds.sort(this);
-        builds.removeIf(b -> getCardHand().contains(b) || getCity().contains(b));
-        return (builds.size() >= res) ? builds.subList(0, res) : builds;
+        Set<Building> discarded = new HashSet<>();
+        for (Building b : builds) {
+            if (getCardHand().contains(b) || getCity().contains(b)) {
+                discarded.add(b);
+            }
+        }
+        for (int i = nbBuilds; i < builds.size(); i++) {
+            discarded.add(builds.get(i));
+        }
+        //On remet dans le deck les cartes non utilisés
+        discarded.forEach(board::putCard);
+
+        List<Building> builded = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
+        board.showDrawChoice(builds, new ArrayList<>(discarded), builded, name);
     }
 
     public void chooseRole() {
@@ -208,19 +210,38 @@ public class Player implements Comparator<Building> {
         return null;
     }
 
-    public void discardCard(Building b) {
-        if (getCardHand().size() > 0) {
-            cardHand.remove(b);
-            board.getPile().putCard(b);
-        }
-    }
-
     public void refundGold(int amount) {
         gold -= board.getBank().refundGold(amount);
     }
 
     public void takeMoney(int amount) {
         gold += board.getBank().withdrawGold(amount);
+    }
+
+    public District getMajority() {
+        HashMap<District, Integer> majority = new HashMap<>();
+        for (District d : District.values()) {
+            majority.put(d, 0);
+        }
+        for (Building b : getCity()) {
+            majority.put(b.getDistrict(), majority.get(b.getDistrict()) + 1);
+        }
+        return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+    }
+
+    public boolean pickRole(int index) {
+        boolean b = board.getCharactersInfos(index).isAvailable();
+        if (b) {
+            role = Optional.of(board.getCharactersInfos(index));
+            board.getCharactersInfos(index).setAvailable(false);
+        }
+        return b;
+    }
+
+    @Override
+    public int compare(Building b1, Building b2) {
+        //Positive if o2>o1
+        return 0;
     }
 
     @Override
@@ -295,31 +316,5 @@ public class Player implements Comparator<Building> {
 
     public void setRole(Optional<Character> role) {
         this.role = role;
-    }
-
-    public District getMajority() {
-        HashMap<District, Integer> majority = new HashMap<>();
-        for (District d : District.values()) {
-            majority.put(d, 0);
-        }
-        for (Building b : getCity()) {
-            majority.put(b.getDistrict(), majority.get(b.getDistrict()) + 1);
-        }
-        return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
-    }
-
-    public boolean pickRole(int index) {
-        boolean b = board.getCharactersInfos(index).isAvailable();
-        if (b) {
-            role = Optional.of(board.getCharactersInfos(index));
-            board.getCharactersInfos(index).setAvailable(false);
-        }
-        return b;
-    }
-
-    @Override
-    public int compare(Building b1, Building b2) {
-        //Positive if o2>o1
-        return 0;
     }
 }

@@ -6,15 +6,10 @@ import fr.unice.polytech.startingpoint.buildings.District;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public class RushMerch extends Player {
-    private final int costMax = 3;
-    private final int costMin = 1;
 
     public RushMerch(Board b) {
         super(b, "RushMarchand");
@@ -22,10 +17,10 @@ public class RushMerch extends Player {
 
     @Override
     public void chooseRole() {
-        ArrayList<Integer> taxList = new ArrayList<>();
 
-        taxList.addAll(List.of(
-                6, 5, 2, 3, 1, 0, 7
+        //Marchand puis Archi
+        ArrayList<Integer> taxList = new ArrayList<>(List.of(
+                5, 6, 2, 3, 1, 0, 7
         ));
 
         for (int elem : taxList) {
@@ -38,6 +33,8 @@ public class RushMerch extends Player {
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
+        int costMax = 3;
+        int costMin = 1;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))

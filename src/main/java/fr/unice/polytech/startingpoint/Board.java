@@ -62,8 +62,8 @@ public class Board {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
         players.add(new RushArchi(this));
-        players.add(new HighScoreThief(this));
         players.add(new HighScoreArchi(this));
+        players.add(new HighScoreThief(this));
         return players;
     }
 
@@ -92,7 +92,7 @@ public class Board {
         return characters.get(index);
     }
 
-    public void showPlay(Player p, int goldDraw, List<Building> checkDraw, List<Building> checkBuilding) {
+    public void showPlay(Player p, int goldDraw) {
         int showGold = (p.getGold() - goldDraw);
         String signe = ANSI_RED + "";
         if (showGold > 0)
@@ -101,18 +101,7 @@ public class Board {
         if (p.getRole().isPresent())
             res.append(" (" + ANSI_ITALIC).append(p.getRole().get().getName()).append(ANSI_RESET).append(") ");
         res.append(" possède " + ANSI_YELLOW).append(p.getGold()).append(ANSI_RESET).append("(").append(signe).append(showGold).append(ANSI_RESET).append(") pieces d'or");
-        if (checkDraw.size() > 0) {
-            res.append(", a pioché " + ANSI_UNDERLINE);
-            checkDraw.forEach(e -> res.append(e.getName()).append(", "));
-            res.append(ANSI_RESET);
-        }
-
-        if (checkBuilding.size() > 0) {
-            res.append(" et a construit ");
-            for (Building e : checkBuilding) {
-                res.append(ANSI_BOLD).append(e.getName()).append(ANSI_RESET).append(", ");
-            }
-        }
+        res.append("\nIl possede ").append(p.getCardHand().size()).append(" cartes et ").append(p.getCity().size()).append(" batiments");
         System.out.println(res + "\n");
     }
 
@@ -156,9 +145,48 @@ public class Board {
         System.out.println(res);
     }
 
-    public void showDrawChoice() {
-        String res = "";
+    public void putCard(Building b) {
+        pile.putCard(b);
+    }
 
+    public void showDrawChoice(List<Building> builds, List<Building> discarded, List<Building> builded, String name) {
+        StringBuilder res = new StringBuilder();
+        if (builds.isEmpty()) {
+            res.append(name).append(" n'a rien pioché");
+        } else {
+            res.append(name).append(" a pioché : ");
+            for (Building b : builds)
+                res.append(b.getName()).append(", ");
+        }
+        if (!discarded.isEmpty()) {
+            res.append("\nIl a choisi de défausser ");
+            for (Building b : discarded)
+                res.append(b.getName()).append(", ");
+        }
+        if (!builded.isEmpty()) {
+            res.append("\nIl garde ");
+            for (Building b : builded)
+                res.append(b.getName()).append(", ");
+        }
+        System.out.println(res);
+    }
+
+    public void showBuilds(List<Building> checkBuilding, List<Building> toBuild, String name) {
+        StringBuilder res = new StringBuilder();
+        if (checkBuilding.isEmpty()) {
+            res.append(name).append(" n'a rien dans sa main : ");
+        } else {
+            res.append(name).append(" a dans sa main : ");
+            for (Building b : checkBuilding)
+                res.append(b.getName()).append(", ");
+        }
+        if (toBuild.isEmpty())
+            res.append("\n").append(name).append(" choisit de ne rien construire");
+        else {
+            res.append("\n").append(name).append(" choisit de construire ");
+            for (Building b : toBuild)
+                res.append(b.getName()).append(", ");
+        }
         System.out.println(res);
     }
 }

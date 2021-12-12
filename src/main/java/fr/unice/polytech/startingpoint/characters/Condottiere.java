@@ -39,7 +39,7 @@ public class Condottiere extends Character {
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+                .toList();
 
         for(int i = cityList.size() -1; i >= 0; i--){
             if (cityList.get(i).getRole().isPresent() && !cityList.get(i).equals(player.get()) &&
@@ -49,7 +49,7 @@ public class Condottiere extends Character {
     }
 
     public void chooseBuild(Board board, Optional<Player> target, Optional<Player> condo) {
-        if (target.isPresent()) {
+        /*if (target.isPresent()) {
             TreeMap<Integer, Building> costMap = new TreeMap<>();
             for (Building b : target.get().getCity()) {
                 costMap.put(b.getCost(), b);
@@ -72,6 +72,6 @@ public class Condottiere extends Character {
                 System.out.println("Le batiment " + build.getName() + " du joueur " + target.get().getName() + " a été détruit.");
             }
             //TODO affichage
-        }
+        }*/
     }
 }

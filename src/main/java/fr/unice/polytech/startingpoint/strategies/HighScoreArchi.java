@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class HighScoreArchi extends Player {
-    private final int costMax = 6;
-    private final int costMin = 3;
 
     public HighScoreArchi(Board b) {
         super(b, "HautScoreArchitect");
@@ -41,7 +39,7 @@ public class HighScoreArchi extends Player {
                 .collect(Collectors.toList());
 
         //if rich, architect
-        if (gold > 5) taxList.add(0, 6);
+        if (gold > 10) taxList.add(0, 6);
         else taxList.add(6);
 
         //if a player has too much advance, condottiere
@@ -66,6 +64,8 @@ public class HighScoreArchi extends Player {
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
+        int costMax = 6;
+        int costMin = 3;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))
