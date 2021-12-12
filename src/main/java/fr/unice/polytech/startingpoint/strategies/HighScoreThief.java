@@ -20,17 +20,20 @@ public class HighScoreThief extends Player {
         super(b, "HautScoreVoleur");
     }
 
+    @Override
     public void roleEffects() {
         if (getRole().isPresent()) {
             getRole().get().usePower(board);
         }
     }
 
+    @Override
     public List<Building> buildDecision() {
         //Scale of cost ok for building
         return buildDecision(costMin, costMax);
     }
 
+    @Override
     public List<Building> buildDecision(int costMin, int costMax) {
         List<Building> checkBuilding = new ArrayList<>();
         for (Building b : getCardHand()) {
@@ -61,23 +64,7 @@ public class HighScoreThief extends Player {
         return checkBuilding;
     }
 
-    public Building chooseBuilding(Building b1, Building b2) {
-        if (isNull(b1))
-            return b2;
-        else if (isNull(b2))
-            return b1;
-        else if (getCardHand().contains(b1))
-            return b2;
-        else if (getCardHand().contains(b2))
-            return b1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Noble) return b1;
-            if (b2.getDistrict() == District.Noble) return b2;
-        }
-
-        return (b1.getCost() < b2.getCost()) ? b2 : b1;
-    }
-
+    @Override
     public void chooseRole() {
         TreeMap<District, Integer> taxmap = new TreeMap<>();
         for (District d : District.values()) {
@@ -111,8 +98,19 @@ public class HighScoreThief extends Player {
 
     @Override
     public int compare(Building b1, Building b2) {
-        //Positive if o2>o1
-        return b2.getCost() - b1.getCost();
+        //return -1 pour b1, 1 pour b2
+        if (isNull(b1))
+            return 1;
+        else if (isNull(b2))
+            return -1;
+        else if (getCardHand().contains(b1))
+            return 1;
+        else if (getCardHand().contains(b2))
+            return -1;
+        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Noble) return -1;
+            if (b2.getDistrict() == District.Noble) return 1;
+        }
+        return (b1.getCost() < b2.getCost()) ? 1 : -1;
     }
-
 }

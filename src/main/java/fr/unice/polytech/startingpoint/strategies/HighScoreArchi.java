@@ -4,7 +4,10 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -17,23 +20,27 @@ public class HighScoreArchi extends Player {
         super(b, "HautScoreArchitect");
     }
 
+    @Override
     public void roleEffects() {
         if (getRole().isPresent()) {
             getRole().get().usePower(board);
         }
     }
 
+    @Override
     public List<Building> buildDecision() {
         //Scale of cost ok for building
         return buildDecision(costMin, costMax);
     }
 
+    @Override
     public List<Building> buildDecision(int costMin, int costMax) {
         List<Building> checkBuilding = new ArrayList<>();
         for (Building b : getCardHand()) {
             //prioritize noble, commercial, religious district buildings
             if (isBuildable(b) && nbBuildable > 0) {
-                if ((b.getCost() <= costMax && b.getCost() >= costMin && (b.getDistrict() == District.Noble || b.getDistrict() == District.Religion || b.getDistrict() == District.Commercial))
+                if ((b.getCost() <= costMax && b.getCost() >= costMin &&
+                        (b.getDistrict() == District.Noble || b.getDistrict() == District.Religion || b.getDistrict() == District.Commercial))
                         || (board.getPile().isEmpty() && board.getBank().getGold() == 0)) {
                     nbBuildable--;
                     checkBuilding.add(b);
@@ -58,27 +65,7 @@ public class HighScoreArchi extends Player {
         return checkBuilding;
     }
 
-    public Building chooseBuilding(Building b1, Building b2) {
-        if (isNull(b1))
-            return b2;
-        else if (isNull(b2))
-            return b1;
-        else if (getCardHand().contains(b1))
-            return b2;
-        else if (getCardHand().contains(b2))
-            return b1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Commercial) return b1;
-            if (b2.getDistrict() == District.Commercial) return b2;
-            if (b1.getDistrict() == District.Noble) return b1;
-            if (b2.getDistrict() == District.Noble) return b2;
-            if (b1.getDistrict() == District.Religion) return b1;
-            if (b2.getDistrict() == District.Religion) return b2;
-        }
-
-        return (b1.getCost() < b2.getCost()) ? b2 : b1;
-    }
-
+    @Override
     public void chooseRole() {
         //Taxes priority
         TreeMap<District, Integer> taxmap = new TreeMap<>();
@@ -123,7 +110,23 @@ public class HighScoreArchi extends Player {
 
     @Override
     public int compare(Building b1, Building b2) {
-        //Positive if o2>o1
-        return b2.getCost() - b1.getCost();
+        //return -1 pour b1, 1 pour b2
+        if (isNull(b1))
+            return 1;
+        else if (isNull(b2))
+            return -1;
+        else if (getCardHand().contains(b1))
+            return 1;
+        else if (getCardHand().contains(b2))
+            return -1;
+        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Commercial) return -1;
+            if (b2.getDistrict() == District.Commercial) return 1;
+            if (b1.getDistrict() == District.Noble) return -1;
+            if (b2.getDistrict() == District.Noble) return 1;
+            if (b1.getDistrict() == District.Religion) return -1;
+            if (b2.getDistrict() == District.Religion) return 1;
+        }
+        return (b1.getCost() < b2.getCost()) ? 1 : -1;
     }
 }
