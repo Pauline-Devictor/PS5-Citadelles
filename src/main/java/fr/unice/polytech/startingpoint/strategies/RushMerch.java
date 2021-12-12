@@ -2,55 +2,84 @@ package fr.unice.polytech.startingpoint.strategies;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public class RushMerch extends Player {
+    private final int costMax = 3;
+    private final int costMin = 1;
 
     public RushMerch(Board b) {
         super(b, "RushMarchand");
     }
 
+    @Override
     public void roleEffects() {
         if (getRole().isPresent()) {
             getRole().get().usePower(board);
         }
     }
 
+    @Override
     public List<Building> buildDecision() {
         //Scale of cost ok for building
-        return buildDecision(0, 3);
+        return buildDecision(costMin, costMax);
     }
 
-    public Building chooseBuilding(Building b1, Building b2) {
-        if (isNull(b1))
-            return b2;
-        else if (isNull(b2))
-            return b1;
-        else if (getCardHand().contains(b1))
-            return b2;
-        else if (getCardHand().contains(b2))
-            return b1;
-        return (b1.getCost() > b2.getCost()) ? b2 : b1;
+    @Override
+    public List<Building> buildDecision(int costMin, int costMax) {
+        TreeMap<Integer, Building> costMap = new TreeMap<>();
+        for (Building b : getCardHand()) {
+            costMap.put(b.getCost(), b);
+        }
+        ArrayList<Building> costList = (ArrayList<Building>) costMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
+
+        //prio pas cher puis vert? sorted par cost, TODO jsp
+        return costList;
     }
 
+    @Override
     public void chooseRole() {
-        int index;
-        do {
-            index = new Random().nextInt(8);
-        } while (!board.getCharactersInfos(index).isAvailable());
-        role = Optional.of(board.getCharactersInfos(index));
-        board.getCharactersInfos(index).setAvailable(false);
+        ArrayList<Integer> taxList = new ArrayList<>();
+
+        taxList.addAll(List.of(
+                6, 5, 2, 3, 1, 0, 7
+        ));
+
+        for (int elem : taxList) {
+            if (pickRole(elem)) {
+                return;
+            }
+        }
     }
 
     @Override
     public int compare(Building b1, Building b2) {
-        //Positive if o2>o1
-        return b1.getCost() - b2.getCost();
+        //return -1 pour b1, 1 pour b2
+        if (isNull(b1))
+            return 1;
+        else if (isNull(b2))
+            return -1;
+        else if (getCardHand().contains(b1))
+            return 1;
+        else if (getCardHand().contains(b2))
+            return -1;
+        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Commercial) return -1;
+            if (b2.getDistrict() == District.Commercial) return 1;
+        }
+        return (b1.getCost() < b2.getCost()) ? -1 : 1;
     }
-
 }
