@@ -5,7 +5,6 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -19,6 +18,7 @@ public class Magician extends Character {
 
     /**
      * Uses the Magician's power
+     *
      * @param b the current game's board
      */
     @Override
@@ -26,7 +26,7 @@ public class Magician extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             if (p.get().getCardHand().size() != 0) {
-                Optional<Player> target = chooseTarget(b, p);
+                Optional<Player> target = chooseTarget(b, p.get());
                 if (target.isPresent()) {
                     swapHandPlayer(p.get(), target.get());
                     this.target = target.get();
@@ -40,6 +40,7 @@ public class Magician extends Character {
 
     /**
      * If there's no one to swap with
+     *
      * @param magician the Magician's player
      */
     public void swapHandDeck(Player magician) {
@@ -50,11 +51,13 @@ public class Magician extends Character {
     }
 
     /**
-     *Swaps the player's hand
-     * @param magician the Magician's player
+     * Swaps the player's hand
+     *
+     * @param magician   the Magician's player
      * @param swapPerson The player to swap with
      */
     public void swapHandPlayer(Player magician, Player swapPerson) {
+        //TODO Eviter les setters ???
         //System.out.println("Le Magicien echange ses cartes avec " + swapPerson.getName());
         List<Building> tempHand = magician.getCardHand();
         magician.setCardHand(swapPerson.getCardHand());
@@ -63,6 +66,7 @@ public class Magician extends Character {
 
     /**
      * Prints the power effect
+     *
      * @param p the Magician's player
      * @return the String to print
      */
@@ -81,12 +85,13 @@ public class Magician extends Character {
 
     /**
      * Chooses the Magician's target
-     * @param board the current game's board
+     *
+     * @param board  the current game's board
      * @param player the Magician's player
      * @return the Magician's target
      */
-    public Optional<Player> chooseTarget(Board board, Optional<Player> player) {
-        if (player.get().getCardHand().size() < 3) {
+    public Optional<Player> chooseTarget(Board board, Player player) {
+        if (player.getCardHand().size() < 3) {
             TreeMap<Integer, Player> cityMap = new TreeMap<>();
             for (Player p : board.getPlayers()) {
                 cityMap.put(p.getCity().size(), p);
@@ -98,8 +103,9 @@ public class Magician extends Character {
                     .map(Map.Entry::getValue)
                     .toList();
 
-            cityList.removeIf(c -> c.equals(player.get()) || c.getCity().size() <= 5);
-            if(!cityList.isEmpty()) return Optional.ofNullable(cityList.get(cityList.size() - 1));
+            cityList.removeIf(c -> c.equals(player) || c.getCity().size() <= 5);
+            if (!cityList.isEmpty())
+                return Optional.ofNullable(cityList.get(cityList.size() - 1));
         }
 
         TreeMap<Integer, Player> handMap = new TreeMap<>();
@@ -113,7 +119,7 @@ public class Magician extends Character {
                 .map(Map.Entry::getValue)
                 .toList();
 
-        handList.removeIf(c -> c.equals(player.get()));
+        handList.removeIf(c -> c.equals(player));
         return Optional.ofNullable(handList.get(handList.size() - 1));
     }
 }

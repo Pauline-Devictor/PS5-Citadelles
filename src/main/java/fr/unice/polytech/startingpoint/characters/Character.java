@@ -10,18 +10,22 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 public abstract class Character {
     protected final CharacterEnum character;
     protected boolean available;
     private boolean isMurdered;
+    private boolean stolen;
     //empty si le personnage n'est pas volé, le voleur sinon
-    private Optional<Player> thief;
+    private Player thief;
 
     public Character(CharacterEnum character) {
         this.character = character;
         available = true;
         isMurdered = false;
-        thief = Optional.empty();
+        stolen = false;
+        thief = null;
     }
 
     /**
@@ -34,7 +38,7 @@ public abstract class Character {
     }
 
     /**
-     * Resets the state of every Role
+     * Resets the state of the character
      */
     public void resetRole() {
         //Not killed anymore
@@ -42,7 +46,7 @@ public abstract class Character {
         //Free the character after each turn
         available = true;
         //No thiefplayer anymore
-        thief = Optional.empty();
+        thief = null;
         //not immune to Condottiere anymore
 
     }
@@ -61,8 +65,8 @@ public abstract class Character {
     public Optional<Player> findPlayer(Board board) {
         Optional<Player> p = Optional.empty();
         for (Player player : board.getPlayers()) {
-            if (player.getRole().isPresent()) {
-                if (player.getRole().get().getClass().equals(getClass()))
+            if (!isNull(player.getRole())) {
+                if (player.getRole().getClass().equals(getClass()))
                     p = Optional.of(player);
             }
         }
@@ -81,13 +85,13 @@ public abstract class Character {
                 taxes++;
             }
             if (b.getBuilding().equals(BuildingEnum.EcoleDeMagie)) {
-                //TODO Implementation des Taxes
                 taxes++;
                 ((Prestige) b).useEffect(p);
             }
         }
         p.takeMoney(taxes);
 
+        //TODO Board
         String res;
         if (taxes <= p.getBoard().getBank().getGold())
             res = "Il a récupéré " + taxes + " pieces des quartiers " + d.name();
@@ -97,51 +101,33 @@ public abstract class Character {
     }
 
     /**
-     *
-     * @return ture if the Character's available
+     * @return true if the Character's available
      */
     public boolean isAvailable() {
         return available;
     }
 
     /**
-     * Sets the Character's availability
-     * @param available
-     */
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    /**
-     *
      * @return true if the Character's murdered
      */
     public boolean isMurdered() {
         return isMurdered;
     }
 
-    /**
-     * Sets the Character's state
-     * @param murdered
-     */
-    public void setMurdered(boolean murdered) {
-        isMurdered = murdered;
+    public void kill() {
+        isMurdered = true;
     }
 
     /**
-     *
      * @return The Thief's player
      */
-    public Optional<Player> getThief() {
+    public Player getThief() {
         return thief;
     }
 
-    /**
-     * Sets the Thief's player
-     * @param thief
-     */
-    protected void setThief(Optional<Player> thief) {
+    protected void stoleBy(Player thief) {
         this.thief = thief;
+        stolen = true;
     }
 
     /**
@@ -160,11 +146,18 @@ public abstract class Character {
     }
 
     /**
-     *
      * @param p the player
      * @return the effect used
      */
     public String printEffect(Player p) {
         return p.getName() + " a utilisé l'effet de : " + getName() + ".";
+    }
+
+    public void took() {
+        available = false;
+    }
+
+    public boolean isStolen() {
+        return stolen;
     }
 }

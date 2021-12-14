@@ -1,5 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
@@ -48,12 +49,10 @@ public class Game {
 
             players.sort(Player.RoleOrder);
             for (Player p : players) {
-                if (p.getRole().isPresent()) {
-                    p.play();
-                    //crown → selection des roles (le dernier roi la récupère)
-                    if (p.getRole().get().getName().equals("King")) {
-                        first = p;
-                    }
+                p.play();
+                //crown → selection des roles (le dernier roi la récupère)
+                if (p.getRole().getClass().equals(King.class)) {
+                    first = p;
                 }
             }
             resetPlayer();
@@ -78,10 +77,9 @@ public class Game {
 
     void resetPlayer() {
         for (Player p : players) {
-            p.setNbBuildable(1);
-            p.setTaxes(0);
-            p.removeRole();
+            p.reset();
         }
+        board.release();
     }
 
     public Board getBoard() {

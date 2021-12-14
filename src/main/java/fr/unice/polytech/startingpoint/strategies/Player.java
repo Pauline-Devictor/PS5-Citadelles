@@ -4,19 +4,27 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 
 import static fr.unice.polytech.startingpoint.Board.*;
+import static java.util.Objects.isNull;
 
 public class Player implements Comparator<Building> {
     protected String name;
     protected int gold;
     protected int goldScore;
     protected final Board board;
-    //TODO Ecraser la valeur/Faire sauter Optional
-    protected Optional<Character> role;
+    protected Character role;
     protected int nbBuildable = 1;
-    protected int taxes;
     protected List<Building> cardHand;
     protected final List<Building> city;
 
@@ -33,16 +41,15 @@ public class Player implements Comparator<Building> {
         drawCards(4);
         city = new ArrayList<>();
         goldScore = 0;
-        //amountStolen = 0;
-        role = Optional.empty();
+        role = null;
     }
 
     public static Comparator<Player> RoleOrder = (e1, e2) -> {
         //Positive if e2 > e1
         int res = 1;
-        if (e1.getRole().isPresent() && e2.getRole().isPresent()) {
-            res = e1.getRole().get().getOrder() - e2.getRole().get().getOrder();
-        } else if (e1.getRole().isPresent())
+        if (!isNull(e1.getRole()) && !isNull(e2.getRole())) {
+            res = e1.getRole().getOrder() - e2.getRole().getOrder();
+        } else if (isNull(e1.getRole()))
             res--;
         return res;
     };
@@ -68,7 +75,7 @@ public class Player implements Comparator<Building> {
     public void play() {
         int goldDraw = getGold();
         boolean draw = drawOrGold();
-        if (getRole().isPresent() && getRole().get().isMurdered()) {
+        if (getRole().isMurdered()) {
             System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped.\n" + ANSI_RESET);
         } else {
             checkStolen();
@@ -107,19 +114,14 @@ public class Player implements Comparator<Building> {
     }
 
     public void roleEffects() {
-        if (getRole().isPresent()) {
-            getRole().get().usePower(board);
-        }
+        getRole().usePower(board);
     }
 
     void checkStolen() {
-        if (getRole().isPresent()) {
-            Optional<Player> thief = getRole().get().getThief();
-            if (thief.isPresent()) {
-                int save = gold;
-                refundGold(gold);
-                thief.get().takeMoney(save);
-            }
+        if (role.isStolen()) {
+            int save = gold;
+            refundGold(gold);
+            role.getThief().takeMoney(save);
         }
     }
 
@@ -141,7 +143,6 @@ public class Player implements Comparator<Building> {
 
     public void drawDecision() {
         if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
-            //TODO Combiné Batiments Effects + Tests
             drawAndChoose(3, 2);
         } else if (getCity().contains(new Library())) {
             new Library().useEffect(this);
@@ -182,13 +183,12 @@ public class Player implements Comparator<Building> {
     }
 
     public void chooseRole() {
-        //todo abstract?
         int index;
+        Random r = new Random();
         do {
-            index = new Random().nextInt(8);
+            index = r.nextInt(8);
         } while (!board.getCharactersInfos(index).isAvailable());
-        role = Optional.of(board.getCharactersInfos(index));
-        board.getCharactersInfos(index).setAvailable(false);
+        pickRole(index);
     }
 
     public List<Building> drawCards(int nbCards) {
@@ -233,8 +233,8 @@ public class Player implements Comparator<Building> {
     public boolean pickRole(int index) {
         boolean b = board.getCharactersInfos(index).isAvailable();
         if (b) {
-            role = Optional.of(board.getCharactersInfos(index));
-            board.getCharactersInfos(index).setAvailable(false);
+            role = board.getCharactersInfos(index);
+            role.took();
         }
         return b;
     }
@@ -247,9 +247,7 @@ public class Player implements Comparator<Building> {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(ANSI_PURPLE + name);
-        if (role.isPresent())
-            res.append(", ").append(role);
+        StringBuilder res = new StringBuilder(ANSI_PURPLE + name).append(", ").append(role);
         res.append(ANSI_RESET + " avec " + ANSI_YELLOW).append(gold).append(ANSI_RESET).append(" pieces d'or");
         res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_GREEN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
         res.append("\n" + ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Batiments Non Construits :" + ANSI_RESET);
@@ -275,7 +273,7 @@ public class Player implements Comparator<Building> {
         return name;
     }
 
-    public Optional<Character> getRole() {
+    public Character getRole() {
         return role;
     }
 
@@ -283,25 +281,14 @@ public class Player implements Comparator<Building> {
         return cardHand;
     }
 
-    public void setNbBuildable(int number) {
-        nbBuildable = number;
-    }
-
-    public void setTaxes(int number) {
-        taxes = number;
+    public void reset() {
+        nbBuildable = 1;
     }
 
     public List<Building> getCity() {
         return city;
     }
 
-    public int getTaxes() {
-        return taxes;
-    }
-
-    public void removeRole() {
-        role = Optional.empty();
-    }
 
     public Board getBoard() {
         return board;
@@ -315,7 +302,7 @@ public class Player implements Comparator<Building> {
         cardHand = cards;
     }
 
-    public void setRole(Optional<Character> role) {
-        this.role = role;
+    public void buildingArchitect() {
+        nbBuildable = 3;
     }
 }

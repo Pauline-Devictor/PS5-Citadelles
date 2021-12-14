@@ -13,7 +13,7 @@ public class TestBoard {
     }
     @Test
     void roleFree(){
-        board.getCharactersInfos(3).setAvailable(false);
+        board.getCharactersInfos(3).took();
         board.setAllFree();
         assertTrue(board.getCharactersInfos(3).isAvailable());
     }

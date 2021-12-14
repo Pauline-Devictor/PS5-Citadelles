@@ -6,13 +6,10 @@ import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public class RushArchi extends Player {
-    private final int costMax = 3;
-    private final int costMin = 1;
 
     public RushArchi(Board b) {
         super(b, "RushArchitect");
@@ -48,6 +45,8 @@ public class RushArchi extends Player {
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
+        int costMin = 1;
+        int costMax = 3;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))

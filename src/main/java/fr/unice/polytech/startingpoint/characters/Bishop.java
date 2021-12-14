@@ -21,6 +21,7 @@ public class Bishop extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
+            //TODO Board
             System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Religion);
         } else

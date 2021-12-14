@@ -22,7 +22,7 @@ public class Thief extends Character {
             System.out.println(printEffect(p.get()));
             Character c = chooseVictim(b);
             if (!c.isMurdered() && c.getClass() != Assassin.class)
-                c.setThief(p);
+                c.stoleBy(p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
@@ -30,13 +30,13 @@ public class Thief extends Character {
 
     /**
      * Chooses the Thief's victim
-     * @param board tue current game's board
+     *
+     * @param board kills current game's board
      * @return the Thief's victim
      */
     public Character chooseVictim(Board board){
         Random random = new Random();
-        //exclu l'indice de l'assassin
-        //exclu le voleur
+        //exclu l'indice de l'assassin et le voleur
         int victim = random.nextInt(9) + 2;
         if (victim > 7) victim = 6;
         return board.getCharacters().get(victim);

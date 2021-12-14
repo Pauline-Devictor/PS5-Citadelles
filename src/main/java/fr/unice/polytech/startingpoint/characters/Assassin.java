@@ -21,7 +21,7 @@ public class Assassin extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
-            chooseVictim(b, p).setMurdered(true);
+            chooseVictim(b, p.get()).kill();
             System.out.println(printEffect(p.get()));
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
@@ -29,12 +29,14 @@ public class Assassin extends Character {
 
     /**
      * Chooses the Assassin's victim
-     * @param board the current game's board
+     *
+     * @param board  the current game's board
      * @param player the Assassin's player
      * @return the Assassin's victim
      */
-    public Character chooseVictim(Board board, Optional<Player> player){
-        if (player.get().getCardHand().size() > 4) return new Magician();
+    public Character chooseVictim(Board board, Player player) {
+        if (player.getCardHand().size() > 4)
+            return new Magician();
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > 5) {
                 District colour = p.getMajority();

@@ -46,24 +46,18 @@ public class TestCharacter {
 
     @Test
     void setTaxes() {
+        player.refundGold(player.getGold());
         when(player.getCity()).thenReturn(List.of(new Building(BuildingEnum.Manoir),
                 new Building(BuildingEnum.TourDeGuet),
                 new Building(BuildingEnum.Port),
                 new Building(BuildingEnum.Chateau)));
         king.collectTaxes(player, District.Noble);
-        assertEquals(2, player.getTaxes());
-    }
-
-    @Test
-    void setTaxesEmpty() {
-        when(player.getCity()).thenReturn(new ArrayList<>());
-        king.collectTaxes(player, District.Noble);
-        assertEquals(0, player.getTaxes());
+        assertEquals(2, player.getGold());
     }
 
     @Test
     void killSomeone() {
-        player.setRole(Optional.of(assasinCharacter));
+        when(player.getRole()).thenReturn(assasinCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         assasinCharacter.usePower(board);
         int killed = (int) board.getCharacters().stream().filter(Character::isMurdered).count();
@@ -72,20 +66,21 @@ public class TestCharacter {
 
     @Test
     void stealSomeone() {
-        player.setRole(Optional.of(thiefCharacter));
+        when(player.getRole()).thenReturn(thiefCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         thiefCharacter.usePower(board);
-        int stole = (int) board.getCharacters().stream().filter(e -> e.getThief().equals(Optional.of(player))).count();
+        int stole = (int) board.getCharacters().stream().filter(Character::isStolen).count();
         assertEquals(1, stole);
     }
 
     @Test
     void swapHandsDeck() {
-        player.setRole(Optional.ofNullable(magicianCharacter));
-
+        when(player.getRole()).thenReturn(magicianCharacter);
         Deck deck = mock(Deck.class);
         when(board.getPile()).thenReturn(deck);
-        when(deck.drawACard()).thenReturn(Optional.of(new Building(BuildingEnum.Caserne)),
+        //noinspection unchecked
+        when(deck.drawACard()).thenReturn(
+                Optional.of(new Building(BuildingEnum.Caserne)),
                 Optional.of(new Building(BuildingEnum.Laboratoire)),
                 Optional.of(new Building(BuildingEnum.Cathedrale)),
                 Optional.of(new Building(BuildingEnum.Palais)));
@@ -102,7 +97,7 @@ public class TestCharacter {
 
     @Test
     void buildArchitect() {
-        player.setRole(Optional.of(archiCharacter));
+        when(player.getRole()).thenReturn(archiCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         archiCharacter.usePower(board);
         assertEquals(3, player.getNbBuildable());
@@ -110,7 +105,7 @@ public class TestCharacter {
 
     @Test
     void findPlayer() {
-        player.setRole(Optional.of(archiCharacter));
+        when(player.getRole()).thenReturn(archiCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         when(board.getCharacters()).thenReturn(List.of(archiCharacter));
         archiCharacter.usePower(board);
@@ -119,30 +114,32 @@ public class TestCharacter {
 
     @Test
     void findPlayerEmpty() {
-        player.setRole(Optional.of(archiCharacter));
+        when(player.getRole()).thenReturn(archiCharacter);
         when(board.getPlayers()).thenReturn(new ArrayList<>());
         assertEquals(Optional.empty(), archiCharacter.findPlayer(board));
     }
 
     @Test
     void findPlayerMatchingRole() {
-        player.setRole(Optional.of(archiCharacter));
+        when(player.getRole()).thenReturn(archiCharacter);
         Player a = new Player(board);
-        a.setRole(Optional.of(new Assassin()));
+        when(a.getRole()).thenReturn(new Assassin());
         Player m = new Player(board);
-        m.setRole(Optional.of(new Merchant()));
+        when(m.getRole()).thenReturn(new Merchant());
         Player t = new Player(board);
-        t.setRole(Optional.of(new Thief()));
+        when(t.getRole()).thenReturn(new Thief());
         when(board.getPlayers()).thenReturn(List.of(a, m, t));
         assertEquals(Optional.empty(), archiCharacter.findPlayer(board));
     }
+
     @Test
-    void destroyBuild(){
-        player.play();//Plays so he can build one building
-        player.setRole(Optional.of(condottiereCharacter));
+    void destroyBuild() {
+        when(player.getRole()).thenReturn(condottiereCharacter);
+        //player.play();//Plays so he can build one building
+        player.build(new Building(BuildingEnum.Manufacture));
         when(board.getPlayers()).thenReturn(List.of(player));
         player.takeMoney(5); // Take money to be able to destroy a build with his power
         condottiereCharacter.usePower(board);
-        assertEquals(player.getCity().size(),0);
+        assertEquals(player.getCity().size(), 0);
     }
 }

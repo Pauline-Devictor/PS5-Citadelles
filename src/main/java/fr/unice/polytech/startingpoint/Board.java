@@ -51,14 +51,14 @@ public class Board {
                 new Merchant(),
                 new Architect(),
                 new Condottiere());
-        players = generatePlayers(nbPlayers);
+        players = generatePlayers();
     }
 
     public Board() {
         this(4);
     }
 
-    public List<Player> generatePlayers(int nbPlayers) {
+    public List<Player> generatePlayers() {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
         players.add(new RushArchi(this));
@@ -97,11 +97,9 @@ public class Board {
         String signe = ANSI_RED + "";
         if (showGold > 0)
             signe = ANSI_GREEN + "+";
-        StringBuilder res = new StringBuilder(ANSI_CYAN + p.getName() + ANSI_RESET);
-        if (p.getRole().isPresent())
-            res.append(" (" + ANSI_ITALIC).append(p.getRole().get().getName()).append(ANSI_RESET).append(") ");
-        res.append(" possède " + ANSI_YELLOW).append(p.getGold()).append(ANSI_RESET).append("(").append(signe).append(showGold).append(ANSI_RESET).append(") pieces d'or");
-        res.append("\nIl possede ").append(p.getCardHand().size()).append(" cartes et ").append(p.getCity().size()).append(" batiments");
+        String res = ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().getName() + ANSI_RESET + ") " +
+                " possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET + "(" + signe + showGold + ANSI_RESET + ") pieces d'or" +
+                "\nIl possede " + p.getCardHand().size() + " cartes et " + p.getCity().size() + " batiments";
         System.out.println(res + "\n");
     }
 
@@ -188,5 +186,9 @@ public class Board {
                 res.append(b.getName()).append(", ");
         }
         System.out.println(res);
+    }
+
+    public void release() {
+        characters.forEach(Character::resetRole);
     }
 }

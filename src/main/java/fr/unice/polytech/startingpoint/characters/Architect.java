@@ -24,7 +24,7 @@ public class Architect extends Character {
         //Architect allows building 2 more buildings total =3
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
-            p.get().setNbBuildable(3);
+            p.get().buildingArchitect();
             cards = p.get().drawCards(2);
             System.out.println(printEffect(p.get()));
         } else
