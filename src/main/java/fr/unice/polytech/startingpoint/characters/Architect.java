@@ -26,26 +26,20 @@ public class Architect extends Character {
         if (p.isPresent()) {
             p.get().buildingArchitect();
             cards = p.get().drawAndChoose(2, 2);
-            System.out.println(printEffect(p.get()));
+            printEffect(p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
     /**
      * Prints the power effect
+     *
      * @param p the Architect's player
-     * @return the String to print
      */
     @Override
-    public String printEffect(Player p) {
-        StringBuilder res = new StringBuilder(super.printEffect(p));
-        res.append(" Il pourra construire 3 batiments ce tour-ci.");
-        if (!cards.isEmpty()) {
-            res.append(" Il a pioché ");
-            for (Building b : cards) {
-                res.append(b.getName()).append(", ");
-            }
-        }
-        return res.toString();
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showArchitectEffect(p, cards);
+
     }
 }

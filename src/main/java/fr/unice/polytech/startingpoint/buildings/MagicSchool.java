@@ -9,11 +9,12 @@ public class MagicSchool extends Prestige {
     }
 
     public void useEffect(Player p) {
-        System.out.println(printEffect(p));
+        printEffect(p);
     }
 
     @Override
-    public String printEffect(Player p) {
-        return super.printEffect(p) + "Il recupere une piece de plus des taxes";
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showMagicSchoolEffect(p);
     }
 }

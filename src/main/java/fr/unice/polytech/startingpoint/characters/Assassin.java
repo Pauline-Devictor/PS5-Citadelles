@@ -22,7 +22,7 @@ public class Assassin extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             chooseVictim(b, p.get()).kill();
-            System.out.println(printEffect(p.get()));
+            printEffect(p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }

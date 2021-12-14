@@ -32,7 +32,7 @@ public class Magician extends Character {
                     this.target = target.get();
                 } else
                     swapHandDeck(p.get());
-                System.out.println(printEffect(p.get()));
+                printEffect(p.get());
             }
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
@@ -58,7 +58,6 @@ public class Magician extends Character {
      */
     public void swapHandPlayer(Player magician, Player swapPerson) {
         //TODO Eviter les setters ???
-        //System.out.println("Le Magicien echange ses cartes avec " + swapPerson.getName());
         List<Building> tempHand = magician.getCardHand();
         magician.setCardHand(swapPerson.getCardHand());
         swapPerson.setCardHand(tempHand);
@@ -68,19 +67,11 @@ public class Magician extends Character {
      * Prints the power effect
      *
      * @param p the Magician's player
-     * @return the String to print
      */
     @Override
-    public String printEffect(Player p) {
-        StringBuilder res = new StringBuilder(super.printEffect(p));
-        if (isNull(target)) {
-            res.append(" Il echange ses cartes avec la pioche. Sa main se compose maintenant de ");
-            for (Building b : p.getCardHand()) {
-                res.append(b.getName()).append(", ");
-            }
-        } else
-            res.append(" Il echange ses cartes avec ").append(target.getName());
-        return res.toString();
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showMagicianEffect(p, target);
     }
 
     /**

@@ -14,21 +14,16 @@ public class Laboratory extends Prestige {
 
     @Override
     public void useEffect(Player p) {
+        printEffect(p);
         if (p.getBoard().getBank().getGold() >= 1 && p.getCardHand().size() > 0) {
             card = p.discardCard();
             p.takeMoney(1);
-            //TODO Board
-            System.out.println(printEffect(p));
         }
     }
 
     @Override
-    public String printEffect(Player p) {
-        String res = super.printEffect(p);
-        if (isNull(card))
-            res += " Il a recuperé 1 piece d'or ";
-        else
-            res += " Il a recuperé 1 piece d'or et a defaussé " + card.getName();
-        return res;
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showLaboratoryEffect(p, (isNull(card)) ? "" : card.getName());
     }
 }

@@ -21,7 +21,7 @@ public class King extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
-            System.out.println(printEffect(p.get()));
+            printEffect(p.get());
             collectTaxes(p.get(), Noble);
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
@@ -29,11 +29,12 @@ public class King extends Character {
 
     /**
      * Prints the power effect
+     *
      * @param p the King's player
-     * @return the String to print
      */
     @Override
-    public String printEffect(Player p) {
-        return super.printEffect(p) + " Il commencera au prochain tour";
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showKingEffect(p);
     }
 }

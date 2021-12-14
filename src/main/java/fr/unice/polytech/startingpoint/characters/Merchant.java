@@ -20,7 +20,7 @@ public class Merchant extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
-            System.out.println(printEffect(p.get()));
+            printEffect(p.get());
             collectTaxes(p.get(), Commercial);
             p.get().takeMoney(1);
         } else
@@ -29,14 +29,12 @@ public class Merchant extends Character {
 
     /**
      * Prints the power effect
+     *
      * @param p the Merchant's player
-     * @return the String to print
      */
     @Override
-    public String printEffect(Player p) {
-        String res = super.printEffect(p);
-        if (!p.getBoard().getBank().isEmpty())
-            res += " Il a recupere une piece de bonus. ";
-        return res;
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showMerchantEffect(p);
     }
 }

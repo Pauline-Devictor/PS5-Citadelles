@@ -9,7 +9,7 @@ public class Observatory extends Prestige {
     }
 
     public void useEffect(Player p) {
+        printEffect(p);
         p.drawAndChoose(3, 1);
-        System.out.println(printEffect(p));
     }
 }

@@ -90,14 +90,7 @@ public abstract class Character {
             }
         }
         p.takeMoney(taxes);
-
-        //TODO Board
-        String res;
-        if (taxes <= p.getBoard().getBank().getGold())
-            res = "Il a récupéré " + taxes + " pieces des quartiers " + d.name();
-        else
-            res = "La banque n'a plus assez de pieces, il a récupéré " + p.getBoard().getBank().getGold() + " pieces d'or";
-        System.out.println(res);
+        p.getBoard().showTaxes(d, p, taxes);
     }
 
     /**
@@ -147,10 +140,9 @@ public abstract class Character {
 
     /**
      * @param p the player
-     * @return the effect used
      */
-    public String printEffect(Player p) {
-        return p.getName() + " a utilisé l'effet de : " + getName() + ".";
+    public void printEffect(Player p) {
+        p.getBoard().showCharacterEffect(p, this);
     }
 
     public void took() {

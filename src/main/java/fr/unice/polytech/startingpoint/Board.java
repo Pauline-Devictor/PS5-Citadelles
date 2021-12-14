@@ -1,6 +1,8 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.*;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
+import static java.util.Objects.isNull;
 
 public class Board {
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
@@ -90,6 +93,10 @@ public class Board {
 
     public Character getCharactersInfos(int index) {
         return characters.get(index);
+    }
+
+    public void release() {
+        characters.forEach(Character::resetRole);
     }
 
     public void showPlay(Player p, int goldDraw) {
@@ -188,7 +195,92 @@ public class Board {
         System.out.println(res);
     }
 
-    public void release() {
-        characters.forEach(Character::resetRole);
+    public void showLaboratoryEffect(Player p, String cardName) {
+        String res = "";
+        if (cardName.equals(""))
+            res += " Il a recuperé 1 piece d'or ";
+        else
+            res += " Il a recuperé 1 piece d'or et a defaussé " + cardName;
+        System.out.println(res);
+    }
+
+    public void showMagicSchoolEffect(Player p) {
+        System.out.println(p.getName() + " recupere une piece de plus des taxes");
+    }
+
+    public void showManufactoryEffect(Player p, List<Building> cards) {
+        StringBuilder res = new StringBuilder();
+        res.append(" Il a defaussé 3 pieces d'or");
+        if (!cards.isEmpty()) {
+            res.append(" et a pioché ");
+            for (Building b : cards) {
+                res.append(b.getName()).append(", ");
+            }
+        }
+        System.out.println(res);
+    }
+
+    public void showTaxes(District d, Player p, int taxes) {
+        String res;
+        if (taxes <= getBank().getGold())
+            res = p.getName() + " a récupéré " + taxes + " pieces des quartiers " + d.name();
+        else
+            res = "La banque n'a plus assez de pieces, " + p.getName() + " a récupéré " + getBank().getGold() + " pieces d'or";
+        System.out.println(res);
+    }
+
+    public void showPrestigeEffect(Player p, Prestige prestige) {
+        String res = p.getName() + " a utilisé : " + prestige.getName() + ".";
+        System.out.println(res);
+    }
+
+    public void showCharacterEffect(Player p, Character c) {
+        String res = p.getName() + " a utilisé l'effet de : " + c.getName() + ".";
+        System.out.println(res);
+    }
+
+    public void showArchitectEffect(Player p, List<Building> cards) {
+        StringBuilder res = new StringBuilder();
+        res.append(p.getName()).append(" pourra construire 3 batiments ce tour-ci.");
+        if (!cards.isEmpty()) {
+            res.append(p.getName()).append(" a pioché ");
+            for (Building b : cards) {
+                res.append(b.getName()).append(", ");
+            }
+        }
+        System.out.println(res);
+    }
+
+
+    public void showKingEffect(Player p) {
+        String res = p.getName() + " commencera au prochain tour";
+        System.out.println(res);
+    }
+
+    public void showMagicianEffect(Player p, Player target) {
+        StringBuilder res = new StringBuilder();
+        if (isNull(target)) {
+            res.append(" Il echange ses cartes avec la pioche. Sa main se compose maintenant de ");
+            for (Building b : p.getCardHand()) {
+                res.append(b.getName()).append(", ");
+            }
+        } else
+            res.append(" Il echange ses cartes avec ").append(target.getName());
+        System.out.println(res);
+    }
+
+    public void showMerchantEffect(Player p) {
+        String res = "La banque est vide, " + p.getName() + " n'a rien recupéré.";
+        if (!getBank().isEmpty())
+            res = p.getName() + " a recupere une piece de bonus. ";
+        System.out.println(res);
+    }
+
+    public void showCondottiereEffect(Player target, Building build) {
+        if (!isNull(target))
+            System.out.println("Le batiment " + build.getName() + " du joueur " + target.getName() + " a été ciblé.");
+        else
+            System.out.println("Le condottiere n'a pas assez d'or, il n'a donc rien detruit");
     }
 }
+

@@ -9,7 +9,7 @@ public class Library extends Prestige {
     }
 
     public void useEffect(Player p) {
+        printEffect(p);
         p.drawAndChoose(2, 2);
-        System.out.println(printEffect(p));
     }
 }

@@ -13,9 +13,13 @@ import java.util.stream.Collectors;
 import static fr.unice.polytech.startingpoint.buildings.District.Military;
 
 public class Condottiere extends Character {
+    Player target;
+    Building build;
 
     public Condottiere() {
         super(CharacterEnum.Condottiere);
+        target = null;
+        build = null;
     }
 
     /**
@@ -26,9 +30,9 @@ public class Condottiere extends Character {
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
-            System.out.println(printEffect(p.get()));
             collectTaxes(p.get(), Military);
             chooseBuild(b, chooseTarget(b, p.get()), p.get());
+            printEffect(p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
@@ -77,15 +81,22 @@ public class Condottiere extends Character {
                 .collect(Collectors.<Building>toList());
 
         Building build;
-        if (condo.getGold() > 10) build = costList.get(costList.size() - 1);
-        else build = costList.get(0);
-
+        if (condo.getGold() > 10)
+            build = costList.get(costList.size() - 1);
+        else
+            build = costList.get(0);
+        this.build = build;
         if (condo.getGold() >= build.getCost()) {
             board.getPile().putCard(build);
             target.getCity().remove(build);
             condo.refundGold(build.getCost() - 1);
-            System.out.println("Le batiment " + build.getName() + " du joueur " + target.getName() + " a été détruit.");
+            this.target = target;
         }
-        //TODO affichage
+    }
+
+    @Override
+    public void printEffect(Player p) {
+        super.printEffect(p);
+        p.getBoard().showCondottiereEffect(target, build);
     }
 }

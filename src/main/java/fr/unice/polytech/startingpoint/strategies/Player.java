@@ -4,16 +4,7 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static fr.unice.polytech.startingpoint.Board.*;
 import static java.util.Objects.isNull;
@@ -29,8 +20,14 @@ public class Player implements Comparator<Building> {
     protected final List<Building> city;
 
     public Player(Board b, String name) {
-        this(b);
         this.name = name;
+        board = b;
+        gold = board.getBank().withdrawGold(2);
+        cardHand = new ArrayList<>();
+        city = new ArrayList<>();
+        drawAndChoose(4, 4);
+        goldScore = 0;
+        role = null;
     }
 
     public Player(Board b) {
@@ -167,11 +164,6 @@ public class Player implements Comparator<Building> {
         nbBuilds = (Math.max(nbBuilds, 0));
         builds.sort(this);
         Set<Building> discarded = new HashSet<>();
-        for (Building b : builds) {
-            if (getCardHand().contains(b) || getCity().contains(b)) {
-                discarded.add(b);
-            }
-        }
         for (int i = nbBuilds; i < builds.size(); i++) {
             discarded.add(builds.get(i));
         }
@@ -179,7 +171,7 @@ public class Player implements Comparator<Building> {
         discarded.forEach(board::putCard);
 
         List<Building> drawn = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
-        drawn.forEach(e -> cardHand.add(e));
+        cardHand.addAll(drawn);
         board.showDrawChoice(builds, new ArrayList<>(discarded), drawn, name);
         return drawn;
     }

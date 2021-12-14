@@ -10,8 +10,8 @@ public abstract class Prestige extends Building {
 
     public abstract void useEffect(Player p);
 
-    public String printEffect(Player p) {
-        return p.getName() + " a utilisé : " + getName() + ".";
+    public void printEffect(Player p) {
+        p.getBoard().showPrestigeEffect(p, this);
     }
 
 }
