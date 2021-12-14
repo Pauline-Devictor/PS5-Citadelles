@@ -5,10 +5,7 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -39,6 +36,8 @@ public class HighScoreArchi extends Player {
                 .map(District::getTaxCollector)
                 .collect(Collectors.toList());
 
+        Collections.reverse(taxList);
+
         //if rich, architect
         if (gold > 10) taxList.add(0, CharacterEnum.Architect.getOrder() - 1);
         else taxList.add(CharacterEnum.Architect.getOrder() - 1);
@@ -48,7 +47,7 @@ public class HighScoreArchi extends Player {
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
         }
-        if ((biggestCity.getCity().size() - city.size() > 4)) taxList.add(0, CharacterEnum.Condottiere.getOrder() - 1);
+        if ((biggestCity.getCity().size() - city.size() > 5)) taxList.add(0, CharacterEnum.Condottiere.getOrder() - 1);
         else taxList.add(CharacterEnum.Condottiere.getOrder() - 1);
 
         taxList.addAll(List.of(

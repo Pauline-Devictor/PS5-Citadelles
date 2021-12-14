@@ -5,10 +5,7 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -37,7 +34,9 @@ public class BalancedFirst extends Player{
                 .map(District::getTaxCollector)
                 .collect(Collectors.toList());
 
-        //prioritize King, Assassin
+        Collections.reverse(taxList);
+
+        //prioritize Assassin, King
         taxList.add(0, CharacterEnum.King.getOrder() - 1);
         taxList.add(0, CharacterEnum.Assassin.getOrder() - 1);
         taxList.addAll(List.of(
