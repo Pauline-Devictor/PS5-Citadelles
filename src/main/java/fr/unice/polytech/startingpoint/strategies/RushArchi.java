@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,14 +23,19 @@ public class RushArchi extends Player {
         ArrayList<Integer> taxList = new ArrayList<>();
 
         //prioritize architect
-        taxList.add(6);
+        taxList.add(CharacterEnum.Architect.getOrder() - 1);
 
         //if has 6+ buildings, Bishop
-        if(getCity().size() > 5) taxList.add(0, 4);
-        else taxList.add(4);
+        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
+        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
 
         taxList.addAll(List.of(
-                2, 3, 5, 1, 0, 7
+                CharacterEnum.Magician.getOrder() - 1,
+                CharacterEnum.King.getOrder() - 1,
+                CharacterEnum.Merchant.getOrder() - 1,
+                CharacterEnum.Thief.getOrder() - 1,
+                CharacterEnum.Assassin.getOrder() - 1,
+                CharacterEnum.Condottiere.getOrder() - 1
         ));
 
         for (int elem : taxList) {

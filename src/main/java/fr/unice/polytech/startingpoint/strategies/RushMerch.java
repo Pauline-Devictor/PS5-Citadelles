@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,14 @@ public class RushMerch extends Player {
 
         //Marchand puis Archi
         ArrayList<Integer> taxList = new ArrayList<>(List.of(
-                5, 6, 2, 3, 1, 0, 7
+                CharacterEnum.Merchant.getOrder() - 1,
+                CharacterEnum.Architect.getOrder() - 1,
+                CharacterEnum.Magician.getOrder() - 1,
+                CharacterEnum.King.getOrder() - 1,
+                CharacterEnum.Thief.getOrder() - 1,
+                CharacterEnum.Bishop.getOrder() - 1,
+                CharacterEnum.Assassin.getOrder() - 1,
+                CharacterEnum.Condottiere.getOrder() - 1
         ));
 
         for (int elem : taxList) {

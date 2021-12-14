@@ -52,7 +52,9 @@ public class HighScoreArchi extends Player {
         else taxList.add(CharacterEnum.Condottiere.getOrder() - 1);
 
         taxList.addAll(List.of(
-                CharacterEnum.Magician.getOrder() - 1, CharacterEnum.Assassin.getOrder() - 1, CharacterEnum.King.getOrder() - 1
+                CharacterEnum.Magician.getOrder() - 1,
+                CharacterEnum.Assassin.getOrder() - 1,
+                CharacterEnum.King.getOrder() - 1
         ));
 
         for (int elem : taxList) {

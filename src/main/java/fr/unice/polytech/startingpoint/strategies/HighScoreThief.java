@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,12 @@ public class HighScoreThief extends Player {
                 .map(District::getTaxCollector)
                 .collect(Collectors.toList());
 
-        taxList.add(0, 3);
-        taxList.add(0, 1);
+        taxList.add(0, CharacterEnum.King.getOrder() - 1);
+        taxList.add(0, CharacterEnum.Thief.getOrder() - 1);
         taxList.addAll(List.of(
-                0, 2, 6
+                CharacterEnum.Assassin.getOrder() - 1,
+                CharacterEnum.Magician.getOrder() - 1,
+                CharacterEnum.Architect.getOrder() - 1
         ));
 
         for (int elem : taxList) {

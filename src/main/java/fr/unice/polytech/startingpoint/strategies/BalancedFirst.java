@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,12 @@ public class BalancedFirst extends Player{
                 .collect(Collectors.toList());
 
         //prioritize King, Assassin
-        taxList.add(0, 3);
-        taxList.add(0, 0);
+        taxList.add(0, CharacterEnum.King.getOrder() - 1);
+        taxList.add(0, CharacterEnum.Assassin.getOrder() - 1);
         taxList.addAll(List.of(
-                1, 2, 6
+                CharacterEnum.Thief.getOrder() - 1,
+                CharacterEnum.Magician.getOrder() - 1,
+                CharacterEnum.Architect.getOrder() - 1
         ));
 
         for (int elem : taxList) {
