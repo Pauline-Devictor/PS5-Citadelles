@@ -11,6 +11,10 @@ public class Thief extends Character {
         super(CharacterEnum.Thief);
     }
 
+    /**
+     * Uses the Thief's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
@@ -23,11 +27,17 @@ public class Thief extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+
+    /**
+     * Chooses the Thief's victim
+     * @param board tue current game's board
+     * @return the Thief's victim
+     */
     public Character chooseVictim(Board board){
         Random random = new Random();
         //exclu l'indice de l'assassin
         //exclu le voleur
-        int victim = random.nextInt(8) + 2;
+        int victim = random.nextInt(9) + 2;
         if (victim > 7) victim = 6;
         return board.getCharacters().get(victim);
     }

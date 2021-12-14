@@ -8,10 +8,15 @@ import java.util.Optional;
 import java.util.Random;
 
 public class Assassin extends Character {
+
     public Assassin() {
         super(CharacterEnum.Assassin);
     }
 
+    /**
+     * uses the Assassin's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
@@ -22,6 +27,12 @@ public class Assassin extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+    /**
+     * Chooses the Assassin's victim
+     * @param board the current game's board
+     * @param player the Assassin's player
+     * @return the Assassin's victim
+     */
     public Character chooseVictim(Board board, Optional<Player> player){
         if (player.get().getCardHand().size() > 4) return new Magician();
         for (Player p : board.getPlayers()) {

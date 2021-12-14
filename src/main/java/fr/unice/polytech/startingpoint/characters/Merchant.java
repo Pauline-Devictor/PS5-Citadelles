@@ -12,6 +12,10 @@ public class Merchant extends Character {
         super(CharacterEnum.Merchant);
     }
 
+    /**
+     * Uses the Merchant's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
@@ -23,6 +27,11 @@ public class Merchant extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+    /**
+     * Prints the power effect
+     * @param p the Merchant's player
+     * @return the String to print
+     */
     @Override
     public String printEffect(Player p) {
         String res = super.printEffect(p);

@@ -4,8 +4,8 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -17,6 +17,10 @@ public class Magician extends Character {
         target = null;
     }
 
+    /**
+     * Uses the Magician's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
@@ -34,6 +38,10 @@ public class Magician extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+    /**
+     * If there's no one to swap with
+     * @param magician the Magician's player
+     */
     public void swapHandDeck(Player magician) {
         int n = magician.getCardHand().size();
         for (int i = 0; i < n; i++)
@@ -41,6 +49,11 @@ public class Magician extends Character {
         magician.drawCards(n);
     }
 
+    /**
+     *Swaps the player's hand
+     * @param magician the Magician's player
+     * @param swapPerson The player to swap with
+     */
     public void swapHandPlayer(Player magician, Player swapPerson) {
         //System.out.println("Le Magicien echange ses cartes avec " + swapPerson.getName());
         List<Building> tempHand = magician.getCardHand();
@@ -48,6 +61,11 @@ public class Magician extends Character {
         swapPerson.setCardHand(tempHand);
     }
 
+    /**
+     * Prints the power effect
+     * @param p the Magician's player
+     * @return the String to print
+     */
     @Override
     public String printEffect(Player p) {
         StringBuilder res = new StringBuilder(super.printEffect(p));
@@ -61,19 +79,41 @@ public class Magician extends Character {
         return res.toString();
     }
 
+    /**
+     * Chooses the Magician's target
+     * @param board the current game's board
+     * @param player the Magician's player
+     * @return the Magician's target
+     */
     public Optional<Player> chooseTarget(Board board, Optional<Player> player) {
-        Player biggestCity = board.getPlayers().get(0);
         if (player.get().getCardHand().size() < 3) {
+            TreeMap<Integer, Player> cityMap = new TreeMap<>();
             for (Player p : board.getPlayers()) {
-                if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
+                cityMap.put(p.getCity().size(), p);
             }
-            if (biggestCity.getCity().size() > 5) return Optional.of(biggestCity);
+            ArrayList<Player> cityList = (ArrayList<Player>) cityMap
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .map(Map.Entry::getValue)
+                    .toList();
+
+            cityList.removeIf(c -> c.equals(player.get()) || c.getCity().size() <= 5);
+            if(!cityList.isEmpty()) return Optional.ofNullable(cityList.get(cityList.size() - 1));
         }
-        Player biggestHand;
-        biggestHand = board.getPlayers().get(0);
+
+        TreeMap<Integer, Player> handMap = new TreeMap<>();
         for (Player p : board.getPlayers()) {
-            if (p.getCardHand().size() > biggestHand.getCardHand().size()) biggestHand = p;
+            handMap.put(p.getCardHand().size(), p);
         }
-        return Optional.of(biggestHand);
+        ArrayList<Player> handList = (ArrayList<Player>) handMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .toList();
+
+        handList.removeIf(c -> c.equals(player.get()));
+        return Optional.ofNullable(handList.get(handList.size() - 1));
     }
 }

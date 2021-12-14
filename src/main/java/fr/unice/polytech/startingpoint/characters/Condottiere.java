@@ -18,6 +18,10 @@ public class Condottiere extends Character {
         super(CharacterEnum.Condottiere);
     }
 
+    /**
+     * uses the Condottiere's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);
@@ -29,6 +33,12 @@ public class Condottiere extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+    /**
+     * Chooses the Condottiere's target
+     * @param board the current game's board
+     * @param player the Condottiere's player
+     * @return the Condottiere's target
+     */
     public Optional<Player> chooseTarget(Board board, Optional<Player> player) {
         TreeMap<Integer, Player> cityMap = new TreeMap<>();
         for (Player p : board.getPlayers()) {
@@ -41,15 +51,20 @@ public class Condottiere extends Character {
                 .map(Map.Entry::getValue)
                 .toList();
 
-        for(int i = cityList.size() -1; i >= 0; i--){
-            if (cityList.get(i).getRole().isPresent() && !cityList.get(i).equals(player.get()) &&
-                    (cityList.get(i).getRole().get().getClass() != Bishop.class)) return Optional.ofNullable(cityList.get(i));
-        }
-        return Optional.empty();
+        cityList.removeIf(c -> c.equals(player.get()) || c.getRole().get().getClass() == Bishop.class
+                                || !c.getRole().isPresent());
+
+        return Optional.ofNullable(cityList.get(cityList.size() - 1));
     }
 
+    /**
+     * Chooses the target's building to destroy
+     * @param board the current game's board
+     * @param target the Condotiiere's target
+     * @param condo the Condottiere's player
+     */
     public void chooseBuild(Board board, Optional<Player> target, Optional<Player> condo) {
-        /*if (target.isPresent()) {
+        if (target.isPresent()) {
             TreeMap<Integer, Building> costMap = new TreeMap<>();
             for (Building b : target.get().getCity()) {
                 costMap.put(b.getCost(), b);
@@ -72,6 +87,6 @@ public class Condottiere extends Character {
                 System.out.println("Le batiment " + build.getName() + " du joueur " + target.get().getName() + " a été détruit.");
             }
             //TODO affichage
-        }*/
+        }
     }
 }

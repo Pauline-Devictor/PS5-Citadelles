@@ -10,13 +10,18 @@ import java.util.Optional;
 
 public class Architect extends Character {
     private List<Building> cards;
+
     public Architect() {
         super(CharacterEnum.Architect);
     }
 
+    /**
+     * Uses the Architect's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
-        //Architect allow building 2 more buildings total =3
+        //Architect allows building 2 more buildings total =3
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             p.get().setNbBuildable(3);
@@ -26,6 +31,11 @@ public class Architect extends Character {
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
     }
 
+    /**
+     * Prints the power effect
+     * @param p the Architect's player
+     * @return the String to print
+     */
     @Override
     public String printEffect(Player p) {
         StringBuilder res = new StringBuilder(super.printEffect(p));

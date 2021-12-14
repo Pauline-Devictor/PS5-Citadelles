@@ -13,6 +13,10 @@ public class Bishop extends Character {
         super(CharacterEnum.Bishop);
     }
 
+    /**
+     * Uses the Bishop's power
+     * @param b the current game's board
+     */
     @Override
     public void usePower(Board b) {
         Optional<Player> p = findPlayer(b);

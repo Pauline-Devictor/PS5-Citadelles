@@ -182,6 +182,7 @@ public class Player implements Comparator<Building> {
     }
 
     public void chooseRole() {
+        //todo abstract?
         int index;
         do {
             index = new Random().nextInt(8);
