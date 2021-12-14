@@ -47,7 +47,7 @@ public class Magician extends Character {
         int n = magician.getCardHand().size();
         for (int i = 0; i < n; i++)
             magician.discardCard();
-        magician.drawCards(n);
+        magician.drawAndChoose(n, n);
     }
 
     /**

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -74,51 +73,32 @@ public class TestPlayer {
         assertFalse(p.isBuildable(tourDeGuet));
     }
 
-    /*@Test
-    void chooseBuildingLow() {
-        assertEquals(eglise, pLow.chooseBuilding(eglise, caserne));
-
-    }
-
-    @Test
-    void chooseBuildingHigh() {
-        assertEquals(caserne, pHigh.chooseBuilding(eglise, caserne));
-    }
-
-    @Test
-    void chooseBuildingNull1() {
-        assertEquals(eglise, p.chooseBuilding(eglise, null));
-    }
-
-    @Test
-    void chooseBuildingNull2() {
-        assertEquals(eglise, p.chooseBuilding(null, eglise));
-    }
-
-    @Test
-    void chooseBuildingNull() {
-        assertNull(p.chooseBuilding(null, null));
-    }*/
-
     @Test
     void drawCards() {
         int size = p.getCardHand().size();
-        p.drawCards(3);
+        p.drawAndChoose(3, 3);
         assertEquals(3, p.getCardHand().size() - size);
     }
 
     @Test
     void drawCardsNeg() {
         int size = p.getCardHand().size();
-        p.drawCards(-1);
+        p.drawAndChoose(2, -1);
         assertEquals(0, p.getCardHand().size() - size);
     }
 
     @Test
     void drawCardsZero() {
         int size = p.getCardHand().size();
-        p.drawCards(0);
+        p.drawAndChoose(2, 0);
         assertEquals(0, p.getCardHand().size() - size);
+    }
+
+    @Test
+    void drawCardsLessThanSelect() {
+        int size = p.getCardHand().size();
+        p.drawAndChoose(2, 3);
+        assertEquals(2, p.getCardHand().size() - size);
     }
 
     /*@Test

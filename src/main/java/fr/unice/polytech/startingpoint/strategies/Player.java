@@ -38,8 +38,8 @@ public class Player implements Comparator<Building> {
         board = b;
         gold = board.getBank().withdrawGold(2);
         cardHand = new ArrayList<>();
-        drawCards(4);
         city = new ArrayList<>();
+        drawAndChoose(4, 4);
         goldScore = 0;
         role = null;
     }
@@ -153,18 +153,18 @@ public class Player implements Comparator<Building> {
         }
     }
 
-    public void drawAndChoose(int nbCards, int nbChoose) {
+    public List<Building> drawAndChoose(int nbCards, int nbChoose) {
         List<Building> builds = new ArrayList<>();
         Optional<Building> b1;
         for (int i = 0; i < nbCards; i++) {
             b1 = getBoard().getPile().drawACard();
             b1.ifPresent(builds::add);
         }
-        chooseBuilding(builds, nbChoose);
+        return chooseBuilding(builds, nbChoose);
     }
 
-    public void chooseBuilding(List<Building> builds, int nbBuilds) {
-
+    public List<Building> chooseBuilding(List<Building> builds, int nbBuilds) {
+        nbBuilds = (Math.max(nbBuilds, 0));
         builds.sort(this);
         Set<Building> discarded = new HashSet<>();
         for (Building b : builds) {
@@ -178,8 +178,10 @@ public class Player implements Comparator<Building> {
         //On remet dans le deck les cartes non utilisés
         discarded.forEach(board::putCard);
 
-        List<Building> builded = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
-        board.showDrawChoice(builds, new ArrayList<>(discarded), builded, name);
+        List<Building> drawn = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
+        drawn.forEach(e -> cardHand.add(e));
+        board.showDrawChoice(builds, new ArrayList<>(discarded), drawn, name);
+        return drawn;
     }
 
     public void chooseRole() {
@@ -191,7 +193,7 @@ public class Player implements Comparator<Building> {
         pickRole(index);
     }
 
-    public List<Building> drawCards(int nbCards) {
+    /*public List<Building> drawCards(int nbCards) {
         List<Building> res = new ArrayList<>();
         for (int i = 0; i < nbCards; i++) {
             Optional<Building> b1 = board.getPile().drawACard();
@@ -199,7 +201,7 @@ public class Player implements Comparator<Building> {
             b1.ifPresent(res::add);
         }
         return res;
-    }
+    }*/
 
     public Building discardCard() {
         if (getCardHand().size() > 0) {

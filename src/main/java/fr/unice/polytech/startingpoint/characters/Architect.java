@@ -25,7 +25,7 @@ public class Architect extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             p.get().buildingArchitect();
-            cards = p.get().drawCards(2);
+            cards = p.get().drawAndChoose(2, 2);
             System.out.println(printEffect(p.get()));
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");

@@ -48,7 +48,7 @@ public abstract class Character {
         //No thiefplayer anymore
         thief = null;
         //not immune to Condottiere anymore
-
+        stolen = false;
     }
 
     /**

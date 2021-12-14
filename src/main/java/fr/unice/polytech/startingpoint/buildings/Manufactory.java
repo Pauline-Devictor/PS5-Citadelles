@@ -16,7 +16,7 @@ public class Manufactory extends Prestige {
     public void useEffect(Player p) {
         if (p.getGold() >= 3 && p.getBoard().getPile().numberOfCards() >= 3) {
             p.refundGold(3);
-            cards = p.drawCards(3);
+            cards = p.drawAndChoose(3, 3);
             System.out.println(printEffect(p));
         }
     }
