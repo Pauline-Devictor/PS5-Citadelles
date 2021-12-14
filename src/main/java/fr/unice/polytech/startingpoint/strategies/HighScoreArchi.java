@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +40,19 @@ public class HighScoreArchi extends Player {
                 .collect(Collectors.toList());
 
         //if rich, architect
-        if (gold > 10) taxList.add(0, 6);
-        else taxList.add(6);
+        if (gold > 10) taxList.add(0, CharacterEnum.Architect.getOrder() - 1);
+        else taxList.add(CharacterEnum.Architect.getOrder() - 1);
 
         //if a player has too much advance, condottiere
         Player biggestCity = board.getPlayers().get(0);
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
         }
-        if ((biggestCity.getCity().size() - city.size() > 4)) taxList.add(0, 7);
-        else taxList.add(7);
+        if ((biggestCity.getCity().size() - city.size() > 4)) taxList.add(0, CharacterEnum.Condottiere.getOrder() - 1);
+        else taxList.add(CharacterEnum.Condottiere.getOrder() - 1);
 
         taxList.addAll(List.of(
-                1, 0, 2
+                CharacterEnum.Magician.getOrder() - 1, CharacterEnum.Assassin.getOrder() - 1, CharacterEnum.King.getOrder() - 1
         ));
 
         for (int elem : taxList) {

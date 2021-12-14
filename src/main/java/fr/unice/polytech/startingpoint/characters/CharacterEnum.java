@@ -19,10 +19,18 @@ public enum CharacterEnum {
         this.order = order;
     }
 
+    /**
+     *
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return order
+     */
     public int getOrder() {
         return order;
     }
