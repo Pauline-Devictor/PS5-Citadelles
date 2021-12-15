@@ -142,7 +142,7 @@ public abstract class Character {
      * @param p the player
      */
     public void printEffect(Player p) {
-        p.getBoard().showCharacterEffect(p, this);
+        p.getBoard().showCharacterEffect(p);
     }
 
     public void took() {

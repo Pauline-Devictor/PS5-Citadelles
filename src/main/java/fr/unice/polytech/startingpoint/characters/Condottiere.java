@@ -100,6 +100,6 @@ public class Condottiere extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showCondottiereEffect(target, build);
+        p.getBoard().showCondottiereEffect(target, build, p);
     }
 }

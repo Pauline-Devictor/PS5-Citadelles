@@ -96,7 +96,7 @@ public class Player implements Comparator<Building> {
         boolean anythingBuildable = cardHand.stream().anyMatch(this::isBuildable);
         boolean emptyBank = board.getBank().isEmpty();
         boolean isDraw = (!emptyDeck && !anythingBuildable) || emptyBank;
-        board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, getName());
+        board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, this);
         return isDraw;
     }
 
@@ -133,7 +133,7 @@ public class Player implements Comparator<Building> {
             }
 
         }
-        board.showBuilds(checkBuilding, toBuild, name);
+        board.showBuilds(checkBuilding, toBuild, this);
     }
 
     public void drawDecision() {
@@ -170,7 +170,7 @@ public class Player implements Comparator<Building> {
 
         List<Building> drawn = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
         cardHand.addAll(drawn);
-        board.showDrawChoice(builds, new ArrayList<>(discarded), drawn, name);
+        board.showDrawChoice(builds, new ArrayList<>(discarded), drawn, this);
         return drawn;
     }
 
@@ -229,14 +229,16 @@ public class Player implements Comparator<Building> {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(ANSI_PURPLE + name).append(", ").append(role);
-        res.append(ANSI_RESET + " avec " + ANSI_YELLOW).append(gold).append(ANSI_RESET).append(" pieces d'or");
-        res.append("\nBâtiments :").append("\tScore des Bâtiments : ").append(ANSI_GREEN_BACKGROUND).append(ANSI_BLACK).append(goldScore).append(ANSI_RESET);
-        res.append("\n" + ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Batiments Non Construits :" + ANSI_RESET);
+        StringBuilder res = new StringBuilder(board.printName(this)).append(", ").append(board.printRole(this));
+
+        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or")
+                .append("\nBâtiments :").append("\tScore des Bâtiments : ")
+                .append(printFormat(String.valueOf(goldScore), ANSI_BLUE)).append("\n").append(printFormat("Batiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
+
         for (Building b : cardHand) {
             res.append("\n\t").append(b.toString()).append(" ");
         }
-        res.append("\n" + ANSI_CYAN_BACKGROUND + ANSI_BLACK + "Batiments Construits :" + ANSI_RESET);
+        res.append("\n").append(printFormat("Batiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
         for (Building b : city) {
             res.append("\n\t").append(b.toString()).append(" ");
         }

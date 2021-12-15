@@ -7,6 +7,7 @@ import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -99,57 +100,60 @@ public class Board {
     }
 
     public void showPlay(Player p, int goldDraw) {
+        String res = printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
         if (!isNull(p.getRole()) && p.getRole().isMurdered())
-            System.out.println(ANSI_ITALIC + p.getName() + " has been killed. Turn is skipped.\n" + ANSI_RESET);
+            res += "\n" + printName(p) + "a ete tué. Son tour est passé\n";
         else {
             int showGold = (p.getGold() - goldDraw);
             String signe = ANSI_RED + "";
             if (showGold > 0)
                 signe = ANSI_GREEN + "+";
-            String res = ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().getName() + ANSI_RESET + ") " +
-                    " possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET + "(" + signe + showGold + ANSI_RESET + ") pieces d'or" +
-                    "\nIl possede " + p.getCardHand().size() + " cartes et " + p.getCity().size() + " batiments";
-            System.out.println(res + "\n");
+            res += "\n" + printName(p) + "(" + printRole(p) + ")" +
+                    " possède " + printFormat(String.valueOf(p.getGold()), ANSI_YELLOW, ANSI_BOLD) + "(" + signe + showGold + ANSI_RESET + ") pieces d'or"
+                    + ", " + printFormat(String.valueOf(p.getCardHand().size()), ANSI_CYAN, ANSI_BOLD)
+                    + " cartes et " + printFormat(String.valueOf(p.getCity().size()), ANSI_BOLD, ANSI_BLUE) + " batiments\n";
+            res += printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
         }
+        System.out.println(res + "\n\n");
     }
 
     void showRanking() {
         players.sort(PointsOrder);
         for (int i = 1; i <= players.size(); i++) {
-            System.out.println(i + ". Avec " + players.get(i - 1).getGoldScore() + " points, c'est " + players.get(i - 1).getName());
+            System.out.println(i + ". Avec " + printFormat(String.valueOf(players.get(i - 1).getGoldScore()), ANSI_BOLD, ANSI_GREEN) + " points, c'est " + printName(players.get(i - 1)));
         }
     }
 
     void showBoard() {
         StringBuilder res = new StringBuilder();
-        for (Player player : players) {
-            res.append("Joueur ").append(player.getName()).append(" :\n").append(player).append("\n");
-        }
+        players.forEach(e -> res.append(e).append("\n"));
         System.out.println(res);
     }
 
     void showVariables(int turn) {
         AtomicInteger res = new AtomicInteger();
         players.forEach(e -> res.addAndGet(e.getGold()));
-        System.out.println(ANSI_RED_BACKGROUND + ANSI_BLACK + "Tour " + (turn) + ":" + ANSI_RESET +
-                " Cartes Restantes : " + pile.numberOfCards() + " Or Dans la Banque : " + bank.getGold() + " Or Joueurs :" + res);
+        System.out.println(printFormat("Tour " + turn, ANSI_BLACK, ANSI_RED_BACKGROUND) +
+                " Il reste " + printFormat(String.valueOf(pile.numberOfCards()), ANSI_GREEN, ANSI_BOLD) + " cartes dans la pioche."
+                + "\nLa Banque detient " + printFormat(String.valueOf(bank.getGold()), ANSI_YELLOW) + " pieces d'or"
+                + "\nLes Joueurs detiennent " + printFormat(res.toString(), ANSI_YELLOW) + " pieces d'or\n");
         if (res.get() + bank.getGold() != 30) {
             throw new IllegalStateException("L'or total n'est plus égal à 30");
         }
     }
 
-    public void showDrawOrGold(boolean emptyDeck, boolean anythingBuildable, boolean emptyBank, boolean isDraw, String name) {
+    public void showDrawOrGold(boolean emptyDeck, boolean anythingBuildable, boolean emptyBank, boolean isDraw, Player p) {
         String res = "";
         if (emptyDeck)
             res += "Le deck ne contient plus de cartes.\n";
         if (!anythingBuildable)
-            res += name + " ne peut rien construire dans sa main.\n";
+            res += printName(p) + "ne peut rien construire dans sa main.\n";
         if (emptyBank)
             res += "La banque ne contient plus de pieces d'or.\n";
         if (isDraw)
-            res += name + " decide donc de piocher.";
+            res += printName(p) + "decide donc de piocher.";
         else
-            res += name + " decide donc de prendre 2 pieces d'or.";
+            res += printName(p) + "decide donc de prendre " + printFormat(String.valueOf(2), ANSI_YELLOW) + " pieces d'or.";
         System.out.println(res);
     }
 
@@ -157,68 +161,56 @@ public class Board {
         pile.putCard(b);
     }
 
-    public void showDrawChoice(List<Building> builds, List<Building> discarded, List<Building> builded, String name) {
+    public void showDrawChoice(List<Building> builds, List<Building> discarded, List<Building> builded, Player p) {
         StringBuilder res = new StringBuilder();
         if (builds.isEmpty()) {
-            res.append(name).append(" n'a rien pioché");
+            res.append(printName(p)).append("n'a rien pioché");
         } else {
-            res.append(name).append(" a pioché : ");
-            for (Building b : builds)
-                res.append(b.getName()).append(", ");
+            res.append(printName(p)).append("a pioché : ").append(printBuildings(builds));
         }
         if (!discarded.isEmpty()) {
-            res.append("\nIl a choisi de défausser ");
-            for (Building b : discarded)
-                res.append(b.getName()).append(", ");
+            res.append("\nIl a choisi de défausser ").append(printBuildings(discarded));
         }
         if (!builded.isEmpty()) {
-            res.append("\nIl garde ");
-            for (Building b : builded)
-                res.append(b.getName()).append(", ");
+            res.append("\nIl garde ").append(printBuildings(builded));
         }
         System.out.println(res);
     }
 
-    public void showBuilds(List<Building> checkBuilding, List<Building> toBuild, String name) {
+    public void showBuilds(List<Building> checkBuilding, List<Building> toBuild, Player p) {
         StringBuilder res = new StringBuilder();
         if (checkBuilding.isEmpty()) {
-            res.append(name).append(" n'a rien dans sa main : ");
+            res.append(printName(p)).append("n'a rien dans sa main : ");
         } else {
-            res.append(name).append(" a dans sa main : ");
-            for (Building b : checkBuilding)
-                res.append(b.getName()).append(", ");
+            res.append(printName(p)).append("a dans sa main : ");
+            res.append(printBuildings(checkBuilding));
         }
         if (toBuild.isEmpty())
-            res.append("\n").append(name).append(" choisit de ne rien construire");
+            res.append("\n").append(printName(p)).append("choisit de ne rien construire");
         else {
-            res.append("\n").append(name).append(" choisit de construire ");
-            for (Building b : toBuild)
-                res.append(b.getName()).append(", ");
+            res.append("\n").append(printName(p)).append("choisit de construire ").append(printBuildings(toBuild));
         }
         System.out.println(res);
     }
 
-    public void showLaboratoryEffect(Player p, String cardName) {
-        String res = "";
-        if (cardName.equals(""))
-            res += " Il a recuperé 1 piece d'or ";
+    public void showLaboratoryEffect(Player p, Building cardName) {
+        String res = printName(p);
+        if (isNull(cardName))
+            res += "a recuperé 1 piece d'or ";
         else
-            res += " Il a recuperé 1 piece d'or et a defaussé " + cardName;
+            res += "a recuperé 1 piece d'or et a defaussé " + cardName.getName();
         System.out.println(res);
     }
 
     public void showMagicSchoolEffect(Player p) {
-        System.out.println(p.getName() + " recupere une piece de plus des taxes");
+        System.out.println(printName(p) + "recupere une piece de plus des taxes");
     }
 
     public void showManufactoryEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
-        res.append(p.getName()).append(" a defaussé 3 pieces d'or");
+        res.append(printName(p)).append("a defaussé 3 pieces d'or");
         if (!cards.isEmpty()) {
-            res.append(" et a pioché ");
-            for (Building b : cards) {
-                res.append(b.getName()).append(", ");
-            }
+            res.append("et a pioché ").append(printBuildings(cards));
         }
         System.out.println(res);
     }
@@ -226,64 +218,99 @@ public class Board {
     public void showTaxes(District d, Player p, int taxes) {
         String res;
         if (taxes <= getBank().getGold())
-            res = p.getName() + " a récupéré " + taxes + " pieces des quartiers " + d.name();
+            res = printName(p) + "a récupéré " + taxes + " pieces des quartiers " + printDistrict(d);
         else
-            res = "La banque n'a plus assez de pieces, " + p.getName() + " a récupéré " + getBank().getGold() + " pieces d'or";
+            res = "La banque n'a plus assez de pieces," + printName(p) + "a récupéré " + getBank().getGold() + " pieces d'or";
         System.out.println(res);
     }
 
     public void showPrestigeEffect(Player p, Prestige prestige) {
-        String res = p.getName() + " a utilisé : " + prestige.getName() + ".";
+        String res = printName(p) + "a utilisé : " + prestige.getName() + ".";
         System.out.println(res);
     }
 
-    public void showCharacterEffect(Player p, Character c) {
-        String res = p.getName() + " a utilisé l'effet de : " + c.getName() + ".";
+    public void showCharacterEffect(Player p) {
+        String res = printName(p) + "a utilisé l'effet de : " + printRole(p) + ".";
         System.out.println(res);
     }
 
     public void showArchitectEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
-        res.append(p.getName()).append(" pourra construire 3 batiments ce tour-ci.");
+        res.append(printName(p)).append("pourra construire 3 batiments ce tour-ci.");
         if (!cards.isEmpty()) {
-            res.append(p.getName()).append(" a pioché ");
-            for (Building b : cards) {
-                res.append(b.getName()).append(", ");
-            }
+            res.append(printName(p)).append("a pioché ").append(printBuildings(cards));
         }
         System.out.println(res);
     }
 
 
     public void showKingEffect(Player p) {
-        String res = p.getName() + " commencera au prochain tour";
+        String res = printName(p) + "commencera au prochain tour";
         System.out.println(res);
     }
 
     public void showMagicianEffect(Player p, Player target) {
         StringBuilder res = new StringBuilder();
         if (isNull(target)) {
-            res.append(" Il echange ses cartes avec la pioche. Sa main se compose maintenant de ");
-            for (Building b : p.getCardHand()) {
-                res.append(b.getName()).append(", ");
-            }
+            res.append(printName(p)).append("echange ses cartes avec la pioche. Sa main se compose maintenant de :");
+            res.append(printBuildings(p.getCardHand()));
         } else
-            res.append(" Il echange ses cartes avec ").append(target.getName());
+            res.append(" Il echange ses cartes avec").append(printName(p));
         System.out.println(res);
     }
 
     public void showMerchantEffect(Player p) {
-        String res = "La banque est vide, " + p.getName() + " n'a rien recupéré.";
+        String res = "La banque est vide," + printName(p) + "n'a rien recupéré.";
         if (!getBank().isEmpty())
-            res = p.getName() + " a recupere une piece de bonus. ";
+            res = printName(p) + "a recupere une piece de bonus. ";
         System.out.println(res);
     }
 
-    public void showCondottiereEffect(Player target, Building build) {
+    public void showCondottiereEffect(Player target, Building build, Player p) {
+        String res = printRole(p) + "n'a pas assez d'or ou pas de cible, il n'a donc rien detruit";
         if (!isNull(target))
-            System.out.println("Le batiment " + build.getName() + " du joueur " + target.getName() + " a été ciblé.");
-        else
-            System.out.println("Le condottiere n'a pas assez d'or, il n'a donc rien detruit");
+            res = ("Le batiment " + printFormat(build.getName(), ANSI_UNDERLINE, ANSI_YELLOW) + " de" + printName(target) + "a été ciblé.");
+        System.out.println(res);
+    }
+
+    public String printBuildings(List<Building> buildings) {
+        StringBuilder res = new StringBuilder("\n");
+        for (int i = 0; i < buildings.size(); i++) {
+            res.append(printBuilding(buildings.get(i))).append(", ");
+            if ((i + 1) % 5 == 0)
+                res.append("\n");
+        }
+        //TODO Retirer derniere virgule
+        return printFormat(res.toString());
+    }
+
+    public String printBuilding(Building b) {
+        return printFormat(b.getName(), ANSI_ITALIC, ANSI_UNDERLINE);
+    }
+
+    public String printName(Player p) {
+        return printFormat(" " + p.getName() + " ", ANSI_PURPLE, ANSI_ITALIC);
+    }
+
+    public String printRole(Player p) {
+        return printFormat(p.getRole().getName(), ANSI_RED, ANSI_ITALIC);
+    }
+
+    public String printDistrict(District d) {
+        String c = switch (d) {
+            case Noble -> ANSI_YELLOW;
+            case Commercial -> ANSI_GREEN;
+            case Religion -> ANSI_BLUE;
+            case Military -> ANSI_RED;
+            case Prestige -> ANSI_PURPLE;
+        };
+        return printFormat(d.name(), c, ANSI_UNDERLINE);
+    }
+
+    public static String printFormat(String text, String... format) {
+        StringBuilder res = new StringBuilder();
+        for (String f : format)
+            res.append(f);
+        return res + text + ANSI_RESET;
     }
 }
-
