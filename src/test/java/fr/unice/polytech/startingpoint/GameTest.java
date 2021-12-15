@@ -34,21 +34,24 @@ class GameTest {
     void runEndOfGame(){
         g.newGame();
         List<Player> players = g.getPlayers();
-        int count = 0 ;
-        for (Player p: players) {
-            if(p.getCity().size()>=8)
+        int count = 0;
+        for (Player p : players) {
+            if (p.getCity().size() >= 8)
                 count++;
         }
-        assertTrue(count>0 ||
+        assertTrue(count > 0 ||
                 (g.getBoard().getPile().isEmpty() &&
-                        g.getBoard().getBank().getGold()==0) );
+                        g.getBoard().getBank().getGold() == 0));
     }
 
-    //@Test
-    void orderPLayer() {
-        when(p.getGoldScore()).thenReturn(15);
-        when(p1.getGoldScore()).thenReturn(13);
-        when(g.getPlayers()).thenReturn(List.of(p, p1));
-        //TODO cf signature
+    @Test
+    void getOrderPlayer() {
+
     }
+
+    @Test
+    void getEmptyOrderPlayer() {
+
+    }
+
 }

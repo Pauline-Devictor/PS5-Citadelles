@@ -71,10 +71,8 @@ public class Player implements Comparator<Building> {
 
     public void play() {
         int goldDraw = getGold();
-        boolean draw = drawOrGold();
-        if (getRole().isMurdered()) {
-            System.out.println(ANSI_ITALIC + getName() + " has been killed. Turn is skipped.\n" + ANSI_RESET);
-        } else {
+        if (!getRole().isMurdered()) {
+            boolean draw = drawOrGold();
             checkStolen();
             //Decide for the use of power of his character
             roleEffects();
@@ -89,8 +87,8 @@ public class Player implements Comparator<Building> {
             //Decide what to build
             buildDecision();
             //show the move in the console
-            board.showPlay(this, goldDraw);
         }
+            board.showPlay(this, goldDraw);
     }
 
     private boolean drawOrGold() {
@@ -184,16 +182,6 @@ public class Player implements Comparator<Building> {
         } while (!board.getCharactersInfos(index).isAvailable());
         pickRole(index);
     }
-
-    /*public List<Building> drawCards(int nbCards) {
-        List<Building> res = new ArrayList<>();
-        for (int i = 0; i < nbCards; i++) {
-            Optional<Building> b1 = board.getPile().drawACard();
-            b1.ifPresent(cardHand::add);
-            b1.ifPresent(res::add);
-        }
-        return res;
-    }*/
 
     public Building discardCard() {
         if (getCardHand().size() > 0) {

@@ -11,10 +11,13 @@ public class TestBoard {
     void setup(){
         board = new Board();
     }
+
     @Test
     void roleFree(){
         board.getCharactersInfos(3).took();
-        board.setAllFree();
+        board.release();
         assertTrue(board.getCharactersInfos(3).isAvailable());
     }
+
+
 }

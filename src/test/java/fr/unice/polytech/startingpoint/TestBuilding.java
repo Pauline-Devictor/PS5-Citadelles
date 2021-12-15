@@ -64,16 +64,6 @@ public class TestBuilding {
         assertEquals(cardHand, p.getCardHand().size());
     }
 
-    /*@Test
-    void testLibrary() {
-        when(p.getCity()).thenReturn(List.of(new Library()));
-        int taille = p.getCardHand().size();
-        for (int i = 0; i < taille; i++)
-            p.discardCard();
-        List<Building> res = p.drawDecision();
-        assertEquals(2, res.size());
-    }*/
-
     @Test
     void testLibraryReturn() {
         when(p.getCity()).thenReturn(List.of(new Library()));

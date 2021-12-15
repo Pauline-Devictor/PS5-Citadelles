@@ -5,6 +5,7 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -92,7 +93,7 @@ public class Magician extends Character {
                     .stream()
                     .sorted(Map.Entry.comparingByKey())
                     .map(Map.Entry::getValue)
-                    .toList();
+                    .collect(Collectors.toList());
 
             cityList.removeIf(c -> c.equals(player) || c.getCity().size() <= 5);
             if (!cityList.isEmpty())
@@ -108,7 +109,7 @@ public class Magician extends Character {
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(Map.Entry::getValue)
-                .toList();
+                .collect(Collectors.toList());
 
         handList.removeIf(c -> c.equals(player));
         return Optional.ofNullable(handList.get(handList.size() - 1));

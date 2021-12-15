@@ -55,9 +55,8 @@ public class Game {
                     first = p;
                 }
             }
-            resetPlayer();
-            board.setAllFree();
 
+            board.release();
             for (Player p : players) {
                 if (p.getCity().size() >= 8 || turn > 50) {
                     endOfGame = true;
@@ -73,13 +72,6 @@ public class Game {
         alternateList.addAll(orderPlayers.subList(index, orderPlayers.size()));
         alternateList.addAll(orderPlayers.subList(0, index));
         orderPlayers = List.copyOf(alternateList);
-    }
-
-    void resetPlayer() {
-        for (Player p : players) {
-            p.reset();
-        }
-        board.release();
     }
 
     public Board getBoard() {

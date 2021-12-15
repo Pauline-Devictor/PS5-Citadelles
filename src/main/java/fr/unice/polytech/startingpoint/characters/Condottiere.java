@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static fr.unice.polytech.startingpoint.buildings.District.Military;
+import static java.util.Objects.isNull;
 
 public class Condottiere extends Character {
     Player target;
@@ -31,7 +32,9 @@ public class Condottiere extends Character {
         Optional<Player> p = findPlayer(b);
         if (p.isPresent()) {
             collectTaxes(p.get(), Military);
-            chooseBuild(b, chooseTarget(b, p.get()), p.get());
+            target = chooseTarget(b, p.get());
+            if (!isNull(target))
+                chooseBuild(b, target, p.get());
             printEffect(p.get());
         } else
             throw new IllegalArgumentException("No Role " + getName() + " in this board");
@@ -56,16 +59,16 @@ public class Condottiere extends Character {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 
-        cityList.removeIf(c -> c.equals(player) || c.getRole().getClass() == Bishop.class);
-
-        return cityList.get(cityList.size() - 1);
+        //Verification que le personnage est un role qui ne soit pas Eveque, ou que ce ne soit pas le condottiere
+        cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class);
+        return cityList.isEmpty() ? null : cityList.get(cityList.size() - 1);
     }
 
     /**
      * Chooses the target's building to destroy
      *
      * @param board  the current game's board
-     * @param target the Condotiiere's target
+     * @param target the Condottiere's target
      * @param condo  the Condottiere's player
      */
     public void chooseBuild(Board board, Player target, Player condo) {

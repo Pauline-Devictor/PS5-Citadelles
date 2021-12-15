@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TestCharacter {
@@ -23,12 +21,14 @@ public class TestCharacter {
     Character king;
     Player player;
     Player archi;
+    Player bishop;
     Player condo;
     Character archiCharacter;
     Character assasinCharacter;
     Character thiefCharacter;
     Character condottiereCharacter;
     Magician magicianCharacter;
+    Bishop bishopCharacter;
 
     @BeforeEach
     void setUp() {
@@ -37,11 +37,13 @@ public class TestCharacter {
         player = spy(new Player(board));
         archi = spy(new Player(board));
         condo = spy(new Player(board));
+        bishop = spy(new Player(board));
         archiCharacter = spy(Architect.class);
         assasinCharacter = spy(Assassin.class);
         thiefCharacter = spy(Thief.class);
         magicianCharacter = spy(Magician.class);
         condottiereCharacter = spy(Condottiere.class);
+        bishopCharacter = spy(Bishop.class);
     }
 
     @Test
@@ -63,6 +65,17 @@ public class TestCharacter {
         int killed = (int) board.getCharacters().stream().filter(Character::isMurdered).count();
         assertEquals(1, killed);
     }
+
+    @Test
+    void assasinChooseVictimColor() {
+
+    }
+
+    @Test
+    void assasinChooseVictimMagician() {
+
+    }
+
 
     @Test
     void stealSomeone() {
@@ -104,7 +117,7 @@ public class TestCharacter {
     }
 
     @Test
-    void findPlayer() {
+    void architectPower() {
         when(player.getRole()).thenReturn(archiCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         when(board.getCharacters()).thenReturn(List.of(archiCharacter));
@@ -121,25 +134,103 @@ public class TestCharacter {
 
     @Test
     void findPlayerMatchingRole() {
-        when(player.getRole()).thenReturn(archiCharacter);
         Player a = new Player(board);
-        when(a.getRole()).thenReturn(new Assassin());
         Player m = new Player(board);
-        when(m.getRole()).thenReturn(new Merchant());
         Player t = new Player(board);
-        when(t.getRole()).thenReturn(new Thief());
+        player.pickRole(6);
+        a.pickRole(0);
+        m.pickRole(5);
+        t.pickRole(1);
+        when(board.getPlayers()).thenReturn(List.of(player, a, m, t));
+        assertEquals(Optional.of(player), archiCharacter.findPlayer(board));
+    }
+
+    @Test
+    void findPlayerAnyRole() {
+        Player a = new Player(board);
+        Player m = new Player(board);
+        Player t = new Player(board);
+        player.pickRole(6);
+        a.pickRole(0);
+        m.pickRole(5);
+        t.pickRole(1);
         when(board.getPlayers()).thenReturn(List.of(a, m, t));
         assertEquals(Optional.empty(), archiCharacter.findPlayer(board));
     }
 
+
     @Test
     void destroyBuild() {
-        when(player.getRole()).thenReturn(condottiereCharacter);
-        //player.play();//Plays so he can build one building
-        player.build(new Building(BuildingEnum.Manufacture));
-        when(board.getPlayers()).thenReturn(List.of(player));
+        archi.takeMoney(25);
+        archi.pickRole(6);
+        player.pickRole(7);
+        archi.build(new Building(BuildingEnum.Manufacture));
+        when(board.getPlayers()).thenReturn(List.of(player, archi));
         player.takeMoney(5); // Take money to be able to destroy a build with his power
         condottiereCharacter.usePower(board);
-        assertEquals(player.getCity().size(), 0);
+        assertEquals(0, archi.getCity().size());
     }
+
+    @Test
+    void destroyAlone() {
+        bishop.takeMoney(10);
+        player.takeMoney(10); // Take money to be able to destroy a build with his power
+        bishop.pickRole(4);
+        player.pickRole(7);
+        bishop.build(new Building(BuildingEnum.Manufacture));
+        player.build(new Building(BuildingEnum.Palais));
+        when(board.getPlayers()).thenReturn(List.of(player, bishop));
+        condottiereCharacter.usePower(board);
+        assertEquals(1, player.getCity().size());
+        assertEquals(1, bishop.getCity().size());
+    }
+
+    @Test
+    void destroyBuildNoGold() {
+        archi.takeMoney(25);
+        archi.pickRole(6);
+        player.pickRole(7);
+        archi.build(new Building(BuildingEnum.Manufacture));
+        when(board.getPlayers()).thenReturn(List.of(player, archi));
+        condottiereCharacter.usePower(board);
+        assertEquals(1, archi.getCity().size());
+    }
+
+    @Test
+    void magicienChooseNoOne() {
+
+    }
+
+    @Test
+    void magicienChooseTarget() {
+
+    }
+
+    @Test
+    void magicienChooseHimself() {
+
+    }
+
+    @Test
+    void swapHandPlayer() {
+
+    }
+
+
+    @Test
+    void swapEmptyHandPlayer() {
+
+    }
+
+
+    @Test
+    void merchantGold() {
+
+    }
+
+    @Test
+    void merchantEmptyBank() {
+
+    }
+
 }

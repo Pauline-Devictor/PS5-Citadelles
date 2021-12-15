@@ -54,19 +54,21 @@ public class Board {
                 new Merchant(),
                 new Architect(),
                 new Condottiere());
-        players = generatePlayers();
+        players = generatePlayers(nbPlayers);
     }
 
     public Board() {
         this(4);
     }
 
-    public List<Player> generatePlayers() {
+    public List<Player> generatePlayers(int nbPlayers) {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
         players.add(new RushArchi(this));
         players.add(new HighScoreArchi(this));
         players.add(new HighScoreThief(this));
+        for (int i = 4; i < nbPlayers; i++)
+            players.add(new Player(this));
         return players;
     }
 
@@ -75,8 +77,9 @@ public class Board {
     }
 
     //Libère tous les roles et vide la liste des roles pris
-    void setAllFree() {
+    void release() {
         characters.forEach(Character::resetRole);
+        players.forEach(Player::reset);
     }
 
     public Deck getPile() {
@@ -95,19 +98,19 @@ public class Board {
         return characters.get(index);
     }
 
-    public void release() {
-        characters.forEach(Character::resetRole);
-    }
-
     public void showPlay(Player p, int goldDraw) {
-        int showGold = (p.getGold() - goldDraw);
-        String signe = ANSI_RED + "";
-        if (showGold > 0)
-            signe = ANSI_GREEN + "+";
-        String res = ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().getName() + ANSI_RESET + ") " +
-                " possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET + "(" + signe + showGold + ANSI_RESET + ") pieces d'or" +
-                "\nIl possede " + p.getCardHand().size() + " cartes et " + p.getCity().size() + " batiments";
-        System.out.println(res + "\n");
+        if (!isNull(p.getRole()) && p.getRole().isMurdered())
+            System.out.println(ANSI_ITALIC + p.getName() + " has been killed. Turn is skipped.\n" + ANSI_RESET);
+        else {
+            int showGold = (p.getGold() - goldDraw);
+            String signe = ANSI_RED + "";
+            if (showGold > 0)
+                signe = ANSI_GREEN + "+";
+            String res = ANSI_CYAN + p.getName() + ANSI_RESET + " (" + ANSI_ITALIC + p.getRole().getName() + ANSI_RESET + ") " +
+                    " possède " + ANSI_YELLOW + p.getGold() + ANSI_RESET + "(" + signe + showGold + ANSI_RESET + ") pieces d'or" +
+                    "\nIl possede " + p.getCardHand().size() + " cartes et " + p.getCity().size() + " batiments";
+            System.out.println(res + "\n");
+        }
     }
 
     void showRanking() {
@@ -210,7 +213,7 @@ public class Board {
 
     public void showManufactoryEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
-        res.append(" Il a defaussé 3 pieces d'or");
+        res.append(p.getName()).append(" a defaussé 3 pieces d'or");
         if (!cards.isEmpty()) {
             res.append(" et a pioché ");
             for (Building b : cards) {

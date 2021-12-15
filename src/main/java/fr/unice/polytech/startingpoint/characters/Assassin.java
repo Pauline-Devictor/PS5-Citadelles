@@ -36,22 +36,26 @@ public class Assassin extends Character {
      */
     public Character chooseVictim(Board board, Player player) {
         if (player.getCardHand().size() > 4)
-            return new Magician();
+            return board.getCharactersInfos(2);
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > 5) {
-                District colour = p.getMajority();
-                switch (colour) {
+                District color = p.getMajority();
+                switch (color) {
                     case Commercial -> {
-                        return new Merchant();
+                        return board.getCharactersInfos(4);
+                        //return new Merchant();
                     }
                     case Noble -> {
-                        return new King();
+                        return board.getCharactersInfos(3);
+                        //return new King();
                     }
                     case Military -> {
-                        return new Condottiere();
+                        return board.getCharactersInfos(7);
+                        //return new Condottiere();
                     }
                     case Religion -> {
-                        return new Bishop();
+                        return board.getCharactersInfos(5);
+                        //return new Bishop();
                     }
                 }
             }
