@@ -46,9 +46,10 @@ public class Magician extends Character {
      */
     public void swapHandDeck(Player magician) {
         int n = magician.getCardHand().size();
+        magician.drawAndChoose(n, n);
         for (int i = 0; i < n; i++)
             magician.discardCard();
-        magician.drawAndChoose(n, n);
+
     }
 
     /**
@@ -98,6 +99,7 @@ public class Magician extends Character {
             cityList.removeIf(c -> c.equals(player) || c.getCity().size() <= 5);
             if (!cityList.isEmpty())
                 return Optional.ofNullable(cityList.get(cityList.size() - 1));
+            return Optional.empty();
         }
 
         TreeMap<Integer, Player> handMap = new TreeMap<>();
@@ -112,6 +114,8 @@ public class Magician extends Character {
                 .collect(Collectors.toList());
 
         handList.removeIf(c -> c.equals(player));
+        if (!handList.isEmpty())
         return Optional.ofNullable(handList.get(handList.size() - 1));
+        else return Optional.empty();
     }
 }
