@@ -60,7 +60,7 @@ public class Condottiere extends Character {
                 .collect(Collectors.toList());
 
         //Verification que le personnage est un role qui ne soit pas Eveque, ou que ce ne soit pas le condottiere
-        cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class);
+        cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class || c.getCity().size()>=8);
         return cityList.isEmpty() ? null : cityList.get(cityList.size() - 1);
     }
 

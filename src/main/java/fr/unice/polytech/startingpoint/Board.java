@@ -97,7 +97,7 @@ public class Board {
 
     public Character getCharactersInfos(int index) {
         return characters.get(index);
-    }
+    } //TODO Find a better way
 
     public void showPlay(Player p, int goldDraw) {
         String res = printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);

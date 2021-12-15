@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class TestCharacter {
@@ -24,8 +25,9 @@ public class TestCharacter {
     Player bishop;
     Player condo;
     Player merchant;
+    Player magician;
     Character archiCharacter;
-    Character assasinCharacter;
+    Assassin assassinCharacter;
     Character thiefCharacter;
     Character condottiereCharacter;
     Magician magicianCharacter;
@@ -41,8 +43,9 @@ public class TestCharacter {
         condo = spy(new Player(board));
         bishop = spy(new Player(board));
         merchant = spy(new Player(board));
+        magician = spy(new Player(board));
         archiCharacter = spy(Architect.class);
-        assasinCharacter = spy(Assassin.class);
+        assassinCharacter = spy(Assassin.class);
         thiefCharacter = spy(Thief.class);
         magicianCharacter = spy(Magician.class);
         condottiereCharacter = spy(Condottiere.class);
@@ -63,21 +66,35 @@ public class TestCharacter {
 
     @Test
     void killSomeone() {
-        when(player.getRole()).thenReturn(assasinCharacter);
+        when(player.getRole()).thenReturn(assassinCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
-        assasinCharacter.usePower(board);
+        assassinCharacter.usePower(board);
         int killed = (int) board.getCharacters().stream().filter(Character::isMurdered).count();
         assertEquals(1, killed);
     }
 
     @Test
-    void assasinChooseVictimColor() {
-
+    void assassinChooseVictimColor() {
+        when(player.getCity()).thenReturn(List.of(new Building(BuildingEnum.Manoir),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Port),
+                new Building(BuildingEnum.Port),
+                new Building(BuildingEnum.Port),
+                new Building(BuildingEnum.Chateau)));
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(board.getPlayers()).thenReturn(List.of(player));
+        when(player.getMajority()).thenReturn(District.Commercial);
+        assassinCharacter.usePower(board);
+        assertTrue(board.getCharactersInfos(4).isMurdered());
     }
 
     @Test
-    void assasinChooseVictimMagician() {
-
+    void assassinChooseVictimMagician() {
+        player.drawAndChoose(4,4);
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(board.getPlayers()).thenReturn(List.of(player));
+        assassinCharacter.usePower(board);
+        assertTrue(board.getCharactersInfos(2).isMurdered());
     }
 
 
@@ -177,8 +194,8 @@ public class TestCharacter {
 
     @Test
     void destroyAlone() {
-        bishop.takeMoney(10);
-        player.takeMoney(10); // Take money to be able to destroy a build with his power
+        bishop.takeMoney(5);
+        player.takeMoney(5); // Take money to be able to destroy a build with his power
         bishop.pickRole(4);
         player.pickRole(7);
         bishop.build(new Building(BuildingEnum.Manufacture));
@@ -201,8 +218,13 @@ public class TestCharacter {
     }
 
     @Test
-    void magicienChooseNoOne() {
-
+    void swapHand() {
+        player.drawAndChoose(4,4);
+        player.pickRole(3);
+        when(player.getRole()).thenReturn(magicianCharacter);
+        when(board.getPlayers()).thenReturn(List.of(player));
+        magicianCharacter.usePower(board);
+        assertTrue(player.getCardHand().size() == 1 );
     }
 
     @Test
@@ -241,7 +263,7 @@ public class TestCharacter {
         merchant.pickRole(5);
         when(board.getPlayers()).thenReturn(List.of(merchant));
         merchantCharacter.usePower(board);
-        assertEquals(14,merchant.getGold());
+        assertEquals(12,merchant.getGold());
     }
 
 }
