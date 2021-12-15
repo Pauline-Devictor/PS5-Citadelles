@@ -23,12 +23,14 @@ public class TestCharacter {
     Player archi;
     Player bishop;
     Player condo;
+    Player merchant;
     Character archiCharacter;
     Character assasinCharacter;
     Character thiefCharacter;
     Character condottiereCharacter;
     Magician magicianCharacter;
     Bishop bishopCharacter;
+    Character merchantCharacter;
 
     @BeforeEach
     void setUp() {
@@ -38,12 +40,14 @@ public class TestCharacter {
         archi = spy(new Player(board));
         condo = spy(new Player(board));
         bishop = spy(new Player(board));
+        merchant = spy(new Player(board));
         archiCharacter = spy(Architect.class);
         assasinCharacter = spy(Assassin.class);
         thiefCharacter = spy(Thief.class);
         magicianCharacter = spy(Magician.class);
         condottiereCharacter = spy(Condottiere.class);
         bishopCharacter = spy(Bishop.class);
+        merchantCharacter = spy(Merchant.class);
     }
 
     @Test
@@ -224,13 +228,20 @@ public class TestCharacter {
 
 
     @Test
-    void merchantGold() {
-
+    void merchantGold() { //Merchant get 1 gold when play
+        merchant.pickRole(5);
+        when(board.getPlayers()).thenReturn(List.of(merchant));
+        merchantCharacter.usePower(board);
+        assertEquals(3,merchant.getGold());
     }
 
     @Test
-    void merchantEmptyBank() {
-
+    void merchantEmptyBank() { //Merchant don't get more gold bc empty bank
+        merchant.takeMoney(board.getBank().getGold());
+        merchant.pickRole(5);
+        when(board.getPlayers()).thenReturn(List.of(merchant));
+        merchantCharacter.usePower(board);
+        assertEquals(14,merchant.getGold());
     }
 
 }
