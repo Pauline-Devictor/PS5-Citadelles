@@ -1,5 +1,7 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.characters;
 
+import fr.unice.polytech.startingpoint.Board;
+import fr.unice.polytech.startingpoint.Deck;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.District;
