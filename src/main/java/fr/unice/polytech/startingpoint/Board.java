@@ -59,7 +59,7 @@ public class Board {
     }
 
     public Board() {
-        this(4);
+        this(5);
     }
 
     public List<Player> generatePlayers(int nbPlayers) {
@@ -68,7 +68,8 @@ public class Board {
         players.add(new RushArchi(this));
         players.add(new HighScoreArchi(this));
         players.add(new HighScoreThief(this));
-        for (int i = 4; i < nbPlayers; i++)
+        players.add(new BalancedFirst(this));
+        for (int i = 5; i < nbPlayers; i++)
             players.add(new Player(this));
         return players;
     }

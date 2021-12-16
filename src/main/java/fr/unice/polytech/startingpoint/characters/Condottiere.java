@@ -2,6 +2,8 @@ package fr.unice.polytech.startingpoint.characters;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.Graveyard;
+import fr.unice.polytech.startingpoint.buildings.Laboratory;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
@@ -83,17 +85,19 @@ public class Condottiere extends Character {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.<Building>toList());
 
-        Building build;
-        if (condo.getGold() > 10)
-            build = costList.get(costList.size() - 1);
-        else
-            build = costList.get(0);
-        this.build = build;
-        if (condo.getGold() >= build.getCost()) {
-            board.getPile().putCard(build);
-            target.getCity().remove(build);
-            condo.refundGold(build.getCost() - 1);
-            this.target = target;
+        costList.removeIf(c -> c instanceof Graveyard);
+
+        if(!costList.isEmpty()) {
+            if (condo.getGold() > 10)
+                this.build = costList.get(costList.size() - 1);
+            else
+                this.build = costList.get(0);
+            if (condo.getGold() >= build.getCost()) {
+                board.getPile().putCard(build);
+                target.getCity().remove(build);
+                condo.refundGold(build.getCost() - 1);
+                this.target = target;
+            }
         }
     }
 

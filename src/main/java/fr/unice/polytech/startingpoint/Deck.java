@@ -15,7 +15,7 @@ public class Deck {
         buildings.add(new Laboratory());
         buildings.add(new Manufactory());
         buildings.add(new Observatory());
-        buildings.add(new Building(BuildingEnum.Cimetiere));
+        buildings.add(new Building(BuildingEnum.Graveyard));
         buildings.add(new Library());
         buildings.add(new MagicSchool());
         buildings.add(new Building(BuildingEnum.Universite));

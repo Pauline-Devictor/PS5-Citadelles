@@ -12,7 +12,7 @@ import static java.util.Objects.isNull;
 
 public class BalancedFirst extends Player{
 
-    public BalancedFirst(Board b){super(b, "BalancedFisrt");}
+    public BalancedFirst(Board b){super(b, "BalancedFirst");}
 
     @Override
     public void chooseRole() {
