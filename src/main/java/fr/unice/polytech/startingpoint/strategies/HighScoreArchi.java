@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class HighScoreArchi extends Player {
+    private final int costMax = 6;
+    private final int costMin = 3;
 
     public HighScoreArchi(Board b) {
         super(b, "HautScoreArchitect");
@@ -66,8 +68,6 @@ public class HighScoreArchi extends Player {
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
-        int costMax = 6;
-        int costMin = 3;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))
@@ -77,13 +77,16 @@ public class HighScoreArchi extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Commercial && b2.getDistrict() == District.Commercial) return b2.getCost() - b1.getCost();
             if (b1.getDistrict() == District.Commercial) return -1;
             if (b2.getDistrict() == District.Commercial) return 1;
+            if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble) return (b2.getCost() - b1.getCost());
             if (b1.getDistrict() == District.Noble) return -1;
             if (b2.getDistrict() == District.Noble) return 1;
+            if (b1.getDistrict() == District.Religion && b2.getDistrict() == District.Religion) return b2.getCost() - b1.getCost();
             if (b1.getDistrict() == District.Religion) return -1;
             if (b2.getDistrict() == District.Religion) return 1;
         }
-        return (b1.getCost() < b2.getCost()) ? 1 : -1;
+        return (b2.getCost() - b1.getCost());
     }
 }

@@ -66,9 +66,10 @@ public class HighScoreThief extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble) return (b2.getCost() - b1.getCost());
             if (b1.getDistrict() == District.Noble) return -1;
             if (b2.getDistrict() == District.Noble) return 1;
         }
-        return (b1.getCost() < b2.getCost()) ? 1 : -1;
+        return (b2.getCost() - b1.getCost());
     }
 }

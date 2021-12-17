@@ -1,28 +1,32 @@
 package fr.unice.polytech.startingpoint;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.Library;
 import fr.unice.polytech.startingpoint.buildings.Observatory;
 import fr.unice.polytech.startingpoint.strategies.HighScoreArchi;
+import fr.unice.polytech.startingpoint.strategies.HighScoreThief;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TestHighScoreArchi {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+public class TestHighScoreThief {
+
     Board board;
-    HighScoreArchi bot;
+    HighScoreThief bot;
 
 
     @BeforeEach
     void setUp() {
         board = spy(new Board());
-        bot = spy(new HighScoreArchi(board));
+        bot = spy(new HighScoreThief(board));
         for(int i = 0; i < bot.getCardHand().size(); i++){
             bot.discardCard();
         }
@@ -38,18 +42,8 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void compare_same_cost_military_vs_bishop(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
-    }
-
-    @Test
     void compare_same_cost_military_vs_noble(){
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)) < 0);
-    }
-
-    @Test
-    void compare_same_cost_military_vs_commercial(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Comptoir)) > 0);
     }
 
     @Test
@@ -58,13 +52,8 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void compare_same_cost_bishop_vs_commercial(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Comptoir)) > 0);
-    }
-
-    @Test
     void compare_same_cost_noble_vs_commercial(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) > 0);
+        assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) < 0);
     }
 
     @Test
@@ -83,8 +72,12 @@ public class TestHighScoreArchi {
     }
 
     @Test
+    void compare_noble_to_noble(){
+        assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Palais)) > 0);
+    }
+
+    @Test
     void compare_cards_with_same_value(){
         assertEquals(0, bot.compare(new Building(BuildingEnum.Marche), new Building(BuildingEnum.Echoppe)));
     }
-
 }

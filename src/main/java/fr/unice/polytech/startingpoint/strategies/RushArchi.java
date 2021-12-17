@@ -56,9 +56,10 @@ public class RushArchi extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Religion && b2.getDistrict() == District.Religion) return (b1.getCost() - b2.getCost());
             if (b1.getDistrict() == District.Religion) return -1;
             if (b2.getDistrict() == District.Religion) return 1;
         }
-        return (b1.getCost() < b2.getCost()) ? -1 : 1;
+        return (b1.getCost() - b2.getCost());
     }
 }
