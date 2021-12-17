@@ -37,13 +37,13 @@ public class TestPlayer {
     @Test
     void buildGold() {
         p.build(eglise);
-        assertEquals(2, p.getGoldScore());
+        assertEquals(2, p.getScore());
     }
 
     @Test
     void buildScore() {
         p.build(eglise);
-        assertEquals(2, p.getGoldScore());
+        assertEquals(2, p.getScore());
     }
 
     @Test

@@ -11,7 +11,7 @@ public class Deck {
 
     Deck() {
         buildings = new ArrayList<>();
-        buildings.add(new MiracleCourtyard(BuildingEnum.CourDesMiracles));
+        buildings.add(new MiracleCourtyard());
         buildings.add(new Laboratory());
         buildings.add(new Manufactory());
         buildings.add(new Observatory());

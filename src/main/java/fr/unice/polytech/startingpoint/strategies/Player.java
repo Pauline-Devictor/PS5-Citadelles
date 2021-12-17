@@ -12,7 +12,7 @@ import static java.util.Objects.isNull;
 public class Player implements Comparator<Building> {
     protected String name;
     protected int gold;
-    protected int goldScore;
+    protected int score;
     protected final Board board;
     protected Character role;
     protected int nbBuildable = 1;
@@ -26,7 +26,7 @@ public class Player implements Comparator<Building> {
         cardHand = new ArrayList<>();
         city = new ArrayList<>();
         drawAndChoose(4, 4);
-        goldScore = 0;
+        score = 0;
         role = null;
     }
 
@@ -37,7 +37,7 @@ public class Player implements Comparator<Building> {
         cardHand = new ArrayList<>();
         city = new ArrayList<>();
         drawAndChoose(4, 4);
-        goldScore = 0;
+        score = 0;
         role = null;
     }
 
@@ -53,13 +53,13 @@ public class Player implements Comparator<Building> {
 
     public static Comparator<Player> PointsOrder = (e1, e2) -> {
         //Positive if e2 > e1
-        return e2.getGoldScore() - e1.getGoldScore();
+        return e2.getScore() - e1.getScore();
     };
 
     public void build(Building b) {
         if (isBuildable(b)) {
             refundGold(b.getCost());
-            goldScore += b.getCost();
+            score += b.getCost();
             cardHand.remove(b);
             city.add(b);
         }
@@ -229,28 +229,41 @@ public class Player implements Comparator<Building> {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(board.printName(this)).append(", ").append(board.printRole(this));
+        StringBuilder res = new StringBuilder(printName(this)).append(", ").append(board.printRole(this));
 
-        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or")
-                .append("\nBâtiments :").append("\tScore des Bâtiments : ")
-                .append(printFormat(String.valueOf(goldScore), ANSI_BLUE)).append("\n").append(printFormat("Batiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
-
-        for (Building b : cardHand) {
-            res.append("\n\t").append(b.toString()).append(" ");
-        }
+        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or et un score de ")
+                .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
+                .append(printFormat("Batiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
+        res.append(printBuildings(cardHand, true));
         res.append("\n").append(printFormat("Batiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
-        for (Building b : city) {
-            res.append("\n\t").append(b.toString()).append(" ");
-        }
+        res.append(printBuildings(city, true));
         return res.toString();
+    }
+
+    public boolean[] calculBonus() {
+        boolean districts = getCity().stream().map(Building::getDistrict).distinct().count() == 5;
+        boolean prestiges = getCity().stream().filter(e -> e.getDistrict() == District.Prestige).count() >= 2
+                && getCity().stream().anyMatch(e -> e.equals(new MiracleCourtyard()));
+        boolean cityDone = getCity().size() >= 8;
+        return new boolean[]{districts, prestiges, cityDone};
+    }
+
+    public void calculScore(boolean first) {
+        boolean[] var = calculBonus();
+        if (var[0] || var[1])
+            score += 3;
+        if (var[2])
+            score += 2;
+        if (first)
+            score += 2;
     }
 
     public int getGold() {
         return gold;
     }
 
-    public int getGoldScore() {
-        return goldScore;
+    public int getScore() {
+        return score;
     }
 
     public String getName() {

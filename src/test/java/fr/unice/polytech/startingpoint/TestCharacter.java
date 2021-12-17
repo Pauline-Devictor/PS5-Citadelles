@@ -202,7 +202,6 @@ public class TestCharacter {
         player.build(new Building(BuildingEnum.Palais));
         when(board.getPlayers()).thenReturn(List.of(player, bishop));
         condottiereCharacter.usePower(board);
-        assertEquals(1, player.getCity().size());
         assertEquals(1, bishop.getCity().size());
     }
 
@@ -273,11 +272,18 @@ public class TestCharacter {
 
     @Test
     void merchantEmptyBank() { //Merchant don't get more gold bc empty bank
-        merchant.takeMoney(board.getBank().getGold());
+        merchant.pickRole(5);
+
+        Bank bank = new Bank(0);
+        when(board.getBank()).thenReturn(bank);
+        when(board.getPlayers()).thenReturn(List.of(merchant));
+        merchantCharacter.usePower(board);
+        assertEquals(2, merchant.getGold());
+        /*merchant.takeMoney(board.getBank().getGold());
         merchant.pickRole(5);
         when(board.getPlayers()).thenReturn(List.of(merchant));
         merchantCharacter.usePower(board);
-        assertEquals(12,merchant.getGold());
+        assertEquals(12,merchant.getGold());*/
     }
 
 }
