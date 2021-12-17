@@ -11,11 +11,11 @@ public class Deck {
 
     Deck() {
         buildings = new ArrayList<>();
-        buildings.add(new MiracleCourtyard(BuildingEnum.CourDesMiracles));
+        buildings.add(new MiracleCourtyard());
         buildings.add(new Laboratory());
         buildings.add(new Manufactory());
         buildings.add(new Observatory());
-        buildings.add(new Building(BuildingEnum.Cimetiere));
+        buildings.add(new Graveyard());
         buildings.add(new Library());
         buildings.add(new MagicSchool());
         buildings.add(new Building(BuildingEnum.Universite));

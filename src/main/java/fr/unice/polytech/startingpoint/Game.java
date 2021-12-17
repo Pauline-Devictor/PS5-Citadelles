@@ -26,9 +26,15 @@ public class Game {
     }
 
     void showEndOfGame() {
-        System.out.println(ANSI_BLUE_BACKGROUND + ANSI_BLACK + "Le classement de fin de partie est le suivant :" + ANSI_RESET);
+        System.out.println(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
+                + "\n\n" +
+                printFormat("La partie est fini, calcul des bonus :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
+        showBonus();
+        System.out.println(printFormat("Le classement de fin de partie est le suivant :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
         board.showRanking();
-        System.out.println(ANSI_ITALIC + ANSI_YELLOW + "Pour plus de details sur la fin de partie :" + ANSI_RESET);
+        System.out.println("\n" + printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
+                + "\n"
+                + printFormat("Pour plus de details sur la fin de partie :", ANSI_YELLOW, ANSI_ITALIC));
         board.showBoard();
     }
 
@@ -54,16 +60,23 @@ public class Game {
                 if (p.getRole().getClass().equals(King.class)) {
                     first = p;
                 }
-            }
-
-            board.release();
-            for (Player p : players) {
-                if (p.getCity().size() >= 8 || turn > 50) {
+                if (!endOfGame && p.getCity().size() >= 8)
+                    first = p;
+                if (p.getCity().size() >= 8 || turn >= 50) {
                     endOfGame = true;
-                    break;
                 }
             }
+            board.release();
         }
+        calculPoint();
+    }
+
+    void showBonus() {
+        players.forEach(e -> board.showBonus(e.equals(first), e));
+    }
+
+    private void calculPoint() {
+        players.forEach(e -> e.calculScore(e.equals(first)));
     }
 
     void getOrderPlayer() {

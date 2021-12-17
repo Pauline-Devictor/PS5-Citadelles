@@ -4,8 +4,8 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 public class MiracleCourtyard extends Prestige {
 
-    public MiracleCourtyard(BuildingEnum courDesMiracles) {
-        super(courDesMiracles);
+    public MiracleCourtyard() {
+        super(BuildingEnum.CourDesMiracles);
     }
 
     @Override

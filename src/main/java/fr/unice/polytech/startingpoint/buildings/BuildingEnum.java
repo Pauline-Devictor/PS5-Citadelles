@@ -23,7 +23,7 @@ public enum BuildingEnum {
     Laboratoire("Laboratoire", 5, District.Prestige),
     Manufacture("Manufacture", 5, District.Prestige),
     Observatoire("Observatoire", 5, District.Prestige),
-    Cimetiere("Cimetière", 5, District.Prestige),
+    Graveyard("Cimetière", 5, District.Prestige),
     Bibiliotheque("Bibliothèque", 6, District.Prestige),
     Universite("Université", 6, District.Prestige),
     Dracoport("Dracoport", 6, District.Prestige),
