@@ -1,5 +1,7 @@
 package fr.unice.polytech.startingpoint;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -7,21 +9,62 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.Library;
 import fr.unice.polytech.startingpoint.buildings.Observatory;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.HighScoreArchi;
+import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestHighScoreArchi {
     Board board;
     HighScoreArchi bot;
+    Assassin mockAssassin;
+    Thief mockThief;
+    Magician mockMagician;
+    King mockKing;
+    Bishop mockBishop;
+    Merchant mockMerchant;
+    Architect mockArchitect;
+    Condottiere mockCondottiere;
+
+
 
 
     @BeforeEach
     void setUp() {
         board = spy(new Board());
+
+        mockAssassin = spy(new Assassin());
+        when(mockAssassin.isAvailable()).thenReturn(true);
+        mockThief = spy(new Thief());
+        when(mockThief.isAvailable()).thenReturn(true);
+        mockMagician = spy(new Magician());
+        when(mockMagician.isAvailable()).thenReturn(true);
+        mockKing = spy(new King());
+        when(mockKing.isAvailable()).thenReturn(true);
+        mockBishop = spy(new Bishop());
+        when(mockBishop.isAvailable()).thenReturn(true);
+        mockMerchant = spy(new Merchant());
+        when(mockMerchant.isAvailable()).thenReturn(true);
+        mockArchitect = spy(new Architect());
+        when(mockArchitect.isAvailable()).thenReturn(true);
+        mockCondottiere = spy(new Condottiere());
+        when(mockCondottiere.isAvailable()).thenReturn(true);
+
+        when(board.getCharacters()).thenReturn(List.of(
+                mockAssassin,
+                mockThief,
+                mockMagician,
+                mockKing,
+                mockBishop,
+                mockMerchant,
+                mockArchitect,
+                mockCondottiere));
+
         bot = spy(new HighScoreArchi(board));
         for(int i = 0; i < bot.getCardHand().size(); i++){
             bot.discardCard();
@@ -35,6 +78,102 @@ public class TestHighScoreArchi {
                 )
         ));
 
+    }
+
+    @Test
+    void choose_role_everything_available_and_rich(){
+        when(bot.getGold()).thenReturn(11);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockArchitect);
+    }
+
+    @Test
+    void choose_role_everything_available_poor_religious(){
+        when(bot.getGold()).thenReturn(1);
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Monastere),
+                new Building(BuildingEnum.Palais),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Forteresse),
+                new Building(BuildingEnum.Comptoir)
+        ));
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockBishop);
+    }
+
+    @Test
+    void choose_role_everything_available_poor_noble(){
+        when(bot.getGold()).thenReturn(1);
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Manoir),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Cathedrale)
+        ));
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockKing);
+    }
+
+    @Test
+    void choose_role_everything_available_poor_opponent_close_to_finish(){
+        HighScoreArchi opponent = spy(new HighScoreArchi(board));
+        when(opponent.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Monastere)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(opponent));
+        when(bot.getGold()).thenReturn(1);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockCondottiere);
+    }
+
+    @Test
+    void choose_role_architect_unavailable_rich_merchant(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(bot.getGold()).thenReturn(11);
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Marche)
+        ));
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockMerchant);
+    }
+    @Test
+    void choose_role_default_magician(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(mockKing.isAvailable()).thenReturn(false);
+        when(mockBishop.isAvailable()).thenReturn(false);
+        when(mockCondottiere.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockMagician);
+    }
+
+    @Test
+    void choose_role_default_assassin(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(mockKing.isAvailable()).thenReturn(false);
+        when(mockBishop.isAvailable()).thenReturn(false);
+        when(mockCondottiere.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
+        when(mockMagician.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockAssassin);
+    }
+
+    @Test
+    void choose_role_default_thief(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(mockKing.isAvailable()).thenReturn(false);
+        when(mockBishop.isAvailable()).thenReturn(false);
+        when(mockCondottiere.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
+        when(mockMagician.isAvailable()).thenReturn(false);
+        when(mockAssassin.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockThief);
     }
 
     @Test

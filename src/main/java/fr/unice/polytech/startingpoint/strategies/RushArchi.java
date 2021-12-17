@@ -22,10 +22,6 @@ public class RushArchi extends Player {
         //prioritize architect
         taxList.add(CharacterEnum.Architect.getOrder() - 1);
 
-        //if has 6+ buildings, Bishop
-        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
-        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
-
         taxList.addAll(List.of(
                 CharacterEnum.Magician.getOrder() - 1,
                 CharacterEnum.King.getOrder() - 1,
@@ -34,6 +30,11 @@ public class RushArchi extends Player {
                 CharacterEnum.Assassin.getOrder() - 1,
                 CharacterEnum.Condottiere.getOrder() - 1
         ));
+
+        //if has 6+ buildings, Bishop
+        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
+        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
+
 
         for (int elem : taxList) {
             if (pickRole(elem)) {

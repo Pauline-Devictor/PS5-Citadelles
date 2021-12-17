@@ -98,7 +98,7 @@ public class Board {
     }
 
     public Character getCharactersInfos(int index) {
-        return characters.get(index);
+        return getCharacters().get(index);
     } //TODO Find a better way
 
     public void showPlay(Player p, int goldDraw) {
