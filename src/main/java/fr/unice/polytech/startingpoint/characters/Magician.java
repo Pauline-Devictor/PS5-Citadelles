@@ -46,7 +46,7 @@ public class Magician extends Character {
      */
     public void swapHandDeck(Player magician) {
         int n = magician.getCardHand().size();
-        magician.drawAndChoose(n, n);
+        magician.drawCards(n, n);
         for (int i = 0; i < n; i++)
             magician.discardCard();
 

@@ -302,4 +302,14 @@ public class Player implements Comparator<Building> {
     public void buildingArchitect() {
         nbBuildable = 3;
     }
+
+    public void drawCards(int nbCards, int nbChoose) {
+        List<Building> builds = new ArrayList<>();
+        Optional<Building> b1;
+        for (int i = 0; i < nbCards; i++) {
+            b1 = getBoard().getPile().drawACard();
+            b1.ifPresent(builds::add);
+        }
+        cardHand.addAll(builds);
+    }
 }
