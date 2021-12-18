@@ -1,12 +1,13 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.strategiesTest;
 
+import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.Library;
 import fr.unice.polytech.startingpoint.buildings.Observatory;
 import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.strategies.HighScoreThief;
 import fr.unice.polytech.startingpoint.strategies.RushArchi;
-import fr.unice.polytech.startingpoint.strategies.RushMerch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,12 +17,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class TestRushMerch {
+public class TestRushArchi {
+
     Board board;
-    RushMerch bot;
+    RushArchi bot;
     Assassin mockAssassin;
     Thief mockThief;
     Magician mockMagician;
@@ -63,7 +64,7 @@ public class TestRushMerch {
                 mockArchitect,
                 mockCondottiere));
 
-        bot = spy(new RushMerch(board));
+        bot = spy(new RushArchi(board));
         for (int i = 0; i < bot.getCardHand().size(); i++) {
             bot.discardCard();
         }
@@ -80,19 +81,11 @@ public class TestRushMerch {
     @Test
     void choose_role_everything_available(){
         bot.chooseRole();
-        assertEquals(bot.getRole(), mockMerchant);
-    }
-
-    @Test
-    void choose_role_default_architect(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
-        bot.chooseRole();
         assertEquals(bot.getRole(), mockArchitect);
     }
 
     @Test
     void choose_role_default_magician(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockMagician);
@@ -100,7 +93,6 @@ public class TestRushMerch {
 
     @Test
     void choose_role_default_king(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
         bot.chooseRole();
@@ -108,66 +100,87 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_thief(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
+    void choose_role_default_merchant(){
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockMerchant);
+    }
+
+    @Test
+    void choose_role_default_thief(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(mockMagician.isAvailable()).thenReturn(false);
+        when(mockKing.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockThief);
     }
 
     @Test
-    void choose_role_default_bishop(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
-        when(mockArchitect.isAvailable()).thenReturn(false);
-        when(mockMagician.isAvailable()).thenReturn(false);
-        when(mockKing.isAvailable()).thenReturn(false);
-        when(mockThief.isAvailable()).thenReturn(false);
-        bot.chooseRole();
-        assertEquals(bot.getRole(), mockBishop);
-    }
-
-    @Test
     void choose_role_default_assassin(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockThief.isAvailable()).thenReturn(false);
-        when(mockBishop.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockAssassin);
     }
 
     @Test
     void choose_role_default_condottiere(){
-        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockThief.isAvailable()).thenReturn(false);
-        when(mockBishop.isAvailable()).thenReturn(false);
         when(mockAssassin.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockCondottiere);
     }
 
+    @Test
+    void choose_role_default_bishop(){
+        when(mockArchitect.isAvailable()).thenReturn(false);
+        when(mockMagician.isAvailable()).thenReturn(false);
+        when(mockKing.isAvailable()).thenReturn(false);
+        when(mockMerchant.isAvailable()).thenReturn(false);
+        when(mockThief.isAvailable()).thenReturn(false);
+        when(mockAssassin.isAvailable()).thenReturn(false);
+        when(mockCondottiere.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockBishop);
+    }
 
+    @Test
+    void choose_role_defensive_bishop(){
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Monastere),
+                new Building(BuildingEnum.Palais),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Forteresse),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.Comptoir)
+        ));
+        bot.chooseRole();
+        assertEquals(bot.getRole(), mockBishop);
+    }
 
     @Test
     void compare_same_cost_military_vs_noble(){
-        assertEquals(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)),0);
+        assertEquals(0, bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)));
     }
 
     @Test
     void compare_same_cost_bishop_vs_noble(){
-        assertEquals(0, bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Manoir)));
+        assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Manoir)) < 0);
     }
 
     @Test
     void compare_same_cost_noble_vs_commercial(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) > 0);
+        assertEquals(0, bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)));
     }
 
     @Test

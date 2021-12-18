@@ -1,11 +1,11 @@
-package fr.unice.polytech.startingpoint.CharactersTest;
+package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.Deck;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 public class TestMagician {
     Board board;
@@ -68,10 +66,10 @@ public class TestMagician {
 
         magicianCharacter.swapHandDeck(player);
         List<Building> cards = List.of(
-                new Building(BuildingEnum.Caserne),
-                new Building(BuildingEnum.Laboratoire),
+                new Building(BuildingEnum.Palais),
                 new Building(BuildingEnum.Cathedrale),
-                new Building(BuildingEnum.Palais)
+                new Building(BuildingEnum.Laboratoire),
+                new Building(BuildingEnum.Caserne)
         );
         assertEquals(cards, player.getCardHand());
     }
@@ -79,24 +77,24 @@ public class TestMagician {
     @Test
     void magicienChooseTarget() {
         when(player.getRole()).thenReturn(magicianCharacter);
-        when(board.getPlayers()).thenReturn(List.of(player,magician));
-        assertTrue(magicianCharacter.chooseTarget(board,player).isPresent());
+        when(board.getPlayers()).thenReturn(List.of(player, magician));
+        assertTrue(magicianCharacter.chooseTarget(board, player).isPresent());
     }
 
     @Test
     void magicianNoTarget() {
         when(player.getRole()).thenReturn(magicianCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
-        assertTrue(magicianCharacter.chooseTarget(board,player).isEmpty());
+        assertTrue(magicianCharacter.chooseTarget(board, player).isEmpty());
     }
 
     @Test
     void swapHandPlayer() {
-        magician.drawAndChoose(2,2);
-        player.drawAndChoose(2,2);
+        magician.drawAndChoose(2, 2);
+        player.drawAndChoose(2, 2);
         List<Building> buildMage = magician.getCardHand();
         when(player.getRole()).thenReturn(magicianCharacter);
-        when(board.getPlayers()).thenReturn(List.of(player,magician));
+        when(board.getPlayers()).thenReturn(List.of(player, magician));
         magicianCharacter.usePower(board);
         assertSame(buildMage, player.getCardHand());
     }
@@ -104,10 +102,10 @@ public class TestMagician {
 
     @Test
     void swapEmptyHandPlayer() {
-        player.drawAndChoose(2,2);
+        player.drawAndChoose(2, 2);
         List<Building> buildMage = magician.getCardHand();
         when(player.getRole()).thenReturn(magicianCharacter);
-        when(board.getPlayers()).thenReturn(List.of(player,magician));
+        when(board.getPlayers()).thenReturn(List.of(player, magician));
         magicianCharacter.usePower(board);
         assertSame(buildMage, player.getCardHand());
     }

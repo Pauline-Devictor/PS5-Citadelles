@@ -1,4 +1,4 @@
-package fr.unice.polytech.startingpoint.CharactersTest;
+package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.characters.*;

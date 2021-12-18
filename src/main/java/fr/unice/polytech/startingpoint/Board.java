@@ -98,6 +98,10 @@ public class Board {
     }
 
     public Character getCharactersInfos(int index) {
+        if (index < 0)
+            index = 0;
+        else if (index > characters.size())
+            index = characters.size() - 1;
         return getCharacters().get(index);
     } //TODO Find a better way
 
@@ -114,8 +118,8 @@ public class Board {
                     " possède " + printFormat(String.valueOf(p.getGold()), ANSI_YELLOW, ANSI_BOLD) + "(" + signe + showGold + ANSI_RESET + ") pieces d'or"
                     + ", " + printFormat(String.valueOf(p.getCardHand().size()), ANSI_CYAN, ANSI_BOLD)
                     + " cartes et " + printFormat(String.valueOf(p.getCity().size()), ANSI_BOLD, ANSI_BLUE) + " batiments\n";
-            res += printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
         }
+        res += printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
         System.out.println(res + "\n\n");
     }
 
@@ -286,7 +290,7 @@ public class Board {
         else if (vars[2])
             res += printName(p) + "a construit 8 bâtiments ou plus, il gagne " + printFormat(2 + " points bonus", ANSI_CYAN) + "\n";
         if (vars[0])
-            res += printName(p) + "a construit un quartier de chaque District, il gagne " + printFormat(3 + " points bonus", ANSI_CYAN) + "\n";
+            res += printName(p) + "a construit un quartier de chaque District, il gagne " + printFormat(3 + " points bonus", ANSI_BLUE) + "\n";
         else if (vars[1])
             res += printName(p) + "a construit un quartier de quatre Quartiers et la Cours des Miracles, il gagne " + printFormat(3 + " points bonus", ANSI_PURPLE) + "\n";
         System.out.print(res);

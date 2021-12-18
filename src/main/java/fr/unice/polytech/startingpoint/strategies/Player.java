@@ -88,13 +88,13 @@ public class Player implements Comparator<Building> {
             buildDecision();
             //show the move in the console
         }
-            board.showPlay(this, goldDraw);
+        board.showPlay(this, goldDraw);
     }
 
-    private boolean drawOrGold() {
-        boolean emptyDeck = board.getPile().isEmpty();
-        boolean anythingBuildable = cardHand.stream().anyMatch(this::isBuildable);
-        boolean emptyBank = board.getBank().isEmpty();
+    public boolean drawOrGold() {
+        boolean emptyDeck = getBoard().getPile().isEmpty();
+        boolean anythingBuildable = getCardHand().stream().anyMatch(this::isBuildable);
+        boolean emptyBank = getBoard().getBank().isEmpty();
         boolean isDraw = (!emptyDeck && !anythingBuildable) || emptyBank;
         board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, this);
         return isDraw;
@@ -108,11 +108,11 @@ public class Player implements Comparator<Building> {
         });
     }
 
-    public void roleEffects() {
+    private void roleEffects() {
         getRole().usePower(board);
     }
 
-    void checkStolen() {
+    private void checkStolen() {
         if (role.isStolen()) {
             int save = gold;
             refundGold(gold);
@@ -120,7 +120,7 @@ public class Player implements Comparator<Building> {
         }
     }
 
-    public void buildDecision() {
+    private void buildDecision() {
         List<Building> checkBuilding = new ArrayList<>(getCardHand());
         checkBuilding.sort(this);
 
@@ -194,7 +194,9 @@ public class Player implements Comparator<Building> {
     }
 
     public void refundGold(int amount) {
-        gold -= board.getBank().refundGold(amount);
+        gold -= board.getBank().refundGold(
+                Math.min(amount, getGold())
+        );
     }
 
     public void takeMoney(int amount) {
@@ -224,7 +226,11 @@ public class Player implements Comparator<Building> {
     @Override
     public int compare(Building b1, Building b2) {
         //Positive if o2>o1
-        return 0;
+        if (getCardHand().containsAll(List.of(b1, b2)) || getCity().containsAll(List.of(b1, b2)))
+            return 0;
+        if (getCardHand().contains(b1) || getCity().contains(b1))
+            return 1;
+        return -1;
     }
 
     @Override
@@ -233,9 +239,9 @@ public class Player implements Comparator<Building> {
 
         res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or et un score de ")
                 .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
-                .append(printFormat("Batiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
+                .append(printFormat("Bâtiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
         res.append(printBuildings(cardHand, true));
-        res.append("\n").append(printFormat("Batiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
+        res.append("\n").append(printFormat("Bâtiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
         res.append(printBuildings(city, true));
         return res.toString();
     }
@@ -303,13 +309,4 @@ public class Player implements Comparator<Building> {
         nbBuildable = 3;
     }
 
-    public void drawCards(int nbCards, int nbChoose) {
-        List<Building> builds = new ArrayList<>();
-        Optional<Building> b1;
-        for (int i = 0; i < nbCards; i++) {
-            b1 = getBoard().getPile().drawACard();
-            b1.ifPresent(builds::add);
-        }
-        cardHand.addAll(builds);
-    }
 }

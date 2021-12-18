@@ -4,7 +4,7 @@ public class Bank {
     private final int bankLimit;
     private int currentAmount;
 
-    Bank(int bankLimit) {
+    public Bank(int bankLimit) {
         this.bankLimit = bankLimit;
         currentAmount = bankLimit;
     }
@@ -21,7 +21,7 @@ public class Bank {
     }
 
     public int refundGold(int gold) {
-        gold = Math.abs(gold);
+        gold = Math.max(gold, 0);
         if (currentAmount + gold > bankLimit) {
             throw new IllegalArgumentException("The bank is richer than it should be.");
         }

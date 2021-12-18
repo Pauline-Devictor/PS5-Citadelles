@@ -25,11 +25,11 @@ public class Game {
         return players;
     }
 
-    void showEndOfGame() {
+    void endOfGame() {
         System.out.println(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
                 + "\n\n" +
                 printFormat("La partie est fini, calcul des bonus :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
-        showBonus();
+        players.forEach(e -> board.showBonus(e.equals(first), e));
         System.out.println(printFormat("Le classement de fin de partie est le suivant :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
         board.showRanking();
         System.out.println("\n" + printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
@@ -40,7 +40,7 @@ public class Game {
 
     void run() {
         newGame();
-        showEndOfGame();
+        endOfGame();
     }
 
     void newGame() {
@@ -68,14 +68,6 @@ public class Game {
             }
             board.release();
         }
-        calculPoint();
-    }
-
-    void showBonus() {
-        players.forEach(e -> board.showBonus(e.equals(first), e));
-    }
-
-    private void calculPoint() {
         players.forEach(e -> e.calculScore(e.equals(first)));
     }
 
@@ -89,5 +81,9 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public List<Player> getOrderPlayers() {
+        return orderPlayers;
     }
 }
