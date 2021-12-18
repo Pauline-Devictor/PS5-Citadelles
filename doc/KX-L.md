@@ -56,9 +56,10 @@ Théo a majoritairement travaillé sur les bâtiments, de leur ajout dans la pio
 
 
 
-## Utilisation de Git et GitHub
+## L'équipe
 
 Le projet a nécessité l'usage de Git et Github. Afin de facilité notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâches. Les différentes labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits. 
+Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problèmes de communication. 
 
 ## Etat actuel du projet
 
@@ -70,7 +71,9 @@ Lors de leur tour de jeu, il est vérifié si le joueur n'a pas été tué par l
 ### Ce qui reste à faire
 Le jeu est presque complet, mais certaines fonctionnalités sont manquantes : 
 - Système de pioche avec des cartes face visible et d'autres face cachée en fonction du nombre de joueurs dans la partie
-- Gestion des fins de parties par les joueurs, notamment les bonus de points
+- Implémentation du cimetière 
+- Stratégies plus développées
+Ce dernier point est à notre sens le plus important, nous aurions aimé faire plus de stratégies prenant en compte plus de rôles et de pouvoirs différents.
 
 ## Base de Code et Changements Nécessaires
 
