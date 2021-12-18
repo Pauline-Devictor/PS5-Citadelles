@@ -58,6 +58,8 @@ Théo a majoritairement travaillé sur les bâtiments, de leur ajout dans la pio
 
 ## Utilisation de Git et GitHub
 
+Le projet a nécessité l'usage de Git et Github. Afin de facilité notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâches. Les différentes labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits. 
+
 ## Etat actuel du projet
 
 ## Base de Code et Changements Nécessaires
