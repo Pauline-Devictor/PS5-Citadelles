@@ -67,7 +67,6 @@ Pour l'avancée du projet, nous avons developpé une bonne communication et util
 ## Etat actuel du projet
 
 ### Ce qui est fait
-### Ce qui est fait
 
 ##### Fonctionnement général
 Le projet possède actuellement une version presque complète du jeu Citadelles, durant une partie, 4 bots s'affrontent avec des stratégies différentes prédéfinies : RushMerch, RushArchi, HighScoreArchi et HighScoreThief.
