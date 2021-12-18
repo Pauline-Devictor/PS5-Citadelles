@@ -78,9 +78,11 @@ public class Board {
     public List<Player> generatePlayers(int nbPlayers) {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
-        players.add(new RushArchi(this));
+        //players.add(new RushArchi(this));
         players.add(new HighScoreArchi(this));
-        players.add(new HighScoreThief(this));
+        //players.add(new HighScoreThief(this));
+        players.add(new HighThiefManufactory(this));
+        players.add(new RushArchiLab(this));
         //players.add(new BalancedFirst(this));
         //players.add(new Player(this));
         for (int i = 4; i < nbPlayers; i++)

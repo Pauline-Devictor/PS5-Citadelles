@@ -23,6 +23,10 @@ public class RushArchi extends Player {
         super(b, "RushArchitect");
     }
 
+    public RushArchi(Board b, String name) {
+        super(b, name);
+    }
+
     /**
      * Prioritize the Architect, or the Bishop for a big city else Anything
      */

@@ -32,9 +32,6 @@ public class TestHighScoreArchi {
     Architect mockArchitect;
     Condottiere mockCondottiere;
 
-
-
-
     @BeforeEach
     void setUp() {
         board = spy(new Board());

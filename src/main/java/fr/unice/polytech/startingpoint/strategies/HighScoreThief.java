@@ -14,8 +14,8 @@ import static java.util.Objects.isNull;
  * The type High score thief.
  */
 public class HighScoreThief extends Player {
-    private final int costMax = 6;
-    private final int costMin = 3;
+    protected final int costMax = 6;
+    protected final int costMin = 3;
 
     /**
      * Instantiates a new High score thief.
@@ -24,6 +24,10 @@ public class HighScoreThief extends Player {
      */
     public HighScoreThief(Board b) {
         super(b, "HautScoreVoleur");
+    }
+
+    public HighScoreThief(Board b, String name) {
+        super(b, name);
     }
 
     /**
