@@ -98,6 +98,12 @@ Un certain nombre d'assesseurs sur des listes renvoient la liste, et non pas des
 ##### -Responsabilité de la classe Player
 La classe _Player_ qui définit les interactions avec le joueur, et ses stratégies a tendance à se diriger vers une classe-dieu avec trop de méthodes, et de responsabilités. Cela devrait être limité en déléguant des responsabilités à d'autres Classes, voir en créant de nouvelles classes pour prendre en charge ces responsabilitées
 
+
+### Liens utiles
+
+Nous avons utilisé les regles suivantes pour developper notre version de citadelles,ainsi que les regles et la Foire Aux Questions, dans le dossier [doc][docRegles] :
+http://jeuxstrategie.free.fr/Citadelles_complet.php
+
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [packStrat]: <https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/tree/master/src/main/java/fr/unice/polytech/startingpoint/strategies>
@@ -112,4 +118,4 @@ La classe _Player_ qui définit les interactions avec le joueur, et ses stratég
    [issuePrestigeA]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/16>
    [issueTours]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/18>
    [issuePoints]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/24>
-   
+   [docRegles]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/tree/master/doc>
