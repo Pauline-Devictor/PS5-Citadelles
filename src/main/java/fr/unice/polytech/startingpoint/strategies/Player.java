@@ -9,6 +9,10 @@ import java.util.*;
 import static fr.unice.polytech.startingpoint.Board.*;
 import static java.util.Objects.isNull;
 
+/**
+ * Class that represents a single player of the game with its golds, city, hand, role and score.
+ * All decisions made by a player is either done by this class or one of its subclasses.
+ */
 public class Player implements Comparator<Building> {
     protected String name;
     protected int gold;
@@ -19,6 +23,11 @@ public class Player implements Comparator<Building> {
     protected List<Building> cardHand;
     protected final List<Building> city;
 
+    /**
+     * @param b board linked to the player
+     * @param name player's name
+     * Creates a player linked to a board with a name
+     */
     public Player(Board b, String name) {
         this.name = name;
         board = b;
@@ -30,6 +39,10 @@ public class Player implements Comparator<Building> {
         role = null;
     }
 
+    /**
+     * @param b board linked to the player
+     * Creates a player linked to a board with undefined name
+     */
     public Player(Board b) {
         this.name = "undefined";
         board = b;
@@ -69,6 +82,9 @@ public class Player implements Comparator<Building> {
         return gold >= b.getCost() && !city.contains(b);
     }
 
+    /**
+     * Make the player play a single turn
+     */
     public void play() {
         int goldDraw = getGold();
         if (!getRole().isMurdered()) {
@@ -91,6 +107,9 @@ public class Player implements Comparator<Building> {
         board.showPlay(this, goldDraw);
     }
 
+    /**
+     * @return boolean, true is the player should draw, false if the player should get golds
+     */
     public boolean drawOrGold() {
         boolean emptyDeck = getBoard().getPile().isEmpty();
         boolean anythingBuildable = getCardHand().stream().anyMatch(this::isBuildable);
@@ -100,6 +119,9 @@ public class Player implements Comparator<Building> {
         return isDraw;
     }
 
+    /**
+     * plays Prestige city effects each turn
+     */
     public void cityEffects() {
         getCity().forEach(e -> {
             if (e instanceof Laboratory || e instanceof Manufactory) {
@@ -109,6 +131,9 @@ public class Player implements Comparator<Building> {
 
     }
 
+    /**
+     * plays Prestige city effects that apply at the end of the game
+     */
     public void cityEffectsEnd() {
         getCity().forEach(e -> {
             if (e instanceof Dracoport || e instanceof University) {
@@ -117,10 +142,17 @@ public class Player implements Comparator<Building> {
         });
     }
 
+    /**
+     * Uses player's current role power
+     */
     private void roleEffects() {
         getRole().usePower(board);
     }
 
+
+    /**
+     * Activates Thief's power if the current player has been targeted
+     */
     private void checkStolen() {
         if (role.isStolen()) {
             int save = gold;
@@ -129,6 +161,9 @@ public class Player implements Comparator<Building> {
         }
     }
 
+    /**
+     * make the player build as many buildings as possible
+     */
     private void buildDecision() {
         List<Building> checkBuilding = new ArrayList<>(getCardHand());
         checkBuilding.sort(this);
@@ -145,6 +180,9 @@ public class Player implements Comparator<Building> {
         board.showBuilds(checkBuilding, toBuild, this);
     }
 
+    /**
+     * Applies Prestige effects linked to drawing
+     */
     public void drawDecision() {
         if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
             drawAndChoose(3, 2);
@@ -157,6 +195,11 @@ public class Player implements Comparator<Building> {
         }
     }
 
+    /**
+     * @param nbCards number of cards to choose from
+     * @param nbChoose number of cards to pick
+     * @return List of chosen cards
+     */
     public List<Building> drawAndChoose(int nbCards, int nbChoose) {
         List<Building> builds = new ArrayList<>();
         Optional<Building> b1;
@@ -167,6 +210,12 @@ public class Player implements Comparator<Building> {
         return chooseBuilding(builds, nbChoose);
     }
 
+    /**
+     * @param builds list of buildings drawn
+     * @param nbBuilds numbers of buildings to choose
+     * @return List of chosen cards
+     * make the player choose which cards to pick whenever he draws
+     */
     public List<Building> chooseBuilding(List<Building> builds, int nbBuilds) {
         nbBuilds = (Math.max(nbBuilds, 0));
         builds.sort(this);
@@ -183,6 +232,9 @@ public class Player implements Comparator<Building> {
         return drawn;
     }
 
+    /**
+     * make the player choose an available role
+     */
     public void chooseRole() {
         int index;
         Random r = new Random();
@@ -192,6 +244,10 @@ public class Player implements Comparator<Building> {
         pickRole(index);
     }
 
+    /**
+     * @return true if a card has been discarded, else false
+     * discards first card of the hand
+     */
     public Building discardCard() {
         if (getCardHand().size() > 0) {
             Building b = cardHand.get(0);
@@ -202,16 +258,28 @@ public class Player implements Comparator<Building> {
         return null;
     }
 
+    /**
+     * @param amount amount to give back
+     * give back golds to bank
+     */
     public void refundGold(int amount) {
         gold -= board.getBank().refundGold(
                 Math.min(amount, getGold())
         );
     }
 
+    /**
+     * @param amount amount of golds to borrow
+     * gets golds from bank
+     */
     public void takeMoney(int amount) {
         gold += board.getBank().withdrawGold(amount);
     }
 
+    /**
+     * @return the district that has the most building
+     * of its kind in current player's city
+     */
     public District getMajority() {
         HashMap<District, Integer> majority = new HashMap<>();
         for (District d : District.values()) {
@@ -223,6 +291,10 @@ public class Player implements Comparator<Building> {
         return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
+    /**
+     * @param index index of the given role (listed by turn order from 0)
+     * @return true if the given role was available, else false
+     */
     public boolean pickRole(int index) {
         boolean b = board.getCharactersInfos(index).isAvailable();
         if (b) {
