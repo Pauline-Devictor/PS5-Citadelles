@@ -66,9 +66,13 @@ Pour l'avancée du projet, nous avons developpé une bonne communication et util
 ## Etat actuel du projet
 
 ### Ce qui est fait
+
+##### Fonctionnement général
 Le projet possède actuellement une version presque complète du jeu Citadelles, durant une partie, 4 bots s'affrontent avec des stratégies différentes prédéfinies : RushMerch, RushArchi, HighScoreArchi et HighScoreThief.
 A chaque tour, les joueurs peuvent choisir un rôle, l'ordre de sélection se base sur le joueur ayant la couronne, puis ceux qui le suivent dans la liste choississent à leur tour (dans la méthode _newGame_ de la classe _Game_).
+##### Un tour de jeu
 Lors de leur tour de jeu, il est vérifié si le joueur n'a pas été tué par l'assassin, dans ce cas là son tour est passé, puis s'il n'a pas été volé par le voleur, dans quel cas son argent est transféré au voleur. Ensuite le joueur peut jouer : il choisit entre piocher une carte ou prendre 2 golds. Le joueur choisit de prendre une carte s'il n'a rien à construire ou si la banque est vide puis les effets de ses bâtiments s'activent. Enfin, le joueur peut construire des bâtiments s'il le souhaite. A la fin d'un tour _showPlay_ affiche tous les choix qui ont eu lieu. 
+##### Roles
 Pour les rôles : tous les pouvoirs ont été implementés et s'utilisent grâce à la méthode _usePower_. Si le pouvoir demande de cibler un joueur, _usePower_ appelera les méthodes _chooseTarget_, ou _chooseVictim_ dans le cas de l'assassin.
  
 ### Ce qui reste à faire
