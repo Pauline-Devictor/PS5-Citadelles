@@ -89,6 +89,12 @@ public class Condottiere extends Character {
         }
     }
 
+    /**
+     * Prints the power effect
+     *
+     * @param p the Merchant's player
+     */
+
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
