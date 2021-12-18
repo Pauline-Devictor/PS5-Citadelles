@@ -106,6 +106,15 @@ public class Player implements Comparator<Building> {
                 ((Prestige) e).useEffect(this);
             }
         });
+
+    }
+
+    public void cityEffectsEnd() {
+        getCity().forEach(e -> {
+            if (e instanceof Dracoport || e instanceof University) {
+                ((Prestige) e).useEffect(this);
+            }
+        });
     }
 
     private void roleEffects() {
@@ -262,6 +271,7 @@ public class Player implements Comparator<Building> {
             score += 2;
         if (first)
             score += 2;
+        cityEffectsEnd();
     }
 
     public int getGold() {
@@ -309,4 +319,7 @@ public class Player implements Comparator<Building> {
         nbBuildable = 3;
     }
 
+    public void bonusPoints(int i) {
+        score += i;
+    }
 }

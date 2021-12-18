@@ -14,6 +14,5 @@ public class Graveyard extends Prestige{
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showMagicSchoolEffect(p);
     }
 }

@@ -18,14 +18,14 @@ public class Deck {
         buildings.add(new Graveyard());
         buildings.add(new Library());
         buildings.add(new MagicSchool());
-        buildings.add(new Building(BuildingEnum.Universite));
-        buildings.add(new Building(BuildingEnum.Dracoport));
+        buildings.add(new University());
+        buildings.add(new Dracoport());
         for (int i = 0; i < 2; i++) {
             buildings.add(new Building(BuildingEnum.Cathedrale));
             buildings.add(new Building(BuildingEnum.Palais));
             buildings.add(new Building(BuildingEnum.HotelDeVille));
             buildings.add(new Building(BuildingEnum.Forteresse));
-            buildings.add(new Building(BuildingEnum.Donjon));
+            buildings.add(new Donjon());
         }
         for (int i = 0; i < 3; i++) {
             buildings.add(new Building(BuildingEnum.Temple));

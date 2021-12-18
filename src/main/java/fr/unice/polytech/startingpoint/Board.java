@@ -1,9 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.District;
-import fr.unice.polytech.startingpoint.buildings.MiracleCourtyard;
-import fr.unice.polytech.startingpoint.buildings.Prestige;
+import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.*;
@@ -212,6 +209,10 @@ public class Board {
         System.out.println(printName(p) + "recupere une piece de plus des taxes");
     }
 
+    public void showDonjonEffect(Player p) {
+        System.out.println(printName(p) + "ne peut pas etre detruit par le condottiere");
+    }
+
     public void showManufactoryEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
         res.append(printName(p)).append("a defaussé 3 pieces d'or");
@@ -248,7 +249,6 @@ public class Board {
         }
         System.out.println(res);
     }
-
 
     public void showKingEffect(Player p) {
         String res = printName(p) + "commencera au prochain tour";
@@ -292,7 +292,7 @@ public class Board {
         if (vars[0])
             res += printName(p) + "a construit un quartier de chaque District, il gagne " + printFormat(3 + " points bonus", ANSI_BLUE) + "\n";
         else if (vars[1])
-            res += printName(p) + "a construit un quartier de quatre Quartiers et la Cours des Miracles, il gagne " + printFormat(3 + " points bonus", ANSI_PURPLE) + "\n";
+            res += printName(p) + "a construit un quartier de quatre Quartiers et la Cour des Miracles, il gagne " + printFormat(3 + " points bonus", ANSI_PURPLE) + "\n";
         System.out.print(res);
     }
 
@@ -339,5 +339,9 @@ public class Board {
         for (String f : format)
             res.append(f);
         return res + text + ANSI_RESET;
+    }
+
+    public void printPrestigePoint(Player p, Prestige prestige) {
+        System.out.println(printName(p) + " possede " + printFormat(prestige.getName(), ANSI_ITALIC, ANSI_PURPLE) + ", il gagne " + printFormat(2 + " points bonus", ANSI_CYAN) + "\n");
     }
 }

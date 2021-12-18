@@ -2,14 +2,12 @@ package fr.unice.polytech.startingpoint.characters;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.Donjon;
 import fr.unice.polytech.startingpoint.buildings.Graveyard;
 import fr.unice.polytech.startingpoint.buildings.Laboratory;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.unice.polytech.startingpoint.buildings.District.Military;
@@ -50,17 +48,7 @@ public class Condottiere extends Character {
      * @return the Condottiere's target
      */
     public Player chooseTarget(Board board, Player player) {
-        TreeMap<Integer, Player> cityMap = new TreeMap<>();
-        for (Player p : board.getPlayers()) {
-            cityMap.put(p.getCity().size(), p);
-        }
-        ArrayList<Player> cityList = (ArrayList<Player>) cityMap
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-
+        List<Player> cityList = map(board);
         //Verification que le personnage est un role qui ne soit pas Eveque, ou que ce ne soit pas le condottiere
         cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class || c.getCity().size()>=8);
         return cityList.isEmpty() ? null : cityList.get(cityList.size() - 1);
@@ -85,7 +73,7 @@ public class Condottiere extends Character {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.<Building>toList());
 
-        costList.removeIf(c -> c instanceof Graveyard);
+        costList.removeIf(c -> c instanceof Donjon);
 
         if(!costList.isEmpty()) {
             if (condo.getGold() > 10)

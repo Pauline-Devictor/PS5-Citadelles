@@ -8,7 +8,8 @@ import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -143,6 +144,19 @@ public abstract class Character {
      */
     public void printEffect(Player p) {
         p.getBoard().showCharacterEffect(p);
+    }
+
+    protected List<Player> map(Board board) {
+        TreeMap<Integer, Player> cityMap = new TreeMap<>();
+        for (Player p : board.getPlayers()) {
+            cityMap.put(p.getCity().size(), p);
+        }
+        return cityMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
 
     public void took() {

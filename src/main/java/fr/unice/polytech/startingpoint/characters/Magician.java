@@ -85,16 +85,7 @@ public class Magician extends Character {
      */
     public Optional<Player> chooseTarget(Board board, Player player) {
         if (player.getCardHand().size() < 3) {
-            TreeMap<Integer, Player> cityMap = new TreeMap<>();
-            for (Player p : board.getPlayers()) {
-                cityMap.put(p.getCity().size(), p);
-            }
-            ArrayList<Player> cityList = (ArrayList<Player>) cityMap
-                    .entrySet()
-                    .stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .map(Map.Entry::getValue)
-                    .collect(Collectors.toList());
+            List<Player> cityList = map(board);
 
             cityList.removeIf(c -> c.equals(player) || c.getCity().size() <= 5);
             if (!cityList.isEmpty())
