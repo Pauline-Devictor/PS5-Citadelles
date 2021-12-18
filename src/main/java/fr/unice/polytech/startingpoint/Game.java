@@ -37,7 +37,7 @@ public class Game {
     }
 
     /**
-     * print the end of the Game
+     * Print the end game details
      */
     void endOfGame() {
         System.out.println(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
@@ -53,15 +53,16 @@ public class Game {
     }
 
     /**
-     * launch a new Game
+     * Launch the game
      */
+
     void run() {
         newGame();
         endOfGame();
     }
 
     /**
-     * Functionning of the game.
+     * Start the game and keep going until game is over
      */
     void newGame() {
         boolean endOfGame = false;
@@ -112,9 +113,9 @@ public class Game {
     }
 
     /**
-     * Gets order players.
+     * Return the choosing order
      *
-     * @return the order players
+     * @return orderPlayers
      */
     public List<Player> getOrderPlayers() {
         return orderPlayers;

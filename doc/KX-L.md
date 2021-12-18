@@ -59,16 +59,21 @@ fin de partie et la détection du vainqueur dans l'issue [#18][issueTours] par e
 l'ajout et le calcul des points, de celui des bâtiments aux bonus de fin de partie, dans l'issue [#24][issuePoints].
 
 ## L'équipe
-
+##### Git et Github
 Le projet a nécessité l'usage de Git et Github. Afin de faciliter notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâche. Les différents labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits entre nos versions. 
-Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problème de communication. Nous avons aussi choisi de commenter notre code autant que possible pour être plus indépendant dans notre compréhension du code lors de nouvelles implémentations, nous avons aussi profité de la fonctionnalité "TODO" de IntelliJ afin de marquer les points importants à améliorer. 
+##### Communication et le groupe
+Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problème de communication. Nous avons aussi choisi de commenter notre code autant que possible pour être plus indépendant dans notre compréhension du code lors de nouvelles implémentations, notamment avec l'issue [#31][Rendu De Noel] nous avons aussi profité de la fonctionnalité "TODO" de IntelliJ afin de marquer les points importants à améliorer. 
 
 ## Etat actuel du projet
 
 ### Ce qui est fait
+
+##### Fonctionnement général
 Le projet possède actuellement une version presque complète du jeu Citadelles, durant une partie, 4 bots s'affrontent avec des stratégies différentes prédéfinies : RushMerch, RushArchi, HighScoreArchi et HighScoreThief.
 A chaque tour, les joueurs peuvent choisir un rôle, l'ordre de sélection se base sur le joueur ayant la couronne, puis ceux qui le suivent dans la liste choississent à leur tour (dans la méthode _newGame_ de la classe _Game_).
+##### Un tour de jeu
 Lors de leur tour de jeu, il est vérifié si le joueur n'a pas été tué par l'assassin, dans ce cas là son tour est passé, puis s'il n'a pas été volé par le voleur, dans quel cas son argent est transféré au voleur. Ensuite le joueur peut jouer : il choisit entre piocher une carte ou prendre 2 golds. Le joueur choisit de prendre une carte s'il n'a rien à construire ou si la banque est vide puis les effets de ses bâtiments s'activent. Enfin, le joueur peut construire des bâtiments s'il le souhaite. A la fin d'un tour _showPlay_ affiche tous les choix qui ont eu lieu. 
+##### Roles
 Pour les rôles : tous les pouvoirs ont été implementés et s'utilisent grâce à la méthode _usePower_. Si le pouvoir demande de cibler un joueur, _usePower_ appelera les méthodes _chooseTarget_, ou _chooseVictim_ dans le cas de l'assassin.
  
 ### Ce qui reste à faire

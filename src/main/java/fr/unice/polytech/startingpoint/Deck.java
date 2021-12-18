@@ -70,9 +70,9 @@ public class Deck {
     }
 
     /**
-     * Is the deck empty.
+     * Check if the deck is empty
      *
-     * @return the boolean
+     * @return boolean
      */
     public boolean isEmpty() {
         return buildings.size() <= 0;
@@ -86,9 +86,8 @@ public class Deck {
     }
 
     /**
-     * Put a card in the deck.
-     *
-     * @param b the building
+     * Store the given Building in the Deck
+     * @param b the Building
      */
     public void putCard(Building b) {
         buildings.add(b);

@@ -100,9 +100,8 @@ public class Board {
     }
 
     /**
-     * Release.
+     * Free every roles and empty the list of the taken roles
      */
-//Libère tous les roles et vide la liste des roles pris
     void release() {
         characters.forEach(Character::resetRole);
         players.forEach(Player::reset);
@@ -127,9 +126,7 @@ public class Board {
     }
 
     /**
-     * Gets characters.
-     *
-     * @return the characters
+     * @return List of every roles
      */
     public List<Character> getCharacters() {
         return characters;
@@ -150,10 +147,9 @@ public class Board {
     } //TODO Find a better way
 
     /**
-     * Show play.
-     *
-     * @param p        the player
-     * @param goldDraw the gold at the beginning of the turn
+     * Print the turn of a player
+     * @param p         the player
+     * @param goldDraw  the gold at the beginning of the turn
      */
     public void showPlay(Player p, int goldDraw) {
         String res = printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
@@ -174,7 +170,7 @@ public class Board {
     }
 
     /**
-     * Show ranking.
+     * Print the ranking of the players
      */
     void showRanking() {
         players.sort(PointsOrder);
@@ -193,8 +189,7 @@ public class Board {
     }
 
     /**
-     * Show variables.
-     *
+     * Show infos of the turn,where the golds are and the number of cards in the deck
      * @param turn the turn
      */
     void showVariables(int turn) {
@@ -234,9 +229,8 @@ public class Board {
     }
 
     /**
-     * Put card.
-     *
-     * @param b the Building
+     * Put the card b in the deck.
+     * @param b The Building
      */
     public void putCard(Building b) {
         pile.putCard(b);
