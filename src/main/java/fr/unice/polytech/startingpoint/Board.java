@@ -548,4 +548,8 @@ public class Board {
     public void printPrestigePoint(Player p, Prestige prestige) {
         System.out.println(printName(p) + " possede " + printFormat(prestige.getName(), ANSI_ITALIC, ANSI_PURPLE) + ", il gagne " + printFormat(2 + " points bonus", ANSI_CYAN) + "\n");
     }
+
+    public void showRole(Player player) {
+        System.out.println(printName(player) + " a choisi le role " + printRole(player));
+    }
 }

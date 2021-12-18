@@ -356,6 +356,7 @@ public class Player implements Comparator<Building> {
         if (b) {
             role = board.getCharactersInfos(index);
             role.took();
+            board.showRole(this);
         }
         return b;
     }

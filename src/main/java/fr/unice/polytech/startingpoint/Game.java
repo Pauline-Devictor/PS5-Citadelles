@@ -71,24 +71,29 @@ public class Game {
             turn++;
             board.showVariables(turn);
 
+            //Phase de Choix des Roles
             getOrderPlayer();
             orderPlayers.forEach(Player::chooseRole);
-
+            System.out.println();
             players.sort(Player.RoleOrder);
+
+            //Phase de Jeu
             for (Player p : players) {
                 p.play();
-                //crown → selection des roles (le dernier roi la récupère)
                 if (p.getRole().getClass().equals(King.class)) {
                     first = p;
                 }
                 if (!endOfGame && p.getCity().size() >= 8)
                     first = p;
+                //Si le jeu est fini
                 if (p.getCity().size() >= 8 || turn >= 50) {
                     endOfGame = true;
                 }
             }
+            //On reset les personnages
             board.release();
         }
+        //Calcul des points bonus
         players.forEach(e -> e.calculScore(e.equals(first)));
     }
 
