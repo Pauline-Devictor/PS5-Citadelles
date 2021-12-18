@@ -34,7 +34,7 @@ Dans ce package se trouve une classe par Strategie, toutes étendues de la class
 
 ### Bâtiments et Effets liés
 
-Les bâtiments sont tous définis dans _BuildingEnum_, avec leur nom, leur coût et leur quartier. Les bâtiments sont donc créés à partir de cette énumération. Les Merveilles sont ensuite étendus des Bâtiments, avec une classe par Merveille, étendu de la classe abstraite Prestige. Chaque Merveille implémente son pouvoir et les méthodes nécessaires au bon déroulement de celui-ci. Cela permet d'utiliser un bâtiment Prestige de façon générique, sans avoir à vérifier son type systématiquement.
+Les bâtiments sont tous définis dans _BuildingEnum_, avec leur nom, leur coût et leur quartier. Les bâtiments sont donc créés à partir de cette énumération. Les Merveilles sont ensuite étendues des Bâtiments, avec une classe par Merveille, étendue de la classe abstraite Prestige. Chaque Merveille implémente son pouvoir et les méthodes nécessaires au bon déroulement de celui-ci. Cela permet d'utiliser un bâtiment Prestige de façon générique, sans avoir à vérifier son type systématiquement.
 
 ### Personnages et leurs Pouvoirs
 
@@ -50,23 +50,22 @@ Nous avons réparti le travail autour de trois axes majeurs :
 
 Ambre et Quentin se sont occupés de ce qui était lié aux stratégies, de la création des stratégies aux appel de l'affichage dans la classe _Player_, ce qui peut se retrouver entre autre dans l'issue [#17][issueStrat]. Ils se sont également occupé de la mise en place de la gestion de l'or, ce qu'on peut retrouver dans l'issue [#29][issueGold].
 
-Pauline s'est quand à elle occupé de ce qui concerne les rôles, de leur choix par les joueurs à leur utilisation en fonction de la stratégie, ce qui se retrouve dans les issues [#15][issueRole1] et [#21][issueRole2] par exemple.
+Pauline s'est quand à elle occupée de ce qui concerne les rôles, de leur choix par les joueurs à leur utilisation en fonction de la stratégie, ce qui se retrouve dans les issues [#15][issueRole1] et [#21][issueRole2] par exemple.
 
 Théo a majoritairement travaillé sur les bâtiments, de leur ajout dans la pioche à l'application des effets des merveilles par les joueurs, dans l'issue [#16][issuePrestigeA]. Il a également participé à l'élaboration du game engine avec la fin de partie et la détection du vainqueur dans l'issue [#18][issueTours] par exemple. Il a également travaillé sur l'ajout et le calcul des points, de celui des bâtiments aux bonus de fin de partie, dans l'issue [#24][issuePoints].
 
-
-
 ## L'équipe
 
-Le projet a nécessité l'usage de Git et Github. Afin de facilité notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâches. Les différentes labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits. 
-Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problèmes de communication. 
+Le projet a nécessité l'usage de Git et Github. Afin de faciliter notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâche. Les différents labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits entre nos versions. 
+Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problème de communication. Nous avons aussi choisi de commenter notre code autant que possible pour être plus indépendant dans notre compréhension du code lors de nouvelles implémentations, nous avons aussi profité de la fonctionnalité "TODO" de IntelliJ afin de marquer les points importants à améliorer. 
 
 ## Etat actuel du projet
 
 ### Ce qui est fait
 Le projet possède actuellement une version presque complète du jeu Citadelles, durant une partie, 4 bots s'affrontent avec des stratégies différentes prédéfinies : RushMerch, RushArchi, HighScoreArchi et HighScoreThief.
 A chaque tour, les joueurs peuvent choisir un rôle, l'ordre de sélection se base sur le joueur ayant la couronne, puis ceux qui le suivent dans la liste choississent à leur tour (dans la méthode _newGame_ de la classe _Game_).
-Lors de leur tour de jeu, il est vérifié si le joueur n'a pas été tué par l'assassin, dans ce cas là son tour est passé, puis s'il n'a pas été volé par le voleur, dans quel cas son argent est transféré au voleur. Ensuite le joueur peut jouer : il choisit entre piocher une carte ou prendre 2 golds. Le joueur choisit de prendre une carte s'il n'a rien à construire ou si la banque est vide.
+Lors de leur tour de jeu, il est vérifié si le joueur n'a pas été tué par l'assassin, dans ce cas là son tour est passé, puis s'il n'a pas été volé par le voleur, dans quel cas son argent est transféré au voleur. Ensuite le joueur peut jouer : il choisit entre piocher une carte ou prendre 2 golds. Le joueur choisit de prendre une carte s'il n'a rien à construire ou si la banque est vide puis les effets de ses bâtiments s'activent. Enfin, le joueur peut construire des bâtiments s'il le souhaite. A la fin d'un tour _showPlay_ affiche tous les choix qui ont eu lieu. 
+Pour les rôles : tous les pouvoirs ont été implementés et s'utilisent grâce à la méthode _usePower_. Si le pouvoir demande de cibler un joueur, _usePower_ appelera les méthodes _chooseTarget_, ou _chooseVictim_ dans le cas de l'assassin.
  
 ### Ce qui reste à faire
 Le jeu est presque complet, mais certaines fonctionnalités sont manquantes : 
