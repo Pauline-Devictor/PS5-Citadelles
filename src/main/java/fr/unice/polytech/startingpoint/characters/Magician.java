@@ -7,8 +7,6 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.isNull;
-
 public class Magician extends Character {
     private Player target;
 
@@ -18,7 +16,8 @@ public class Magician extends Character {
     }
 
     /**
-     * Uses the Magician's power
+     * Uses the Magician's power :
+     * Swap his card with someone or with the deck
      *
      * @param b the current game's board
      */
@@ -40,16 +39,15 @@ public class Magician extends Character {
     }
 
     /**
-     * If there's no one to swap with
+     * Discard all the hand, and draw the same amount of card
      *
      * @param magician the Magician's player
      */
     public void swapHandDeck(Player magician) {
         int n = magician.getCardHand().size();
-        magician.drawAndChoose(n, n);
         for (int i = 0; i < n; i++)
             magician.discardCard();
-
+        magician.drawAndChoose(n, n);
     }
 
     /**
@@ -77,7 +75,7 @@ public class Magician extends Character {
     }
 
     /**
-     * Chooses the Magician's target
+     * Chooses the target with the most of cards
      *
      * @param board  the current game's board
      * @param player the Magician's player
@@ -106,7 +104,8 @@ public class Magician extends Character {
 
         handList.removeIf(c -> c.equals(player));
         if (!handList.isEmpty())
-        return Optional.ofNullable(handList.get(handList.size() - 1));
-        else return Optional.empty();
+            return Optional.ofNullable(handList.get(handList.size() - 1));
+        else
+            return Optional.empty();
     }
 }

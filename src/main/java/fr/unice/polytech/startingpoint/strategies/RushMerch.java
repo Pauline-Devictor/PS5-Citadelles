@@ -10,12 +10,23 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Rush merch.
+ */
 public class RushMerch extends Player {
 
+    /**
+     * Instantiates a new Rush merch.
+     *
+     * @param b the b
+     */
     public RushMerch(Board b) {
         super(b, "RushMarchand");
     }
 
+    /**
+     * Pick in the order of the list : first choice is the merchant, last choice is condottiere
+     */
     @Override
     public void chooseRole() {
 
@@ -38,6 +49,13 @@ public class RushMerch extends Player {
         }
     }
 
+    /**
+     * Try to pick Commercial, or the minimal cost
+     *
+     * @param b1 The First Building
+     * @param b2 The Second Building
+     * @return negative for b1, positive for b2, zero otherwise
+     */
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2

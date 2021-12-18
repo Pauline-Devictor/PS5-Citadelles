@@ -6,9 +6,15 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * The type Deck.
+ */
 public class Deck {
     private final ArrayList<Building> buildings;
 
+    /**
+     * Instantiates a new Deck.
+     */
     Deck() {
         buildings = new ArrayList<>();
         buildings.add(new MiracleCourtyard());
@@ -48,6 +54,11 @@ public class Deck {
         }
     }
 
+    /**
+     * Draw a card if the deck isn't empty.
+     *
+     * @return the optional
+     */
     public Optional<Building> drawACard() {
         if (buildings.size() > 0) {
             int index = new Random().nextInt(buildings.size());
@@ -58,14 +69,27 @@ public class Deck {
         return Optional.empty();
     }
 
+    /**
+     * Is the deck empty.
+     *
+     * @return the boolean
+     */
     public boolean isEmpty() {
         return buildings.size() <= 0;
     }
 
+    /**
+     * @return Number of cards in the deck.
+     */
     public int numberOfCards() {
         return buildings.size();
     }
 
+    /**
+     * Put a card in the deck.
+     *
+     * @param b the building
+     */
     public void putCard(Building b) {
         buildings.add(b);
     }

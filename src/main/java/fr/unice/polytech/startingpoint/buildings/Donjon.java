@@ -2,7 +2,13 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-public class Donjon extends Prestige{
+/**
+ * The type Donjon.
+ */
+public class Donjon extends Prestige {
+    /**
+     * Instantiates a new Donjon.
+     */
     public Donjon() {
         super(BuildingEnum.Donjon);
     }

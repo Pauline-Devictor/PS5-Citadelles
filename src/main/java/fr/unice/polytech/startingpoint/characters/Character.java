@@ -13,14 +13,28 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Character.
+ */
 public abstract class Character {
+    /**
+     * The Character.
+     */
     protected final CharacterEnum character;
+    /**
+     * The Available.
+     */
     protected boolean available;
     private boolean isMurdered;
     private boolean stolen;
     //empty si le personnage n'est pas volé, le voleur sinon
     private Player thief;
 
+    /**
+     * Instantiates a new Character.
+     *
+     * @param character the character
+     */
     public Character(CharacterEnum character) {
         this.character = character;
         available = true;
@@ -54,12 +68,14 @@ public abstract class Character {
 
     /**
      * Uses a Character's power
+     *
      * @param board the game current's board
      */
     public abstract void usePower(Board board);
 
     /**
      * Finds the Character's player
+     *
      * @param board the game current's board
      * @return the Character's player
      */
@@ -76,6 +92,8 @@ public abstract class Character {
 
     /**
      * Collects Character's taxes
+     * Collect 1 gold per District build by the player
+     *
      * @param p the Character's player
      * @param d the District's taxes to collect
      */
@@ -95,6 +113,8 @@ public abstract class Character {
     }
 
     /**
+     * Is available boolean.
+     *
      * @return true if the Character's available
      */
     public boolean isAvailable() {
@@ -102,29 +122,43 @@ public abstract class Character {
     }
 
     /**
+     * Is murdered boolean.
+     *
      * @return true if the Character's murdered
      */
     public boolean isMurdered() {
         return isMurdered;
     }
 
+    /**
+     * Kill.
+     */
     public void kill() {
         isMurdered = true;
     }
 
     /**
+     * Gets thief.
+     *
      * @return The Thief's player
      */
     public Player getThief() {
         return thief;
     }
 
+    /**
+     * Stole by.
+     *
+     * @param thief the thief
+     */
     protected void stoleBy(Player thief) {
         this.thief = thief;
         stolen = true;
     }
 
     /**
+     * Gets name.
+     *
      * @return the Character's name
      */
     public String getName() {
@@ -132,6 +166,7 @@ public abstract class Character {
     }
 
     /**
+     * Gets order.
      *
      * @return the Character's order
      */
@@ -140,12 +175,20 @@ public abstract class Character {
     }
 
     /**
+     * Print effect.
+     *
      * @param p the player
      */
     public void printEffect(Player p) {
         p.getBoard().showCharacterEffect(p);
     }
 
+    /**
+     * Map list.
+     *
+     * @param board the board
+     * @return the list
+     */
     protected List<Player> map(Board board) {
         TreeMap<Integer, Player> cityMap = new TreeMap<>();
         for (Player p : board.getPlayers()) {
@@ -159,10 +202,18 @@ public abstract class Character {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Took.
+     */
     public void took() {
         available = false;
     }
 
+    /**
+     * Is stolen boolean.
+     *
+     * @return the boolean
+     */
     public boolean isStolen() {
         return stolen;
     }

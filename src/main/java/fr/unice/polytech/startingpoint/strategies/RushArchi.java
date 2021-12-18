@@ -9,12 +9,23 @@ import java.util.*;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Rush archi.
+ */
 public class RushArchi extends Player {
 
+    /**
+     * Instantiates a new Rush archi.
+     *
+     * @param b the b
+     */
     public RushArchi(Board b) {
         super(b, "RushArchitect");
     }
 
+    /**
+     * Prioritize the Architect, or the Bishop for a big city else Anything
+     */
     @Override
     public void chooseRole() {
         ArrayList<Integer> taxList = new ArrayList<>();
@@ -43,6 +54,13 @@ public class RushArchi extends Player {
         }
     }
 
+    /**
+     * Try to pick Religion, or the minimal cost
+     *
+     * @param b1 The First Building
+     * @param b2 The Second Building
+     * @return negative for b1, positive for b2, zero otherwise
+     */
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2

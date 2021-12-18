@@ -10,9 +10,19 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public class BalancedFirst extends Player{
+/**
+ * The type Balanced first.
+ */
+public class BalancedFirst extends Player {
 
-    public BalancedFirst(Board b){super(b, "BalancedFirst");}
+    /**
+     * Instantiates a new Balanced first.
+     *
+     * @param b the b
+     */
+    public BalancedFirst(Board b) {
+        super(b, "BalancedFirst");
+    }
 
     @Override
     public void chooseRole() {
@@ -52,6 +62,13 @@ public class BalancedFirst extends Player{
         }
     }
 
+    /**
+     * Prioritize Noble Buildings
+     *
+     * @param b1
+     * @param b2
+     * @return
+     */
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2

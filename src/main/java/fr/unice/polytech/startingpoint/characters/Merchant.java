@@ -14,6 +14,9 @@ public class Merchant extends Character {
 
     /**
      * Uses the Merchant's power
+     * Take 1 Gold and
+     * Collect Taxes from Commercial Districts
+     *
      * @param b the current game's board
      */
     @Override

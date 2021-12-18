@@ -50,9 +50,13 @@ Nous avons réparti le travail autour de trois axes majeurs :
 
 Ambre et Quentin se sont occupés de ce qui était lié aux stratégies, de la création des stratégies aux appel de l'affichage dans la classe _Player_, ce qui peut se retrouver entre autre dans l'issue [#17][issueStrat]. Ils se sont également occupé de la mise en place de la gestion de l'or, ce qu'on peut retrouver dans l'issue [#29][issueGold].
 
-Pauline s'est quand à elle occupée de ce qui concerne les rôles, de leur choix par les joueurs à leur utilisation en fonction de la stratégie, ce qui se retrouve dans les issues [#15][issueRole1] et [#21][issueRole2] par exemple.
+Pauline s'est quand à elle occupée de ce qui concerne les rôles, de leur choix par les joueurs à leur utilisation en
+fonction de la stratégie, ce qui se retrouve dans les issues [#15][issueRole1] et [#21][issueRole2] par exemple.
 
-Théo a majoritairement travaillé sur les bâtiments, de leur ajout dans la pioche à l'application des effets des merveilles par les joueurs, dans l'issue [#16][issuePrestigeA]. Il a également participé à l'élaboration du game engine avec la fin de partie et la détection du vainqueur dans l'issue [#18][issueTours] par exemple. Il a également travaillé sur l'ajout et le calcul des points, de celui des bâtiments aux bonus de fin de partie, dans l'issue [#24][issuePoints].
+Théo a majoritairement travaillé sur les bâtiments, de leur ajout dans la pioche à l'application des effets des
+merveilles par les joueurs, dans l'issue [#16][issuePrestigeA]. Il a contribué à l'élaboration du game engine avec la
+fin de partie et la détection du vainqueur dans l'issue [#18][issueTours] par exemple. Il a également travaillé sur
+l'ajout et le calcul des points, de celui des bâtiments aux bonus de fin de partie, dans l'issue [#24][issuePoints].
 
 ## L'équipe
 

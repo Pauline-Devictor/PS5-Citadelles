@@ -14,19 +14,44 @@ import static java.util.Objects.isNull;
  * All decisions made by a player is either done by this class or one of its subclasses.
  */
 public class Player implements Comparator<Building> {
+    /**
+     * The Name.
+     */
     protected String name;
+    /**
+     * The Gold.
+     */
     protected int gold;
+    /**
+     * The Score.
+     */
     protected int score;
+    /**
+     * The Board.
+     */
     protected final Board board;
+    /**
+     * The Role.
+     */
     protected Character role;
+    /**
+     * The Nb buildable.
+     */
     protected int nbBuildable = 1;
+    /**
+     * The Card hand.
+     */
     protected List<Building> cardHand;
+    /**
+     * The City.
+     */
     protected final List<Building> city;
 
     /**
-     * @param b board linked to the player
-     * @param name player's name
-     * Creates a player linked to a board with a name
+     * Instantiates a new Player.
+     *
+     * @param b    board linked to the player
+     * @param name player's name Creates a player linked to a board with a name
      */
     public Player(Board b, String name) {
         this.name = name;
@@ -40,8 +65,9 @@ public class Player implements Comparator<Building> {
     }
 
     /**
-     * @param b board linked to the player
-     * Creates a player linked to a board with undefined name
+     * Instantiates a new Player.
+     *
+     * @param b board linked to the player Creates a player linked to a board with undefined name
      */
     public Player(Board b) {
         this.name = "undefined";
@@ -54,6 +80,9 @@ public class Player implements Comparator<Building> {
         role = null;
     }
 
+    /**
+     * Compare two players depending on the order in the turn
+     */
     public static Comparator<Player> RoleOrder = (e1, e2) -> {
         //Positive if e2 > e1
         int res = 1;
@@ -64,11 +93,19 @@ public class Player implements Comparator<Building> {
         return res;
     };
 
+    /**
+     * The constant PointsOrder.
+     */
     public static Comparator<Player> PointsOrder = (e1, e2) -> {
         //Positive if e2 > e1
         return e2.getScore() - e1.getScore();
     };
 
+    /**
+     * Build b is possible
+     *
+     * @param b Building to build
+     */
     public void build(Building b) {
         if (isBuildable(b)) {
             refundGold(b.getCost());
@@ -78,6 +115,12 @@ public class Player implements Comparator<Building> {
         }
     }
 
+    /**
+     * Is buildable boolean.
+     *
+     * @param b the b
+     * @return the boolean
+     */
     public boolean isBuildable(Building b) {
         return gold >= b.getCost() && !city.contains(b);
     }
@@ -108,6 +151,8 @@ public class Player implements Comparator<Building> {
     }
 
     /**
+     * Draw or gold boolean.
+     *
      * @return boolean, true is the player should draw, false if the player should get golds
      */
     public boolean drawOrGold() {
@@ -196,7 +241,9 @@ public class Player implements Comparator<Building> {
     }
 
     /**
-     * @param nbCards number of cards to choose from
+     * Draw and choose list.
+     *
+     * @param nbCards  number of cards to choose from
      * @param nbChoose number of cards to pick
      * @return List of chosen cards
      */
@@ -211,10 +258,11 @@ public class Player implements Comparator<Building> {
     }
 
     /**
-     * @param builds list of buildings drawn
+     * Choose building list.
+     *
+     * @param builds   list of buildings drawn
      * @param nbBuilds numbers of buildings to choose
-     * @return List of chosen cards
-     * make the player choose which cards to pick whenever he draws
+     * @return List of chosen cards make the player choose which cards to pick whenever he draws
      */
     public List<Building> chooseBuilding(List<Building> builds, int nbBuilds) {
         nbBuilds = (Math.max(nbBuilds, 0));
@@ -245,11 +293,14 @@ public class Player implements Comparator<Building> {
     }
 
     /**
-     * @return true if a card has been discarded, else false
-     * discards first card of the hand
+     * Discard card building.
+     *
+     * @return true if a card has been discarded, else false discards worse card of the hand
      */
     public Building discardCard() {
         if (getCardHand().size() > 0) {
+            cardHand.sort(this);
+            Collections.reverse(cardHand);
             Building b = cardHand.get(0);
             cardHand.remove(b);
             board.getPile().putCard(b);
@@ -259,8 +310,9 @@ public class Player implements Comparator<Building> {
     }
 
     /**
+     * Refund gold.
+     *
      * @param amount amount to give back
-     * give back golds to bank
      */
     public void refundGold(int amount) {
         gold -= board.getBank().refundGold(
@@ -269,16 +321,18 @@ public class Player implements Comparator<Building> {
     }
 
     /**
-     * @param amount amount of golds to borrow
-     * gets golds from bank
+     * Take money.
+     *
+     * @param amount amount of golds to borrow gets golds from bank
      */
     public void takeMoney(int amount) {
         gold += board.getBank().withdrawGold(amount);
     }
 
     /**
-     * @return the district that has the most building
-     * of its kind in current player's city
+     * Gets majority.
+     *
+     * @return the district that has the most building of its kind in current player's city
      */
     public District getMajority() {
         HashMap<District, Integer> majority = new HashMap<>();
@@ -292,6 +346,8 @@ public class Player implements Comparator<Building> {
     }
 
     /**
+     * Pick role boolean.
+     *
      * @param index index of the given role (listed by turn order from 0)
      * @return true if the given role was available, else false
      */
@@ -327,6 +383,14 @@ public class Player implements Comparator<Building> {
         return res.toString();
     }
 
+    /**
+     * compute boolean in oder to do if bonus are available
+     * 0 : Districts
+     * 1 : Prestige
+     * 2 : Complete City
+     *
+     * @return an array of boolean for bonus points
+     */
     public boolean[] calculBonus() {
         boolean districts = getCity().stream().map(Building::getDistrict).distinct().count() == 5;
         boolean prestiges = getCity().stream().filter(e -> e.getDistrict() == District.Prestige).count() >= 2
@@ -335,6 +399,11 @@ public class Player implements Comparator<Building> {
         return new boolean[]{districts, prestiges, cityDone};
     }
 
+    /**
+     * modify the score depending on the bonus of the player
+     *
+     * @param first is the player first to finish
+     */
     public void calculScore(boolean first) {
         boolean[] var = calculBonus();
         if (var[0] || var[1])
@@ -346,51 +415,107 @@ public class Player implements Comparator<Building> {
         cityEffectsEnd();
     }
 
+    /**
+     * Gets gold.
+     *
+     * @return the gold
+     */
     public int getGold() {
         return gold;
     }
 
+    /**
+     * Gets score.
+     *
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
     public Character getRole() {
         return role;
     }
 
+    /**
+     * Gets card hand.
+     *
+     * @return the card hand
+     */
     public List<Building> getCardHand() {
         return cardHand;
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         nbBuildable = 1;
     }
 
+    /**
+     * Gets city.
+     *
+     * @return the city
+     */
     public List<Building> getCity() {
         return city;
     }
 
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * Gets nb buildable.
+     *
+     * @return the number of buildable builds
+     */
     public int getNbBuildable() {
         return nbBuildable;
     }
 
+    /**
+     * Sets card hand.
+     *
+     * @param cards the cards
+     */
     public void setCardHand(List<Building> cards) {
         cardHand = cards;
     }
 
+    /**
+     * Set Number of Builds to 3.
+     */
     public void buildingArchitect() {
         nbBuildable = 3;
     }
 
+    /**
+     * Gave i Bonus points.
+     *
+     * @param i the number of points
+     */
     public void bonusPoints(int i) {
         score += i;
     }

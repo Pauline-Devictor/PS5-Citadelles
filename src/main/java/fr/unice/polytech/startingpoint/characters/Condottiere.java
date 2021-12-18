@@ -3,8 +3,6 @@ package fr.unice.polytech.startingpoint.characters;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.Donjon;
-import fr.unice.polytech.startingpoint.buildings.Graveyard;
-import fr.unice.polytech.startingpoint.buildings.Laboratory;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;
@@ -56,6 +54,8 @@ public class Condottiere extends Character {
 
     /**
      * Chooses the target's building to destroy
+     * If more than 10 gold, the most expensive
+     * Else the less expensive
      *
      * @param board  the current game's board
      * @param target the Condottiere's target

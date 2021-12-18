@@ -2,14 +2,15 @@ package fr.unice.polytech.startingpoint.strategiesTest;
 
 import fr.unice.polytech.startingpoint.Bank;
 import fr.unice.polytech.startingpoint.Board;
+import fr.unice.polytech.startingpoint.Deck;
 import fr.unice.polytech.startingpoint.buildings.*;
-import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.strategies.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 import static fr.unice.polytech.startingpoint.strategies.Player.RoleOrder;
@@ -31,10 +32,8 @@ public class TestPlayer {
         board = spy(new Board());
         pSpy = spy(new Player(board));
         p = new Player(new Board());
-        pLow = spy(new RushMerch(new Board()));
+        pLow = spy(new RushMerch(board));
         pHigh = spy(new HighScoreThief(new Board()));
-        when(pLow.getCardHand()).thenReturn(new ArrayList<>());
-        when(pHigh.getCardHand()).thenReturn(new ArrayList<>());
         eglise = new Building(BuildingEnum.Eglise);
         caserne = new Building(BuildingEnum.Caserne);
         tourDeGuet = new Building(BuildingEnum.TourDeGuet);
@@ -321,5 +320,22 @@ public class TestPlayer {
         assertFalse(pSpy.calculBonus()[0]);
         assertFalse(pSpy.calculBonus()[1]);
         assertFalse(pSpy.calculBonus()[2]);
+    }
+
+    @Test
+    void discardCard() {
+        Deck deck = mock(Deck.class);
+        when(deck.drawACard()).thenReturn(Optional.of(new Library()),
+                Optional.of(new Building(BuildingEnum.Manoir)),
+                Optional.of(new Building(BuildingEnum.Palais)),
+                Optional.of(new Building(BuildingEnum.Temple)));
+        when(pLow.getCity()).thenReturn(new ArrayList<>());
+        when(board.getPile()).thenReturn(deck);
+        while (pLow.getCardHand().size() != 0)
+            pLow.discardCard();
+        pLow.drawAndChoose(4, 4);
+        pLow.discardCard();
+        assertEquals(List.of(new Building(BuildingEnum.Palais), new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Temple))
+                , pLow.getCardHand());
     }
 }

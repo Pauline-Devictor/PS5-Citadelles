@@ -12,7 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 import static java.util.Objects.isNull;
 
+/**
+ * The type Board.
+ */
 public class Board {
+
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -21,7 +25,6 @@ public class Board {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -31,7 +34,6 @@ public class Board {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-
     public static final String ANSI_BOLD = "\u001B[1m";
     public static final String ANSI_ITALIC = "\u001B[3m";
     public static final String ANSI_UNDERLINE = "\u001B[4m";
@@ -41,6 +43,11 @@ public class Board {
     private final List<Character> characters;
     private final List<Player> players;
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param nbPlayers the number of players
+     */
     Board(int nbPlayers) {
         this.bank = new Bank(30);
         this.pile = new Deck();
@@ -55,10 +62,19 @@ public class Board {
         players = generatePlayers(nbPlayers);
     }
 
+    /**
+     * Instantiates a new Board.
+     */
     public Board() {
         this(4);
     }
 
+    /**
+     * Generate players list.
+     *
+     * @param nbPlayers the nb players
+     * @return the list
+     */
     public List<Player> generatePlayers(int nbPlayers) {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
@@ -72,28 +88,57 @@ public class Board {
         return players;
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public List<Player> getPlayers() {
         return players;
     }
 
-    //Libère tous les roles et vide la liste des roles pris
+    /**
+     * Release.
+     */
+//Libère tous les roles et vide la liste des roles pris
     void release() {
         characters.forEach(Character::resetRole);
         players.forEach(Player::reset);
     }
 
+    /**
+     * Gets pile.
+     *
+     * @return the pile
+     */
     public Deck getPile() {
         return pile;
     }
 
+    /**
+     * Gets bank.
+     *
+     * @return the bank
+     */
     public Bank getBank() {
         return bank;
     }
 
+    /**
+     * Gets characters.
+     *
+     * @return the characters
+     */
     public List<Character> getCharacters() {
         return characters;
     }
 
+    /**
+     * Gets characters infos.
+     *
+     * @param index the index
+     * @return the characters infos
+     */
     public Character getCharactersInfos(int index) {
         if (index < 0)
             index = 0;
@@ -102,6 +147,12 @@ public class Board {
         return getCharacters().get(index);
     } //TODO Find a better way
 
+    /**
+     * Show play.
+     *
+     * @param p        the player
+     * @param goldDraw the gold at the beginning of the turn
+     */
     public void showPlay(Player p, int goldDraw) {
         String res = printFormat("---------------------------------------------------------------", ANSI_WHITE, ANSI_BLACK_BACKGROUND);
         if (!isNull(p.getRole()) && p.getRole().isMurdered())
@@ -120,6 +171,9 @@ public class Board {
         System.out.println(res + "\n\n");
     }
 
+    /**
+     * Show ranking.
+     */
     void showRanking() {
         players.sort(PointsOrder);
         for (int i = 1; i <= players.size(); i++) {
@@ -127,12 +181,20 @@ public class Board {
         }
     }
 
+    /**
+     * Show board.
+     */
     void showBoard() {
         StringBuilder res = new StringBuilder();
         players.forEach(e -> res.append(e).append("\n"));
         System.out.println(res);
     }
 
+    /**
+     * Show variables.
+     *
+     * @param turn the turn
+     */
     void showVariables(int turn) {
         AtomicInteger res = new AtomicInteger();
         players.forEach(e -> res.addAndGet(e.getGold()));
@@ -145,6 +207,15 @@ public class Board {
         }
     }
 
+    /**
+     * Show draw or gold decision
+     *
+     * @param emptyDeck         is the deck empty
+     * @param anythingBuildable is there something buildable
+     * @param emptyBank         is the bank empty
+     * @param isDraw            the drawDecision
+     * @param p                 the player
+     */
     public void showDrawOrGold(boolean emptyDeck, boolean anythingBuildable, boolean emptyBank, boolean isDraw, Player p) {
         String res = "";
         if (emptyDeck)
@@ -160,11 +231,24 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Put card.
+     *
+     * @param b the Building
+     */
     public void putCard(Building b) {
         pile.putCard(b);
     }
 
-    public void showDrawChoice(List<Building> builds, List<Building> discarded, List<Building> builded, Player p) {
+    /**
+     * Show draw choice.
+     *
+     * @param builds    the builds
+     * @param discarded the discarded
+     * @param built     the built
+     * @param p         the Player
+     */
+    public void showDrawChoice(List<Building> builds, List<Building> discarded, List<Building> built, Player p) {
         StringBuilder res = new StringBuilder();
         if (builds.isEmpty()) {
             res.append(printName(p)).append("n'a rien pioché");
@@ -174,12 +258,19 @@ public class Board {
         if (!discarded.isEmpty()) {
             res.append("\nIl a choisi de défausser ").append(printBuildings(discarded, false));
         }
-        if (!builded.isEmpty()) {
-            res.append("\nIl garde ").append(printBuildings(builded, false));
+        if (!built.isEmpty()) {
+            res.append("\nIl garde ").append(printBuildings(built, false));
         }
         System.out.println(res);
     }
 
+    /**
+     * Show builds.
+     *
+     * @param checkBuilding the check building
+     * @param toBuild       the to build
+     * @param p             the player
+     */
     public void showBuilds(List<Building> checkBuilding, List<Building> toBuild, Player p) {
         StringBuilder res = new StringBuilder();
         if (checkBuilding.isEmpty()) {
@@ -196,23 +287,45 @@ public class Board {
         System.out.println(res);
     }
 
-    public void showLaboratoryEffect(Player p, Building cardName) {
+    /**
+     * Show laboratory effect.
+     *
+     * @param p    the player
+     * @param card the card
+     */
+    public void showLaboratoryEffect(Player p, Building card) {
         String res = printName(p);
-        if (isNull(cardName))
+        if (isNull(card))
             res += "a recuperé 1 piece d'or ";
         else
-            res += "a recuperé 1 piece d'or et a defaussé " + cardName.getName();
+            res += "a recuperé 1 piece d'or et a defaussé " + card.getName();
         System.out.println(res);
     }
 
+    /**
+     * Show magic school effect.
+     *
+     * @param p the player
+     */
     public void showMagicSchoolEffect(Player p) {
         System.out.println(printName(p) + "recupere une piece de plus des taxes");
     }
 
+    /**
+     * Show donjon effect.
+     *
+     * @param p the player
+     */
     public void showDonjonEffect(Player p) {
         System.out.println(printName(p) + "ne peut pas etre detruit par le condottiere");
     }
 
+    /**
+     * Show manufactory effect.
+     *
+     * @param p     the player
+     * @param cards the cards
+     */
     public void showManufactoryEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
         res.append(printName(p)).append("a defaussé 3 pieces d'or");
@@ -222,6 +335,13 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show taxes.
+     *
+     * @param d     the district
+     * @param p     the player
+     * @param taxes the taxes
+     */
     public void showTaxes(District d, Player p, int taxes) {
         String res;
         if (taxes <= getBank().getGold())
@@ -231,16 +351,33 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show prestige effect.
+     *
+     * @param p        the player
+     * @param prestige the prestige
+     */
     public void showPrestigeEffect(Player p, Prestige prestige) {
         String res = printName(p) + "a utilisé : " + prestige.getName() + ".";
         System.out.println(res);
     }
 
+    /**
+     * Show character effect.
+     *
+     * @param p the player
+     */
     public void showCharacterEffect(Player p) {
         String res = printName(p) + "a utilisé l'effet de : " + printRole(p) + ".";
         System.out.println(res);
     }
 
+    /**
+     * Show architect effect.
+     *
+     * @param p     the player
+     * @param cards the cards
+     */
     public void showArchitectEffect(Player p, List<Building> cards) {
         StringBuilder res = new StringBuilder();
         res.append(printName(p)).append("pourra construire 3 batiments ce tour-ci.");
@@ -250,11 +387,22 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show king effect.
+     *
+     * @param p the player
+     */
     public void showKingEffect(Player p) {
         String res = printName(p) + "commencera au prochain tour";
         System.out.println(res);
     }
 
+    /**
+     * Show magician effect.
+     *
+     * @param p      the player
+     * @param target the target
+     */
     public void showMagicianEffect(Player p, Player target) {
         StringBuilder res = new StringBuilder();
         if (isNull(target)) {
@@ -265,6 +413,11 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show merchant effect.
+     *
+     * @param p the player
+     */
     public void showMerchantEffect(Player p) {
         String res = "La banque est vide," + printName(p) + "n'a rien recupéré.";
         if (!getBank().isEmpty())
@@ -272,6 +425,13 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show condottiere effect.
+     *
+     * @param target the target
+     * @param build  the build
+     * @param p      the player
+     */
     public void showCondottiereEffect(Player target, Building build, Player p) {
         String res = printRole(p) + "n'a pas assez d'or ou pas de cible, il n'a donc rien detruit";
         if (!isNull(target) && !isNull(build))
@@ -279,10 +439,13 @@ public class Board {
         System.out.println(res);
     }
 
+    /**
+     * Show bonus.
+     *
+     * @param first the first
+     * @param p     the player
+     */
     public void showBonus(boolean first, Player p) {
-        //0 : Districts
-        //1 : Prestige
-        //2 : Complete City
         boolean[] vars = p.calculBonus();
         String res = "";
         if (first)
@@ -296,6 +459,13 @@ public class Board {
         System.out.print(res);
     }
 
+    /**
+     * Print buildings string.
+     *
+     * @param buildings the buildings
+     * @param extend    the extend
+     * @return String of the list of building
+     */
     public static String printBuildings(List<Building> buildings, boolean extend) {
         int wrap = extend ? 3 : 5;
         StringBuilder res = new StringBuilder("\n");
@@ -307,6 +477,13 @@ public class Board {
         return printFormat(res.toString());
     }
 
+    /**
+     * Print building string.
+     *
+     * @param b      the building
+     * @param extend the extend
+     * @return formated Building String
+     */
     public static String printBuilding(Building b, boolean extend) {
         String res = printFormat(b.getName(), ANSI_ITALIC);
         if (extend) {
@@ -315,14 +492,32 @@ public class Board {
         return res;
     }
 
+    /**
+     * Print name string.
+     *
+     * @param p the player
+     * @return the name in purple
+     */
     public static String printName(Player p) {
         return printFormat(" " + p.getName() + " ", ANSI_PURPLE, ANSI_ITALIC);
     }
 
+    /**
+     * Print role string.
+     *
+     * @param p the player
+     * @return the role in Red
+     */
     public String printRole(Player p) {
         return printFormat(p.getRole().getName(), ANSI_RED, ANSI_ITALIC);
     }
 
+    /**
+     * Print district string.
+     *
+     * @param d the district
+     * @return the district in color
+     */
     public static String printDistrict(District d) {
         String c = switch (d) {
             case Noble -> ANSI_YELLOW;
@@ -334,6 +529,13 @@ public class Board {
         return printFormat(d.name(), c, ANSI_UNDERLINE);
     }
 
+    /**
+     * Print format string.
+     *
+     * @param text   the message
+     * @param format the format
+     * @return the string
+     */
     public static String printFormat(String text, String... format) {
         StringBuilder res = new StringBuilder();
         for (String f : format)
@@ -341,6 +543,12 @@ public class Board {
         return res + text + ANSI_RESET;
     }
 
+    /**
+     * Print prestige point depending of the building called
+     *
+     * @param p        the player
+     * @param prestige the prestige
+     */
     public void printPrestigePoint(Player p, Prestige prestige) {
         System.out.println(printName(p) + " possede " + printFormat(prestige.getName(), ANSI_ITALIC, ANSI_PURPLE) + ", il gagne " + printFormat(2 + " points bonus", ANSI_CYAN) + "\n");
     }

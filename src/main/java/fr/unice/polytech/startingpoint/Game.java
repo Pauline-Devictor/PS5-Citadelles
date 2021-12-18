@@ -8,12 +8,20 @@ import java.util.List;
 
 import static fr.unice.polytech.startingpoint.Board.*;
 
+/**
+ * The type Game.
+ */
 public class Game {
     private final Board board;
     private final List<Player> players;
     private List<Player> orderPlayers;
     private Player first;
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param nb_players the nb players
+     */
     Game(int nb_players) {
         board = new Board(nb_players);
         orderPlayers = List.copyOf(board.getPlayers());
@@ -21,10 +29,16 @@ public class Game {
         first = players.get(0);
     }
 
+    /**
+     * @return players
+     */
     public List<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * print the end of the Game
+     */
     void endOfGame() {
         System.out.println(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
                 + "\n\n" +
@@ -38,11 +52,17 @@ public class Game {
         board.showBoard();
     }
 
+    /**
+     * launch a new Game
+     */
     void run() {
         newGame();
         endOfGame();
     }
 
+    /**
+     * Functionning of the game.
+     */
     void newGame() {
         boolean endOfGame = false;
         int turn = 0;
@@ -71,6 +91,9 @@ public class Game {
         players.forEach(e -> e.calculScore(e.equals(first)));
     }
 
+    /**
+     * Get the right order in order to choose Roles, depending on the King of the last turn
+     */
     void getOrderPlayer() {
         List<Player> alternateList = new ArrayList<>();
         int index = orderPlayers.indexOf(first);
@@ -79,10 +102,20 @@ public class Game {
         orderPlayers = List.copyOf(alternateList);
     }
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * Gets order players.
+     *
+     * @return the order players
+     */
     public List<Player> getOrderPlayers() {
         return orderPlayers;
     }

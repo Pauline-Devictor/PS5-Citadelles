@@ -15,6 +15,8 @@ public class Bishop extends Character {
 
     /**
      * Uses the Bishop's power
+     * Collect taxes of Religion Buildings
+     *
      * @param b the current game's board
      */
     @Override
