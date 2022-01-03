@@ -9,16 +9,50 @@ import java.util.*;
 import static fr.unice.polytech.startingpoint.Board.*;
 import static java.util.Objects.isNull;
 
+/**
+ * Class that represents a single player of the game with its golds, city, hand, role and score.
+ * All decisions made by a player is either done by this class or one of its subclasses.
+ */
 public class Player implements Comparator<Building> {
+    /**
+     * The Name.
+     */
     protected String name;
+    /**
+     * The Gold.
+     */
     protected int gold;
-    protected int goldScore;
+    /**
+     * The Score.
+     */
+    protected int score;
+    /**
+     * The Board.
+     */
     protected final Board board;
+    /**
+     * The Role.
+     */
     protected Character role;
+    /**
+     * The Nb buildable.
+     */
     protected int nbBuildable = 1;
+    /**
+     * The Card hand.
+     */
     protected List<Building> cardHand;
+    /**
+     * The City.
+     */
     protected final List<Building> city;
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param b    board linked to the player
+     * @param name player's name Creates a player linked to a board with a name
+     */
     public Player(Board b, String name) {
         this.name = name;
         board = b;
@@ -26,10 +60,15 @@ public class Player implements Comparator<Building> {
         cardHand = new ArrayList<>();
         city = new ArrayList<>();
         drawAndChoose(4, 4);
-        goldScore = 0;
+        score = 0;
         role = null;
     }
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param b board linked to the player Creates a player linked to a board with undefined name
+     */
     public Player(Board b) {
         this.name = "undefined";
         board = b;
@@ -37,10 +76,13 @@ public class Player implements Comparator<Building> {
         cardHand = new ArrayList<>();
         city = new ArrayList<>();
         drawAndChoose(4, 4);
-        goldScore = 0;
+        score = 0;
         role = null;
     }
 
+    /**
+     * Compare two players depending on the order in the turn
+     */
     public static Comparator<Player> RoleOrder = (e1, e2) -> {
         //Positive if e2 > e1
         int res = 1;
@@ -51,24 +93,41 @@ public class Player implements Comparator<Building> {
         return res;
     };
 
+    /**
+     * The constant PointsOrder.
+     */
     public static Comparator<Player> PointsOrder = (e1, e2) -> {
         //Positive if e2 > e1
-        return e2.getGoldScore() - e1.getGoldScore();
+        return e2.getScore() - e1.getScore();
     };
 
+    /**
+     * Build b is possible
+     *
+     * @param b Building to build
+     */
     public void build(Building b) {
         if (isBuildable(b)) {
             refundGold(b.getCost());
-            goldScore += b.getCost();
+            score += b.getCost();
             cardHand.remove(b);
             city.add(b);
         }
     }
 
+    /**
+     * Is buildable boolean.
+     *
+     * @param b the b
+     * @return the boolean
+     */
     public boolean isBuildable(Building b) {
         return gold >= b.getCost() && !city.contains(b);
     }
 
+    /**
+     * Make the player play a single turn
+     */
     public void play() {
         int goldDraw = getGold();
         if (!getRole().isMurdered()) {
@@ -88,31 +147,58 @@ public class Player implements Comparator<Building> {
             buildDecision();
             //show the move in the console
         }
-            board.showPlay(this, goldDraw);
+        board.showPlay(this, goldDraw);
     }
 
-    private boolean drawOrGold() {
-        boolean emptyDeck = board.getPile().isEmpty();
-        boolean anythingBuildable = cardHand.stream().anyMatch(this::isBuildable);
-        boolean emptyBank = board.getBank().isEmpty();
+    /**
+     * Draw or gold boolean.
+     *
+     * @return boolean, true is the player should draw, false if the player should get golds
+     */
+    public boolean drawOrGold() {
+        boolean emptyDeck = getBoard().getPile().isEmpty();
+        boolean anythingBuildable = getCardHand().stream().anyMatch(this::isBuildable);
+        boolean emptyBank = getBoard().getBank().isEmpty();
         boolean isDraw = (!emptyDeck && !anythingBuildable) || emptyBank;
         board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, this);
         return isDraw;
     }
 
+    /**
+     * plays Prestige city effects each turn
+     */
     public void cityEffects() {
         getCity().forEach(e -> {
             if (e instanceof Laboratory || e instanceof Manufactory) {
                 ((Prestige) e).useEffect(this);
             }
         });
+
     }
 
-    public void roleEffects() {
+    /**
+     * plays Prestige city effects that apply at the end of the game
+     */
+    public void cityEffectsEnd() {
+        getCity().forEach(e -> {
+            if (e instanceof Dracoport || e instanceof University) {
+                ((Prestige) e).useEffect(this);
+            }
+        });
+    }
+
+    /**
+     * Uses player's current role power
+     */
+    private void roleEffects() {
         getRole().usePower(board);
     }
 
-    void checkStolen() {
+
+    /**
+     * Activates Thief's power if the current player has been targeted
+     */
+    private void checkStolen() {
         if (role.isStolen()) {
             int save = gold;
             refundGold(gold);
@@ -120,7 +206,10 @@ public class Player implements Comparator<Building> {
         }
     }
 
-    public void buildDecision() {
+    /**
+     * make the player build as many buildings as possible
+     */
+    private void buildDecision() {
         List<Building> checkBuilding = new ArrayList<>(getCardHand());
         checkBuilding.sort(this);
 
@@ -136,6 +225,9 @@ public class Player implements Comparator<Building> {
         board.showBuilds(checkBuilding, toBuild, this);
     }
 
+    /**
+     * Applies Prestige effects linked to drawing
+     */
     public void drawDecision() {
         if (getCity().containsAll(List.of(new Library(), new Observatory()))) {
             drawAndChoose(3, 2);
@@ -148,6 +240,13 @@ public class Player implements Comparator<Building> {
         }
     }
 
+    /**
+     * Draw and choose list.
+     *
+     * @param nbCards  number of cards to choose from
+     * @param nbChoose number of cards to pick
+     * @return List of chosen cards
+     */
     public List<Building> drawAndChoose(int nbCards, int nbChoose) {
         List<Building> builds = new ArrayList<>();
         Optional<Building> b1;
@@ -158,6 +257,13 @@ public class Player implements Comparator<Building> {
         return chooseBuilding(builds, nbChoose);
     }
 
+    /**
+     * Choose building list.
+     *
+     * @param builds   list of buildings drawn
+     * @param nbBuilds numbers of buildings to choose
+     * @return List of chosen cards make the player choose which cards to pick whenever he draws
+     */
     public List<Building> chooseBuilding(List<Building> builds, int nbBuilds) {
         nbBuilds = (Math.max(nbBuilds, 0));
         builds.sort(this);
@@ -174,6 +280,9 @@ public class Player implements Comparator<Building> {
         return drawn;
     }
 
+    /**
+     * make the player choose an available role
+     */
     public void chooseRole() {
         int index;
         Random r = new Random();
@@ -183,8 +292,15 @@ public class Player implements Comparator<Building> {
         pickRole(index);
     }
 
+    /**
+     * Discard card building.
+     *
+     * @return true if a card has been discarded, else false discards worse card of the hand
+     */
     public Building discardCard() {
         if (getCardHand().size() > 0) {
+            cardHand.sort(this);
+            Collections.reverse(cardHand);
             Building b = cardHand.get(0);
             cardHand.remove(b);
             board.getPile().putCard(b);
@@ -193,14 +309,31 @@ public class Player implements Comparator<Building> {
         return null;
     }
 
+    /**
+     * Refund gold.
+     *
+     * @param amount amount to give back
+     */
     public void refundGold(int amount) {
-        gold -= board.getBank().refundGold(amount);
+        gold -= board.getBank().refundGold(
+                Math.min(amount, getGold())
+        );
     }
 
+    /**
+     * Take money.
+     *
+     * @param amount amount of golds to borrow gets golds from bank
+     */
     public void takeMoney(int amount) {
         gold += board.getBank().withdrawGold(amount);
     }
 
+    /**
+     * Gets majority.
+     *
+     * @return the district that has the most building of its kind in current player's city
+     */
     public District getMajority() {
         HashMap<District, Integer> majority = new HashMap<>();
         for (District d : District.values()) {
@@ -212,11 +345,18 @@ public class Player implements Comparator<Building> {
         return Collections.max(majority.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
+    /**
+     * Pick role boolean.
+     *
+     * @param index index of the given role (listed by turn order from 0)
+     * @return true if the given role was available, else false
+     */
     public boolean pickRole(int index) {
         boolean b = board.getCharactersInfos(index).isAvailable();
         if (b) {
             role = board.getCharactersInfos(index);
             role.took();
+            board.showRole(this);
         }
         return b;
     }
@@ -224,69 +364,160 @@ public class Player implements Comparator<Building> {
     @Override
     public int compare(Building b1, Building b2) {
         //Positive if o2>o1
-        return 0;
+        if (getCardHand().containsAll(List.of(b1, b2)) || getCity().containsAll(List.of(b1, b2)))
+            return 0;
+        if (getCardHand().contains(b1) || getCity().contains(b1))
+            return 1;
+        return -1;
     }
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(board.printName(this)).append(", ").append(board.printRole(this));
+        StringBuilder res = new StringBuilder(printName(this)).append(", ").append(board.printRole(this));
 
-        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or")
-                .append("\nBâtiments :").append("\tScore des Bâtiments : ")
-                .append(printFormat(String.valueOf(goldScore), ANSI_BLUE)).append("\n").append(printFormat("Batiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
-
-        for (Building b : cardHand) {
-            res.append("\n\t").append(b.toString()).append(" ");
-        }
-        res.append("\n").append(printFormat("Batiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
-        for (Building b : city) {
-            res.append("\n\t").append(b.toString()).append(" ");
-        }
+        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or et un score de ")
+                .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
+                .append(printFormat("Bâtiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
+        res.append(printBuildings(cardHand, true));
+        res.append("\n").append(printFormat("Bâtiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
+        res.append(printBuildings(city, true));
         return res.toString();
     }
 
+    /**
+     * compute boolean in oder to do if bonus are available
+     * 0 : Districts
+     * 1 : Prestige
+     * 2 : Complete City
+     *
+     * @return an array of boolean for bonus points
+     */
+    public boolean[] calculBonus() {
+        boolean districts = getCity().stream().map(Building::getDistrict).distinct().count() == 5;
+        boolean prestiges = getCity().stream().filter(e -> e.getDistrict() == District.Prestige).count() >= 2
+                && getCity().stream().anyMatch(e -> e.equals(new MiracleCourtyard()));
+        boolean cityDone = getCity().size() >= 8;
+        return new boolean[]{districts, prestiges, cityDone};
+    }
+
+    /**
+     * modify the score depending on the bonus of the player
+     *
+     * @param first is the player first to finish
+     */
+    public void calculScore(boolean first) {
+        boolean[] var = calculBonus();
+        if (var[0] || var[1])
+            score += 3;
+        if (var[2])
+            score += 2;
+        if (first)
+            score += 2;
+        cityEffectsEnd();
+    }
+
+    /**
+     * Gets gold.
+     *
+     * @return the gold
+     */
     public int getGold() {
         return gold;
     }
 
-    public int getGoldScore() {
-        return goldScore;
+    /**
+     * Gets score.
+     *
+     * @return the score
+     */
+    public int getScore() {
+        return score;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
     public Character getRole() {
         return role;
     }
 
+    /**
+     * Gets card hand.
+     *
+     * @return the card hand
+     */
     public List<Building> getCardHand() {
         return cardHand;
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         nbBuildable = 1;
     }
 
+    /**
+     * Gets city.
+     *
+     * @return the city
+     */
     public List<Building> getCity() {
         return city;
     }
 
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * Gets nb buildable.
+     *
+     * @return the number of buildable builds
+     */
     public int getNbBuildable() {
         return nbBuildable;
     }
 
+    /**
+     * Sets card hand.
+     *
+     * @param cards the cards
+     */
     public void setCardHand(List<Building> cards) {
         cardHand = cards;
     }
 
+    /**
+     * Set Number of Builds to 3.
+     */
     public void buildingArchitect() {
         nbBuildable = 3;
+    }
+
+    /**
+     * Gave i Bonus points.
+     *
+     * @param i the number of points
+     */
+    public void bonusPoints(int i) {
+        score += i;
     }
 }

@@ -16,7 +16,9 @@ public class Architect extends Character {
     }
 
     /**
-     * Uses the Architect's power
+     * Uses the Architect's power :
+     * Draw 2 Cards and raise the number of buildings available for the turn to 3
+     *
      * @param b the current game's board
      */
     @Override

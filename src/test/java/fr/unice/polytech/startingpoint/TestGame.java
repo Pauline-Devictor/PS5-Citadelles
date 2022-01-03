@@ -1,18 +1,17 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class GameTest {
+class TestGame {
     Game g;
     Player p;
     Player p1;
@@ -27,7 +26,7 @@ class GameTest {
     @Test
     void runTest() {
         g.run();
-        verify(g, times(1)).showEndOfGame();
+        verify(g, times(1)).endOfGame();
     }
 
     @Test
@@ -45,13 +44,11 @@ class GameTest {
     }
 
     @Test
-    void getOrderPlayer() {
-
-    }
-
-    @Test
     void getEmptyOrderPlayer() {
-
+        List<Player> players = new ArrayList<>();
+        when(g.getOrderPlayers()).thenReturn(players);
+        g.getOrderPlayer();
+        assertEquals(new ArrayList<>(), players);
     }
 
 }

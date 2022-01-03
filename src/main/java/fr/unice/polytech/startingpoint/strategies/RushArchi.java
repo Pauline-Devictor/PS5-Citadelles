@@ -9,22 +9,33 @@ import java.util.*;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Rush archi.
+ */
 public class RushArchi extends Player {
 
+    /**
+     * Instantiates a new Rush archi.
+     *
+     * @param b the b
+     */
     public RushArchi(Board b) {
         super(b, "RushArchitect");
     }
 
+    public RushArchi(Board b, String name) {
+        super(b, name);
+    }
+
+    /**
+     * Prioritize the Architect, or the Bishop for a big city else Anything
+     */
     @Override
     public void chooseRole() {
         ArrayList<Integer> taxList = new ArrayList<>();
 
         //prioritize architect
         taxList.add(CharacterEnum.Architect.getOrder() - 1);
-
-        //if has 6+ buildings, Bishop
-        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
-        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
 
         taxList.addAll(List.of(
                 CharacterEnum.Magician.getOrder() - 1,
@@ -35,6 +46,11 @@ public class RushArchi extends Player {
                 CharacterEnum.Condottiere.getOrder() - 1
         ));
 
+        //if has 6+ buildings, Bishop
+        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
+        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
+
+
         for (int elem : taxList) {
             if (pickRole(elem)) {
                 return;
@@ -42,6 +58,13 @@ public class RushArchi extends Player {
         }
     }
 
+    /**
+     * Try to pick Religion, or the minimal cost
+     *
+     * @param b1 The First Building
+     * @param b2 The Second Building
+     * @return negative for b1, positive for b2, zero otherwise
+     */
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
@@ -56,9 +79,10 @@ public class RushArchi extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == District.Religion && b2.getDistrict() == District.Religion) return (b1.getCost() - b2.getCost());
             if (b1.getDistrict() == District.Religion) return -1;
             if (b2.getDistrict() == District.Religion) return 1;
         }
-        return (b1.getCost() < b2.getCost()) ? -1 : 1;
+        return (b1.getCost() - b2.getCost());
     }
 }

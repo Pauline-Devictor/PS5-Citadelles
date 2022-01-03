@@ -1,5 +1,9 @@
 package fr.unice.polytech.startingpoint.buildings;
 
+/**
+ * All Buildings available in the Game
+ * with their names, cost & districts
+ */
 public enum BuildingEnum {
     Temple("Temple", 1, District.Religion),
     Eglise("Eglise", 2, District.Religion),

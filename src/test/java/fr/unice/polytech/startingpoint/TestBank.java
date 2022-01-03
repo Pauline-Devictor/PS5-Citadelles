@@ -3,15 +3,15 @@ package fr.unice.polytech.startingpoint;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BankTest {
+public class TestBank {
     @Test
-    void withDrawGold1(){
+    void withDrawGold1() {
         Bank b = new Bank(30);
         assertEquals(3, b.withdrawGold(3));
     }
 
     @Test
-    void withDrawGold2(){
+    void withDrawGold2() {
         Bank b = new Bank(30);
         assertEquals(30, b.withdrawGold(32));
     }
@@ -29,8 +29,9 @@ public class BankTest {
     }
 
     @Test
-    void refundGold2(){
+    void refundGold2() {
         Bank b = new Bank(30);
-        assertThrows(RuntimeException.class, ()-> b.refundGold(-3));
+        b.refundGold(-3);
+        assertEquals(b.getGold(), 30);
     }
 }

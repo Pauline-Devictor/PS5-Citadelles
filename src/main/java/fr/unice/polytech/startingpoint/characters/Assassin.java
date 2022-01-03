@@ -14,7 +14,9 @@ public class Assassin extends Character {
     }
 
     /**
-     * uses the Assassin's power
+     * uses the Assassin's power :
+     * Kill a role
+     *
      * @param b the current game's board
      */
     @Override
@@ -29,7 +31,8 @@ public class Assassin extends Character {
 
     /**
      * Chooses the Assassin's victim
-     *
+     * if the hand is full, kill the magician,
+     * else kill the player which the most Building of a Color
      * @param board  the current game's board
      * @param player the Assassin's player
      * @return the Assassin's victim

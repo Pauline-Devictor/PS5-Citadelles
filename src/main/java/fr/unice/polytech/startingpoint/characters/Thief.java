@@ -12,7 +12,10 @@ public class Thief extends Character {
     }
 
     /**
-     * Uses the Thief's power
+     * Uses the Thief's power :
+     * Set the thief on a role, if the role is pick
+     * Take the gold of the target
+     *
      * @param b the current game's board
      */
     @Override

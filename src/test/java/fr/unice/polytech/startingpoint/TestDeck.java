@@ -1,7 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.buildings.Library;
-import fr.unice.polytech.startingpoint.buildings.Manufactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

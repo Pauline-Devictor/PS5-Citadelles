@@ -14,7 +14,9 @@ public class King extends Character {
     }
 
     /**
-     * Uses the King's power
+     * Uses the King's power :
+     * Collect Taxes from Noble Districts
+     *
      * @param b the current game's board
      */
     @Override
