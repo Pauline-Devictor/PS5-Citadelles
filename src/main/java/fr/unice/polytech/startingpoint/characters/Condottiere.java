@@ -40,6 +40,8 @@ public class Condottiere extends Character {
 
     /**
      * Chooses the Condottiere's target
+     * If a player has more than 5 buildings, targets him
+     * Else, targets a player which has a 1 gold building
      *
      * @param board  the current game's board
      * @param player the Condottiere's player
@@ -49,7 +51,17 @@ public class Condottiere extends Character {
         List<Player> cityList = map(board);
         //Verification que le personnage est un role qui ne soit pas Eveque, ou que ce ne soit pas le condottiere
         cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class || c.getCity().size()>=8);
-        return cityList.isEmpty() ? null : cityList.get(cityList.size() - 1);
+        if((!cityList.isEmpty() && cityList.get(cityList.size() - 1).getCity().size() > 5)) return cityList.get(cityList.size() - 1);
+
+        else if (!cityList.isEmpty()) {
+            Collections.reverse(cityList);
+            for (Player p : cityList) {
+                for (Building b: p.getCity()) {
+                    if(b.getCost() == 1) return p;
+                }
+            }
+        }
+        return  null;
     }
 
     /**
@@ -76,7 +88,7 @@ public class Condottiere extends Character {
         costList.removeIf(c -> c instanceof Donjon);
 
         if(!costList.isEmpty()) {
-            if (condo.getGold() > 10)
+            if (condo.getGold() > 10 && target.getCity().size() >5)
                 this.build = costList.get(costList.size() - 1);
             else
                 this.build = costList.get(0);

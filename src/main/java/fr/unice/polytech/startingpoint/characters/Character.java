@@ -184,7 +184,7 @@ public abstract class Character {
     }
 
     /**
-     * Map list.
+     * Map list and sort by city size.
      *
      * @param board the board
      * @return the list
