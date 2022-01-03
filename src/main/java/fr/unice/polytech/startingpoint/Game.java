@@ -50,6 +50,7 @@ public class Game {
                 + "\n"
                 + printFormat("Pour plus de details sur la fin de partie :", ANSI_YELLOW, ANSI_ITALIC));
         board.showBoard();
+        board.writeWinner();
     }
 
     /**

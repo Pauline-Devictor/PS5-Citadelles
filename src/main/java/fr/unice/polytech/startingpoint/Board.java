@@ -1,10 +1,12 @@
 package fr.unice.polytech.startingpoint;
 
+import fr.unice.polytech.startingpoint.Csv.CsvWrite;
 import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.*;
 
+import javax.lang.model.type.NullType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -551,5 +553,33 @@ public class Board {
 
     public void showRole(Player player) {
         System.out.println(printName(player) + " a choisi le role " + printRole(player));
+    }
+
+    /**
+     * write result of the game in results.csv
+     */
+    public void writeWinner(){
+        CsvWrite writer = new CsvWrite();
+        writer.write(""); //reset the resources "stats.csv"
+        players.sort(PointsOrder);
+        int index = 0;
+        int bestScore = players.get(0).getScore();
+        if (players.get(1).getScore() == players.get(0).getScore()){ //determine if equalities or not
+            while (players.get(index).getScore() == players.get(0).getScore() && index < players.size()){
+                writer.append(players.get(index).getName() + ",0,1,0");
+                index+=1;
+            }
+            while (index < players.size()){
+                writer.append(players.get(index).getName() + ",0,0,1");
+                index+=1;
+            }
+        }
+        else {
+            writer.append(players.get(0).getName() + ",1,0,0");
+            for (index=1;index<players.size(); index++){
+                writer.append(players.get(index).getName() + ",0,0,1");
+            }
+        }
+        writer.save(); //save the data
     }
 }
