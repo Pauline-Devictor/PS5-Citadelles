@@ -1,9 +1,7 @@
 package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
-import fr.unice.polytech.startingpoint.buildings.Building;
-import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
-import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.strategies.Player;
@@ -63,5 +61,17 @@ public class TestAssassin {
         when(board.getPlayers()).thenReturn(List.of(player));
         assassinCharacter.usePower(board);
         assertTrue(board.getCharactersInfos(2).isMurdered());
+    }
+
+    @Test
+    void assassinArchi(){
+        when(magician.getCity()).thenReturn(List.of(new Manufactory(), new Graveyard(), new Library(), new Observatory(), new MiracleCourtyard()));
+        when(magician.getCardHand()).thenReturn(List.of(new MiracleCourtyard(), new Graveyard()));
+        when(magician.getGold()).thenReturn(5);
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(board.getPlayers()).thenReturn(List.of(magician, player));
+        assassinCharacter.usePower(board);
+        //archi
+        assertTrue(board.getCharactersInfos(6).isMurdered());
     }
 }

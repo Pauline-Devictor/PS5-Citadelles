@@ -40,6 +40,13 @@ public class Assassin extends Character {
     public Character chooseVictim(Board board, Player player) {
         if (player.getCardHand().size() > 4)
             return board.getCharactersInfos(2);
+
+        //condition archi
+        for (Player p : board.getPlayers()) {
+            if (p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5 && !p.equals(player))
+                return board.getCharacters().get(CharacterEnum.Architect.getOrder() - 1);
+        }
+
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > 5) {
                 District color = p.getMajority();
@@ -63,8 +70,9 @@ public class Assassin extends Character {
                 }
             }
         }
+
         Random random = new Random();
-        int victim = random.nextInt(7) + 1;
+        int victim = random.nextInt(6) + 2;
         return board.getCharacters().get(victim);
     }
 }
