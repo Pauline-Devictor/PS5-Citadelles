@@ -11,7 +11,7 @@ public class Dracoport extends Prestige {
      * Instantiates a new Dracoport.
      */
     public Dracoport() {
-        super(BuildingEnum.CourDesMiracles);
+        super(BuildingEnum.Dracoport);
     }
 
     /**

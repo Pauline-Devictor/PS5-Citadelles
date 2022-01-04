@@ -4,7 +4,9 @@ import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.*;
 
 import static fr.unice.polytech.startingpoint.Board.*;
 
@@ -12,6 +14,7 @@ import static fr.unice.polytech.startingpoint.Board.*;
  * The type Game.
  */
 public class Game {
+    public static Logger LOGGER = Logger.getLogger(Game.class.getName());
     private final Board board;
     private final List<Player> players;
     private List<Player> orderPlayers;
@@ -27,6 +30,25 @@ public class Game {
         orderPlayers = List.copyOf(board.getPlayers());
         players = board.getPlayers();
         first = players.get(0);
+
+        LOGGER.setLevel(Level.ALL);
+        ConsoleHandler show = new ConsoleHandler();
+        show.setLevel(Level.FINEST);
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.addHandler(show);
+        Formatter testFormat = new SimpleFormatter() {
+            private static final String format = "%3$s %n";
+
+            @Override
+            public synchronized String format(LogRecord lr) {
+                return String.format(format,
+                        new Date(lr.getMillis()),
+                        lr.getLevel().getLocalizedName(),
+                        lr.getMessage()
+                );
+            }
+        };
+        show.setFormatter(testFormat);
     }
 
     /**
@@ -40,13 +62,13 @@ public class Game {
      * Print the end game details
      */
     void endOfGame() {
-        System.out.println(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
-                + "\n\n" +
+
+        LOGGER.finest(printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND) + "\n\n" +
                 printFormat("La partie est fini, calcul des bonus :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
         players.forEach(e -> board.showBonus(e.equals(first), e));
-        System.out.println(printFormat("Le classement de fin de partie est le suivant :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
+        LOGGER.finer(printFormat("Le classement de fin de partie est le suivant :", ANSI_BLACK, ANSI_BLUE_BACKGROUND));
         board.showRanking();
-        System.out.println("\n" + printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
+        LOGGER.finest("\n" + printFormat("_____________________________________________________________________", ANSI_RED, ANSI_BOLD, ANSI_WHITE_BACKGROUND)
                 + "\n"
                 + printFormat("Pour plus de details sur la fin de partie :", ANSI_YELLOW, ANSI_ITALIC));
         board.showBoard();
@@ -75,7 +97,8 @@ public class Game {
             //Phase de Choix des Roles
             getOrderPlayer();
             orderPlayers.forEach(Player::chooseRole);
-            System.out.println();
+            //LOGGER.fine("\n");
+            //System.out.println();
             players.sort(Player.RoleOrder);
 
             //Phase de Jeu
