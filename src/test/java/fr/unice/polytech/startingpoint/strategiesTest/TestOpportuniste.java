@@ -209,6 +209,22 @@ public class TestOpportuniste {
     }
 
     @Test
+    void chooseRoleBishop3(){
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Marche)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(bot));
+
+        bot.chooseRole();
+        assertEquals(mockBishop, bot.getRole());
+    }
+
+    @Test
     void compareSameCostMilitaryVsReligion(){
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
     }
