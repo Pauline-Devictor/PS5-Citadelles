@@ -1,6 +1,7 @@
 package fr.unice.polytech.startingpoint.characters;
 
 import fr.unice.polytech.startingpoint.Board;
+import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
@@ -49,6 +50,7 @@ public class Assassin extends Character {
             priorityTarget = Optional.empty();
             return board.getCharactersInfos(copyOfTarget);
         }
+
         if (player.getCardHand().size() > 4)
             return board.getCharactersInfos(2);
 
@@ -58,9 +60,32 @@ public class Assassin extends Character {
                 return board.getCharacters().get(CharacterEnum.Architect.getOrder() - 1);
         }
 
-        for (Player p : board.getPlayers()) {
-            if (p.getCity().size() > 5) {
-                District color = p.getMajority();
+        Optional<Player> p = findPlayer(board);
+        if(p.isPresent()){
+            boolean contains1gold = false;
+            for (Building b: p.get().getCity()) {
+                if (b.getCost() == 1) contains1gold = true;
+            }
+            if(p.get().getCity().size() == 6 || contains1gold){
+                return board.getCharacters().get(CharacterEnum.Condottiere.getOrder() - 1);
+            }
+        }
+
+        int riches = 0;
+        for (Player enemies : board.getPlayers()) {
+            if (enemies.getGold() > 4) riches++;
+        }
+        if(riches > 1){
+            return  board.getCharactersInfos(CharacterEnum.Thief.getOrder() - 1);
+        }
+
+
+
+
+
+        for (Player enemies : board.getPlayers()) {
+            if (enemies.getCity().size() > 5) {
+                District color = enemies.getMajority();
                 switch (color) {
                     case Commercial -> {
                         return board.getCharactersInfos(4);
