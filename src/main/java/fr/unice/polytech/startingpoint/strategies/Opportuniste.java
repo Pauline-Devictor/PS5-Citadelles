@@ -57,10 +57,32 @@ public class Opportuniste extends Player {
             }
         }
 
-
         //case: a 7-build enemy
         if(enemyHas7builds){
-            //TODO issue 42
+           if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()
+              && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
+               pickRole(CharacterEnum.Condottiere.getOrder()-1);
+               return;
+           }
+           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
+                   && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
+               pickRole(CharacterEnum.Assassin.getOrder()-1);
+               return;
+           }
+           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
+                   && board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()){
+               pickRole(CharacterEnum.Assassin.getOrder()-1);
+               for (Player p : board.getPlayers()) {
+                   if(p.getCity().size() == 7 && p.getCardHand().isEmpty()){
+                       ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
+                               .setPriorityTarget(CharacterEnum.Magician.getOrder()-1);
+                       return;
+                   }
+               }
+               ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
+                       .setPriorityTarget(CharacterEnum.Bishop.getOrder()-1);
+               return;
+           }
         }
 
         //case: someone has too much advance (might finish with Archi)

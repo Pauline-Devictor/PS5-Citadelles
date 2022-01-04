@@ -1,6 +1,4 @@
 package fr.unice.polytech.startingpoint.csv;
-import fr.unice.polytech.startingpoint.Csv.CsvRead;
-import fr.unice.polytech.startingpoint.Csv.CsvWrite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -8,7 +8,10 @@ import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;

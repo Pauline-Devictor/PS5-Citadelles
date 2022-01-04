@@ -5,7 +5,8 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Objects.isNull;
 
