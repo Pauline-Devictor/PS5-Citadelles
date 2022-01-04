@@ -21,6 +21,7 @@ public class TestAssassin {
     Player magician;
     Assassin assassinCharacter;
     Magician magicianCharacter;
+    Merchant merchantCharacter;
 
     @BeforeEach
     void setUp() {
@@ -30,6 +31,7 @@ public class TestAssassin {
         magician = spy(new Player(board));
         assassinCharacter = spy(Assassin.class);
         magicianCharacter = spy(Magician.class);
+        merchantCharacter = spy(Merchant.class);
     }
     @Test
     void killSomeone() {
@@ -41,7 +43,7 @@ public class TestAssassin {
     }
 
     @Test
-    void assassinChooseVictimColor() {
+    void assassinChoosesCondoBecauseOwns1CostBuilding() {
         when(player.getCity()).thenReturn(List.of(new Building(BuildingEnum.Manoir),
                 new Building(BuildingEnum.TourDeGuet),
                 new Building(BuildingEnum.Port),
@@ -52,7 +54,35 @@ public class TestAssassin {
         when(board.getPlayers()).thenReturn(List.of(player));
         when(player.getMajority()).thenReturn(District.Commercial);
         assassinCharacter.usePower(board);
+        assertTrue(board.getCharactersInfos(7).isMurdered());
+    }
+
+    @Test
+    void assassinChooseVictimColorMerchant() {
+        when(magician.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Manoir),
+                new Building(BuildingEnum.Prison),
+                new Building(BuildingEnum.Echoppe),
+                new Building(BuildingEnum.Port),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.Comptoir)));
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(magician.getRole()).thenReturn(merchantCharacter);
+        when(board.getPlayers()).thenReturn(List.of(player, magician));
+        when(player.getMajority()).thenReturn(District.Commercial);
+        assassinCharacter.usePower(board);
         assertTrue(board.getCharactersInfos(4).isMurdered());
+    }
+
+    @Test
+    void assassinChooseThiefPotentielBigTheft() {
+        when(magician.getGold()).thenReturn(5);
+        when(player.getGold()).thenReturn(7);
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(magician.getRole()).thenReturn(magicianCharacter);
+        when(board.getPlayers()).thenReturn(List.of(player, magician));
+        assassinCharacter.usePower(board);
+        assertTrue(board.getCharactersInfos(1).isMurdered());
     }
 
     @Test

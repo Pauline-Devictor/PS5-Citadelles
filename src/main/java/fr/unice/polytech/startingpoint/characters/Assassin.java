@@ -64,7 +64,7 @@ public class Assassin extends Character {
         if(p.isPresent()){
             boolean contains1gold = false;
             for (Building b: p.get().getCity()) {
-                if (b.getCost() == 1) contains1gold = true;
+                if (b.getCost() == 1) contains1gold = true; break;
             }
             if(p.get().getCity().size() == 6 || contains1gold){
                 return board.getCharacters().get(CharacterEnum.Condottiere.getOrder() - 1);
