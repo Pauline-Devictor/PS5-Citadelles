@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
+
 public class CsvRead {
     public void read() {
         //Build reader instance
@@ -21,6 +23,8 @@ public class CsvRead {
                 //Verifying the read data here
                 System.out.println(Arrays.toString(nextLine));
             }
-        }catch (Exception e){System.out.println("Failed to read");}
+        } catch (Exception e) {
+            LOGGER.severe("Failed to read :" + e.getMessage());
+        }
     }
 }

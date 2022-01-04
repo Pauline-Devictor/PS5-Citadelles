@@ -375,7 +375,7 @@ public class Player implements Comparator<Building> {
     public String toString() {
         StringBuilder res = new StringBuilder(printName(this)).append(", ").append(board.printRole(this));
 
-        res.append(ANSI_RESET + " avec ").append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(" pieces d'or et un score de ")
+        res.append(printFormat(" avec ", ANSI_WHITE)).append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(printFormat(" pieces d'or et un score de ", ANSI_WHITE))
                 .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
                 .append(printFormat("Bâtiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
         res.append(printBuildings(cardHand, true));

@@ -53,19 +53,15 @@ public class Assassin extends Character {
                 switch (color) {
                     case Commercial -> {
                         return board.getCharactersInfos(4);
-                        //return new Merchant();
                     }
                     case Noble -> {
                         return board.getCharactersInfos(3);
-                        //return new King();
                     }
                     case Military -> {
                         return board.getCharactersInfos(7);
-                        //return new Condottiere();
                     }
                     case Religion -> {
                         return board.getCharactersInfos(5);
-                        //return new Bishop();
                     }
                 }
             }
