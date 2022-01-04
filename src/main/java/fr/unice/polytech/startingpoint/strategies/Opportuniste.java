@@ -3,6 +3,7 @@ package fr.unice.polytech.startingpoint.strategies;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.characters.Assassin;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
 import java.util.ArrayList;
@@ -31,9 +32,10 @@ public class Opportuniste extends Player {
         //condition to not let someone play Architect
         for (Player p : board.getPlayers()) {
             if (p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5 && !p.equals(this))
-                if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable())
-                    //to kill Architect
-                    characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
+                if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()){
+                    //to kill the architect
+                    ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Architect.getOrder());
+                    characters.add(0, CharacterEnum.Assassin.getOrder() - 1);}
                 else if(board.getCharactersInfos(CharacterEnum.Architect.getOrder() - 1).isAvailable())
                     //to prevent player from playing Architect
                     characters.add(0,CharacterEnum.Architect.getOrder() - 1);
@@ -45,10 +47,11 @@ public class Opportuniste extends Player {
                 if(board.getCharactersInfos(CharacterEnum.King.getOrder() - 1).isAvailable())
                     //to prevent him from taking King -> Assassin
                     characters.add(0, CharacterEnum.King.getOrder() - 1);
-                else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable())
+                else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
                     //to kill the King
-                    //TODO set Assassin's target?
+                    ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Architect.getOrder());
                     characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
+                }
                 else if(board.getCharactersInfos(CharacterEnum.Condottiere.getOrder() - 1).isAvailable())
                     //to destroy a building from the player
                     characters.add(0, CharacterEnum.Condottiere.getOrder() - 1);

@@ -74,4 +74,17 @@ public class TestAssassin {
         //archi
         assertTrue(board.getCharactersInfos(6).isMurdered());
     }
+
+    @Test
+    void assassinTargetKing(){
+        when(magician.getCity()).thenReturn(List.of(new Manufactory(), new Graveyard(), new Library(), new Observatory(), new MiracleCourtyard()));
+        when(magician.getCardHand()).thenReturn(List.of(new MiracleCourtyard(), new Graveyard()));
+        when(magician.getGold()).thenReturn(5);
+        when(player.getRole()).thenReturn(assassinCharacter);
+        when(board.getPlayers()).thenReturn(List.of(magician, player));
+        // should kill king over anything
+        assassinCharacter.setPriorityTarget(3);
+        assassinCharacter.usePower(board);
+        assertTrue(board.getCharactersInfos(3).isMurdered());
+    }
 }

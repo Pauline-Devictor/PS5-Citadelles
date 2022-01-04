@@ -8,9 +8,15 @@ import java.util.Optional;
 import java.util.Random;
 
 public class Assassin extends Character {
+    Optional<Integer> priorityTarget;
 
     public Assassin() {
         super(CharacterEnum.Assassin);
+        priorityTarget = Optional.empty();
+    }
+
+    public void setPriorityTarget(int priorityTarget) {
+        this.priorityTarget = Optional.of(priorityTarget);
     }
 
     /**
@@ -38,6 +44,11 @@ public class Assassin extends Character {
      * @return the Assassin's victim
      */
     public Character chooseVictim(Board board, Player player) {
+        if(priorityTarget.isPresent()){
+            int copyOfTarget = priorityTarget.get();
+            priorityTarget = Optional.empty();
+            return board.getCharactersInfos(copyOfTarget);
+        }
         if (player.getCardHand().size() > 4)
             return board.getCharactersInfos(2);
 
