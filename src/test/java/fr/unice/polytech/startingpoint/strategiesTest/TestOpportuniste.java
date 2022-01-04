@@ -8,7 +8,6 @@ import fr.unice.polytech.startingpoint.buildings.Observatory;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.HighScoreArchi;
 import fr.unice.polytech.startingpoint.strategies.Opportuniste;
-import fr.unice.polytech.startingpoint.strategies.Opportuniste;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

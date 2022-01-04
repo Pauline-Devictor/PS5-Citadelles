@@ -12,9 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.logging.Level;
 
-import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.spy;
@@ -29,7 +27,7 @@ public class TestCondottiere {
 
     @BeforeEach
     void setUp() {
-        LOGGER.setLevel(Level.OFF);
+        //LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         archi = spy(new Player(board));
         condo = spy(new Player(board));
@@ -58,24 +56,6 @@ public class TestCondottiere {
         condottiereCharacter.usePower(board);
         //too expensive to destroy (archi has only one card, so not worth it)
         assertEquals(1, archi.getCity().size());
-    }
-
-    @Test
-    void destroyMostExpensiveBuild() {
-        archi.takeMoney(25);
-        archi.pickRole(6);
-        condo.pickRole(7);
-        archi.build(new Manufactory());
-        archi.build(new Building(BuildingEnum.Eglise));
-        archi.build(new Building(BuildingEnum.Echoppe));
-        archi.build(new Building(BuildingEnum.Port));
-        archi.build(new Building(BuildingEnum.Temple));
-        archi.build(new Building(BuildingEnum.TourDeGuet));
-
-        when(board.getPlayers()).thenReturn(List.of(condo, archi));
-        condo.takeMoney(12); // Take money to be able to destroy a build with his power
-        condottiereCharacter.usePower(board);
-        assertFalse(archi.getCity().contains(new Manufactory()));
     }
 
     @Test

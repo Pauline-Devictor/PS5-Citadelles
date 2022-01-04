@@ -1,9 +1,9 @@
-package fr.unice.polytech.startingpoint.Csv;
+package fr.unice.polytech.startingpoint.csv;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.util.Arrays;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
 

@@ -3,20 +3,21 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Formatter;
 import java.util.logging.*;
 
 import static fr.unice.polytech.startingpoint.Board.*;
+import static fr.unice.polytech.startingpoint.Main.nb_players;
+import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 
 /**
  * The type Game.
  */
 public class Game {
     public static Logger LOGGER = Logger.getLogger(Game.class.getName());
-    private final Board board;
-    private final List<Player> players;
+    private Board board;
+    private List<Player> players;
     private List<Player> orderPlayers;
     private Player first;
 
@@ -26,16 +27,12 @@ public class Game {
      * @param nb_players the nb players
      */
     Game(int nb_players) {
-        board = new Board(nb_players);
-        orderPlayers = List.copyOf(board.getPlayers());
-        players = board.getPlayers();
-        first = players.get(0);
+        initBoard(nb_players);
 
-        LOGGER.setLevel(Level.ALL);
         ConsoleHandler show = new ConsoleHandler();
-        show.setLevel(Level.FINEST);
-        LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(show);
+        show.setLevel(Level.FINEST);
+
         Formatter testFormat = new SimpleFormatter() {
             private static final String format = "%3$s %n";
 
@@ -84,10 +81,31 @@ public class Game {
         endOfGame();
     }
 
+    void initBoard(int nb_players) {
+        board = new Board(nb_players);
+        orderPlayers = List.copyOf(board.getPlayers());
+        players = board.getPlayers();
+        first = players.get(0);
+    }
+
+    void run1000() {
+        Map<String, Integer> results = new TreeMap<>();
+        for (int i = 0; i < 1000; i++) {
+            newGame();
+            players.sort(PointsOrder);
+            if (results.containsKey(players.get(0).getName()))
+                results.put(players.get(0).getName(), results.get(players.get(0).getName()) + 1);
+            else
+                results.put(players.get(0).getName(), 1);
+        }
+        board.showStats(results);
+    }
+
     /**
      * Start the game and keep going until game is over
      */
     void newGame() {
+        initBoard(nb_players);
         boolean endOfGame = false;
         int turn = 0;
         while (!endOfGame) {
@@ -97,8 +115,6 @@ public class Game {
             //Phase de Choix des Roles
             getOrderPlayer();
             orderPlayers.forEach(Player::chooseRole);
-            //LOGGER.fine("\n");
-            //System.out.println();
             players.sort(Player.RoleOrder);
 
             //Phase de Jeu

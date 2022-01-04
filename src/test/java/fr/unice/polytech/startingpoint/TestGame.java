@@ -2,7 +2,6 @@ package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -54,4 +53,9 @@ class TestGame {
         assertEquals(new ArrayList<>(), players);
     }
 
+    @Test
+    void run1000Test() {
+        g.run1000();
+        verify(g, times(1000)).initBoard(anyInt());
+    }
 }

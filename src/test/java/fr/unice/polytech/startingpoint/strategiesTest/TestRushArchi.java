@@ -6,7 +6,6 @@ import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.Library;
 import fr.unice.polytech.startingpoint.buildings.Observatory;
 import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.strategies.HighScoreThief;
 import fr.unice.polytech.startingpoint.strategies.RushArchi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

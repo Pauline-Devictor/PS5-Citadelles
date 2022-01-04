@@ -1,8 +1,6 @@
 package fr.unice.polytech.startingpoint.strategiesTest;
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -13,7 +11,6 @@ import fr.unice.polytech.startingpoint.buildings.Library;
 import fr.unice.polytech.startingpoint.buildings.Observatory;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.HighScoreArchi;
-import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

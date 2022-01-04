@@ -1,13 +1,16 @@
 package fr.unice.polytech.startingpoint;
 
-import fr.unice.polytech.startingpoint.Csv.CsvWrite;
-import fr.unice.polytech.startingpoint.buildings.*;
+import fr.unice.polytech.startingpoint.buildings.Building;
+import fr.unice.polytech.startingpoint.buildings.District;
+import fr.unice.polytech.startingpoint.buildings.Prestige;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
@@ -68,7 +71,7 @@ public class Board {
      * Instantiates a new Board.
      */
     public Board() {
-        this(4);
+        this(6);
     }
 
     /**
@@ -80,13 +83,11 @@ public class Board {
     public List<Player> generatePlayers(int nbPlayers) {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
-        //players.add(new RushArchi(this));
+        players.add(new RushArchi(this));
         players.add(new HighScoreArchi(this));
-        //players.add(new HighScoreThief(this));
+        players.add(new HighScoreThief(this));
         players.add(new HighThiefManufactory(this));
         players.add(new RushArchiLab(this));
-        //players.add(new BalancedFirst(this));
-        //players.add(new Player(this));
         for (int i = 4; i < nbPlayers; i++)
             players.add(new Player(this));
         return players;
@@ -183,12 +184,21 @@ public class Board {
     void showRanking() {
         players.sort(PointsOrder);
         for (int i = 1; i <= players.size(); i++) {
-            LOGGER.fine(printFormat(i + ". Avec ", ANSI_WHITE)
+            LOGGER.config(printFormat(i + ". Avec ", ANSI_WHITE)
                     + printFormat(String.valueOf(players.get(i - 1).getScore()), ANSI_BOLD, ANSI_GREEN)
                     + printFormat(" points, c'est ", ANSI_WHITE)
                     + printName(players.get(i - 1))
             );
         }
+    }
+
+    /**
+     * Show stats when 1000 games are thrown
+     */
+    void showStats(Map<String, Integer> results) {
+        StringBuilder res = new StringBuilder();
+        results.forEach((k, v) -> res.append(k).append(" Victoires : ").append(v).append("\n"));
+        LOGGER.config(String.valueOf(res));
     }
 
     /**
@@ -198,7 +208,6 @@ public class Board {
         StringBuilder res = new StringBuilder();
         players.forEach(e -> res.append(e).append("\n"));
         LOGGER.fine(String.valueOf(res));
-        //System.out.println(res);
     }
 
     /**
@@ -218,16 +227,6 @@ public class Board {
                 + printFormat("\nLes Joueurs detiennent ", ANSI_WHITE)
                 + printFormat(res.toString(), ANSI_YELLOW)
                 + printFormat(" pieces d'or\n", ANSI_WHITE));
-        /*System.out.println(printFormat("Tour " + turn, ANSI_BLACK, ANSI_RED_BACKGROUND) +
-                " Il reste "
-                + printFormat(String.valueOf(pile.numberOfCards()), ANSI_GREEN, ANSI_BOLD)
-                + " cartes dans la pioche."
-                + "\nLa Banque detient "
-                + printFormat(String.valueOf(bank.getGold()), ANSI_YELLOW)
-                + " pieces d'or"
-                + "\nLes Joueurs detiennent "
-                + printFormat(res.toString(), ANSI_YELLOW)
-                + " pieces d'or\n");              */
         if (res.get() + bank.getGold() != 30) {
             throw new IllegalStateException("L'or total n'est plus égal à 30");
         }
