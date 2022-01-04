@@ -78,6 +78,10 @@ public class HighScoreArchi extends Player {
         }
     }
 
+    /**
+     * @param d the Buildding's District
+     * @return the weight of the District
+     */
     private int calculDistrict(District d) {
         return switch (d) {
             case Commercial -> 3;
