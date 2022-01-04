@@ -9,9 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.logging.Level;
 
-import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
@@ -26,7 +24,7 @@ public class TestAssassin {
 
     @BeforeEach
     void setUp() {
-        LOGGER.setLevel(Level.OFF);
+        //LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         player = spy(new Player(board));
         magician = spy(new Player(board));

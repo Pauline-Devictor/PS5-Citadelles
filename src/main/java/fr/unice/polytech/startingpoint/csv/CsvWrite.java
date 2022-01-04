@@ -1,10 +1,10 @@
-package fr.unice.polytech.startingpoint.Csv;
-
-import java.io.FileReader;
-import java.io.FileWriter;
+package fr.unice.polytech.startingpoint.csv;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
 
