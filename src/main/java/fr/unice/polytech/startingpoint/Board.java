@@ -3,6 +3,9 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Prestige;
+import fr.unice.polytech.startingpoint.csv.CsvRead;
+import fr.unice.polytech.startingpoint.csv.CsvWrite;
+import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.csv.CsvWrite;
@@ -657,6 +660,5 @@ public class Board {
                 writer.append(players.get(index).getName() + ",0,0,1");
             }
         }
-        writer.save(); //save the data
     }
 }

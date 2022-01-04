@@ -26,32 +26,32 @@ public class TestCsvWrite {
     @Test
     void writeEmpty(){
         writer.write("");
-        reader.read();
+        reader.printCsv("src/main/resources/save/stats.csv");
         Mockito.verify(outMock).println("[]");
     }
     @Test
     void writeMessage(){
         writer.write("a message");
-        reader.read();
+        reader.printCsv("src/main/resources/save/stats.csv");
         Mockito.verify(outMock).println("[a message]");
     }
     @Test
     void appendVoid(){
         writer.append("");
-        reader.read();
+        reader.printCsv("src/main/resources/save/stats.csv");
         verify(outMock,times(2)).println("[]");
     }
     @Test
     void appendSomething(){
         writer.append("Here some text to test");
-        reader.read();
+        reader.printCsv("src/main/resources/save/stats.csv");
         Mockito.verify(outMock).println("[Here some text to test]");
     }
     @Test
     void appendAfterWriting(){
         writer.write("write");
         writer.append("append");
-        reader.read();
+        reader.printCsv("src/main/resources/save/stats.csv");
         verify(outMock,times(2)).println(anyString());
     }
 }
