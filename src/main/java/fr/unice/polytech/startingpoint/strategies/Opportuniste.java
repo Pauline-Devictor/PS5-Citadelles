@@ -31,47 +31,49 @@ public class Opportuniste extends Player {
 
         //condition to not let someone play Architect
         for (Player p : board.getPlayers()) {
-            if (p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5 && !p.equals(this))
-                if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()){
-                    //to kill the architect
+            if (this.hashCode() != p.hashCode() && p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5) {
+                if (board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
+                    //to kill Architect
                     ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Architect.getOrder());
-                    characters.add(0, CharacterEnum.Assassin.getOrder() - 1);}
-                else if(board.getCharactersInfos(CharacterEnum.Architect.getOrder() - 1).isAvailable())
+                    characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
+                }
+                else if (board.getCharactersInfos(CharacterEnum.Architect.getOrder() - 1).isAvailable())
                     //to prevent player from playing Architect
-                    characters.add(0,CharacterEnum.Architect.getOrder() - 1);
+                    characters.add(0, CharacterEnum.Architect.getOrder() - 1);
+            }
         }
 
         //case: a 6-buildind player
         for (Player p : board.getPlayers()) {
-            if(p.getCity().size() == 6){
-                if(board.getCharactersInfos(CharacterEnum.King.getOrder() - 1).isAvailable())
+            if (this.hashCode() != p.hashCode() && p.getCity().size() == 6) {
+                if (board.getCharactersInfos(CharacterEnum.King.getOrder() - 1).isAvailable())
                     //to prevent him from taking King -> Assassin
                     characters.add(0, CharacterEnum.King.getOrder() - 1);
                 else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
                     //to kill the King
-                    ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Architect.getOrder());
+                    ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.King.getOrder());
                     characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
                 }
                 else if(board.getCharactersInfos(CharacterEnum.Condottiere.getOrder() - 1).isAvailable())
                     //to destroy a building from the player
                     characters.add(0, CharacterEnum.Condottiere.getOrder() - 1);
-                else if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder() - 1).isAvailable())
+                else if (board.getCharactersInfos(CharacterEnum.Bishop.getOrder() - 1).isAvailable())
                     //to prevent him from playing Bishop and have no Building destroyed
                     characters.add(0, CharacterEnum.Bishop.getOrder() - 1);
             }
         }
 
         //adds all missing characters in order
-        for(int i = 0; i<8; i++){
-            if(!characters.contains(i)) characters.add(i);
-        }
+            for (int i = 0; i < 8; i++) {
+                if (!characters.contains(i)) characters.add(i);
+            }
 
-        for (int elem : characters) {
-            if (pickRole(elem)) {
-                return;
+            for (int elem : characters) {
+                if (pickRole(elem)) {
+                    return;
+                }
             }
         }
-    }
 
     /**
      * @param d the Buildding's District

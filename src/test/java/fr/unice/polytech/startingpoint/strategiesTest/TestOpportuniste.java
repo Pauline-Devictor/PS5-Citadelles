@@ -15,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
@@ -36,6 +38,7 @@ public class TestOpportuniste {
 
     @BeforeEach
     void setUp() {
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
 
         mockAssassin = spy(new Assassin());
@@ -209,6 +212,22 @@ public class TestOpportuniste {
     }
 
     @Test
+    void chooseRoleBishop3(){
+        when(bot.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Marche)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(bot));
+
+        bot.chooseRole();
+        assertEquals(mockBishop, bot.getRole());
+    }
+
+    @Test
     void compareSameCostMilitaryVsReligion(){
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
     }
@@ -225,7 +244,7 @@ public class TestOpportuniste {
 
     @Test
     void compareSameCostNobleVsCommercial(){
-        assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) == 0);
+        assertEquals(0, bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)));
     }
 
     @Test

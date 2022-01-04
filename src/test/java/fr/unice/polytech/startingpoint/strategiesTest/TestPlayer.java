@@ -7,11 +7,14 @@ import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.strategies.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 import static fr.unice.polytech.startingpoint.strategies.Player.RoleOrder;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +32,7 @@ public class TestPlayer {
 
     @BeforeEach
     void setUp() {
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         pSpy = spy(new Player(board));
         p = new Player(new Board());

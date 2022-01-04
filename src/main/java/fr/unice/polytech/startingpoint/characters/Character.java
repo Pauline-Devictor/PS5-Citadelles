@@ -21,9 +21,6 @@ public abstract class Character {
      * The Character.
      */
     protected final CharacterEnum character;
-    /**
-     * The Available.
-     */
     protected boolean available;
     private boolean isMurdered;
     private boolean stolen;
@@ -111,6 +108,7 @@ public abstract class Character {
         p.takeMoney(taxes);
         p.getBoard().showTaxes(d, p, taxes);
     }
+
 
     /**
      * Is available boolean.

@@ -11,7 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -35,6 +37,7 @@ public class TestMerchant {
 
     @BeforeEach
     void setUp() {
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         king = new King();
         player = spy(new Player(board));

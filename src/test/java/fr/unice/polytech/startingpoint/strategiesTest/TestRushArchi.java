@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -35,6 +37,7 @@ public class TestRushArchi {
 
     @BeforeEach
     void setUp() {
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
 
         mockAssassin = spy(new Assassin());

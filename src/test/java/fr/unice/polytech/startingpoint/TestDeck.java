@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -14,6 +16,7 @@ public class TestDeck {
 
     @BeforeEach
     void setUp(){
+        LOGGER.setLevel(Level.OFF);
         d = spy(new Deck());
     }
 

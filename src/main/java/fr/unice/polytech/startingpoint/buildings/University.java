@@ -11,7 +11,7 @@ public class University extends Prestige {
      * Instantiates a new University.
      */
     public University() {
-        super(BuildingEnum.CourDesMiracles);
+        super(BuildingEnum.Universite);
     }
 
     /**
