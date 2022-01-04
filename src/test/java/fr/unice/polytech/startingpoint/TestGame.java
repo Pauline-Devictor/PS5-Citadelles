@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -21,6 +23,7 @@ class TestGame {
         g = spy(new Game(6));
         p = mock(Player.class);
         p1 = mock(Player.class);
+        LOGGER.setLevel(Level.OFF);
     }
 
     @Test

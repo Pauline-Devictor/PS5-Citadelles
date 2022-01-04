@@ -12,7 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.logging.Level;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.spy;
@@ -27,6 +29,7 @@ public class TestCondottiere {
 
     @BeforeEach
     void setUp() {
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         archi = spy(new Player(board));
         condo = spy(new Player(board));
@@ -90,7 +93,7 @@ public class TestCondottiere {
         when(board.getPlayers()).thenReturn(List.of(condo, archi));
         condo.takeMoney(5); // Take money to be able to destroy a build with his power
         condottiereCharacter.usePower(board);
-        assertFalse(archi.getCity().contains(BuildingEnum.Temple));
+        assertFalse(archi.getCity().contains(new Building(BuildingEnum.Temple)));
     }
 
     @Test
@@ -128,6 +131,6 @@ public class TestCondottiere {
         when(board.getPlayers()).thenReturn(List.of(condo, archi));
         condo.takeMoney(12); // Take money to be able to destroy a build with his power
         condottiereCharacter.usePower(board);
-        assertFalse(archi.getCity().contains(BuildingEnum.TourDeGuet));
+        assertFalse(archi.getCity().contains(new Building(BuildingEnum.TourDeGuet)));
     }
 }

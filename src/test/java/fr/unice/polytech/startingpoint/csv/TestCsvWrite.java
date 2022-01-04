@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.PrintStream;
+import java.util.logging.Level;
+
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.mockito.Mockito.*;
 
 public class TestCsvWrite {
@@ -15,6 +18,7 @@ public class TestCsvWrite {
 
     @BeforeEach
     void setup(){
+        LOGGER.setLevel(Level.OFF);
         writer = new CsvWrite();
         writer.write("");
         reader = new CsvRead();

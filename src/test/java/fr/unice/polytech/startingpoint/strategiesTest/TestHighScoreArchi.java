@@ -1,4 +1,5 @@
 package fr.unice.polytech.startingpoint.strategiesTest;
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class TestHighScoreArchi {
     Board board;
@@ -34,6 +36,8 @@ public class TestHighScoreArchi {
 
     @BeforeEach
     void setUp() {
+
+        LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
 
         mockAssassin = spy(new Assassin());
