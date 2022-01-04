@@ -22,97 +22,82 @@ public class Opportuniste extends Player {
      */
     @Override
     public void chooseRole(){
-        //initialize with main default choices
-        ArrayList<Integer> characters = new ArrayList<>(List.of(
-                CharacterEnum.Bishop.getOrder() - 1,
-                CharacterEnum.Condottiere.getOrder() - 1,
-                CharacterEnum.Thief.getOrder() - 1
-        ));
 
-        Player enemyHas7builds = null;
-        Player enemyHas6buildsAndEndsWithArchi = null;
-        Player enemyHas6builds = null;
+        //current player has 7 builds
+        if(this.getCity().size() == 7){
+            //to kill the Condottiere
+            if (pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
+                        .setPriorityTarget(CharacterEnum.Condottiere.getOrder()-1);
+                return;
+            }
+            else if (pickRole(CharacterEnum.Bishop.getOrder() - 1)) return;
+            else if (pickRole(CharacterEnum.Condottiere.getOrder() - 1)) return;
+        }
+
+        //test special cases
+        Boolean enemyHas7builds = false;
+        Boolean enemyArchi = false;
+        Boolean enemyHas6builds = false;
 
         for (Player p : board.getPlayers()){
             if(p.hashCode() == this.hashCode()){
                 continue;
             }
             if(p.getCity().size() == 7){
-                if(enemyHas7builds == null){
-                    enemyHas7builds = p;
-                }
-                else{
-                    enemyHas7builds = enemyHas7builds.getScore() > p.getScore() ? enemyHas7builds : p;
-                }
+                enemyHas7builds = true;
                 continue;
             }
             if(p.getCity().size() == 6){
-                if(enemyHas6builds == null){
-                    enemyHas6builds = p;
-                }
-                else{
-                    enemyHas6builds = enemyHas6builds.getScore() > p.getScore() ? enemyHas6builds : p;
-                }
+               enemyHas6builds = true;
+               continue;
             }
             if(p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5) {
-                if (enemyHas6buildsAndEndsWithArchi == null) {
-                    enemyHas6buildsAndEndsWithArchi = p;
-                } else {
-                    enemyHas6buildsAndEndsWithArchi = enemyHas6buildsAndEndsWithArchi.getScore() > p.getScore() ? enemyHas6buildsAndEndsWithArchi : p;
-                }
+                enemyArchi = true;
             }
-
-
         }
 
-            //case: a 6-buildind player
-        if (enemyHas6builds != null) {
-            if (board.getCharactersInfos(CharacterEnum.King.getOrder() - 1).isAvailable())
-                //to prevent him from taking King -> Assassin
-                characters.add(0, CharacterEnum.King.getOrder() - 1);
-            else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
-                //to kill the King
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.King.getOrder());
-                characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
-            }
-            else if(board.getCharactersInfos(CharacterEnum.Condottiere.getOrder() - 1).isAvailable())
-                //to destroy a building from the player
-                characters.add(0, CharacterEnum.Condottiere.getOrder() - 1);
-            else if (board.getCharactersInfos(CharacterEnum.Bishop.getOrder() - 1).isAvailable())
-                //to prevent him from playing Bishop and have no Building destroyed
-                characters.add(0, CharacterEnum.Bishop.getOrder() - 1);
+
+        //case: a 7-build enemy
+        if(enemyHas7builds){
+            //TODO issue 42
         }
-        //case: someone has too much advance (might take Archi)
-        if (enemyHas6buildsAndEndsWithArchi != null) {
-            if (board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
+
+        //case: someone has too much advance (might finish with Archi)
+        else if (enemyArchi) {
+            if (pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
                 //to kill Architect
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Architect.getOrder());
-                characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
+                        .setPriorityTarget(CharacterEnum.Architect.getOrder()-1);
+                return;
             }
-            else if (board.getCharactersInfos(CharacterEnum.Architect.getOrder() - 1).isAvailable())
-                //to prevent player from playing Architect
-                characters.add(0, CharacterEnum.Architect.getOrder() - 1);
+            else if (pickRole(CharacterEnum.Architect.getOrder() - 1)) return;
         }
 
-        if(this.getCity().size() == 6){
-            // Current player should try to end the game or avoid being targeted
-        }
+        //case: a 6-build enemy
+        else if (enemyHas6builds) {
+            //to prevent him from taking King -> Assassin
+            if (pickRole(CharacterEnum.King.getOrder() - 1)) return;
+            //to kill the King
+            else if(pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
 
-        if(enemyHas7builds != null) {
-            if (board.getCharactersInfos(CharacterEnum.Assassin.getOrder() - 1).isAvailable()) {
-                //to kill the Condottiere
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1)).setPriorityTarget(CharacterEnum.Condottiere.getOrder());
-                characters.add(0, CharacterEnum.Assassin.getOrder() - 1);
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
+                        .setPriorityTarget(CharacterEnum.King.getOrder()-1);
+                return;
             }
-            else if (board.getCharactersInfos(CharacterEnum.Bishop.getOrder() - 1).isAvailable()){
-                characters.add(0, CharacterEnum.Bishop.getOrder() - 1);}
-            else if (board.getCharactersInfos(CharacterEnum.Condottiere.getOrder() - 1).isAvailable())
-                characters.add(0, CharacterEnum.Condottiere.getOrder() - 1);
+            //to destroy a building from the player
+            else if(pickRole(CharacterEnum.Condottiere.getOrder() - 1)) return;
+            //to prevent him from playing Bishop and have no Building destroyed
+            else if (pickRole(CharacterEnum.Bishop.getOrder() - 1)) return;
         }
 
-        if(this.getCity().size() == 7){
-            // Current player should try to end the game
-        }
+
+        //initialize with main default choices
+        ArrayList<Integer> characters = new ArrayList<>(List.of(
+                CharacterEnum.Bishop.getOrder() - 1,
+                CharacterEnum.Condottiere.getOrder() - 1,
+                CharacterEnum.Thief.getOrder() - 1
+        ));
 
         //adds all missing characters in order
         for (int i = 0; i < 8; i++) {
