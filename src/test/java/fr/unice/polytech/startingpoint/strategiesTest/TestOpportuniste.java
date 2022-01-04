@@ -282,6 +282,57 @@ public class TestOpportuniste {
     }
 
     @Test
+    void chooseRoleCondottiere4() {
+        when(opponent.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.Caserne)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(opponent));
+        bot.chooseRole();
+        assertEquals(mockCondottiere, bot.getRole());
+    }
+
+    @Test
+    void chooseRoleAssassin4() {
+        when(opponent.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.Caserne)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(opponent));
+        when(mockBishop.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(mockAssassin, bot.getRole());
+    }
+
+    @Test
+    void chooseRoleAssassin5() {
+        when(opponent.getCity()).thenReturn(List.of(
+                new Building(BuildingEnum.Temple),
+                new Building(BuildingEnum.Cathedrale),
+                new Building(BuildingEnum.Chateau),
+                new Building(BuildingEnum.Taverne),
+                new Building(BuildingEnum.TourDeGuet),
+                new Building(BuildingEnum.Marche),
+                new Building(BuildingEnum.Caserne)
+        ));
+        when(board.getPlayers()).thenReturn(List.of(opponent));
+        when(mockCondottiere.isAvailable()).thenReturn(false);
+        bot.chooseRole();
+        assertEquals(mockAssassin, bot.getRole());
+    }
+
+
+    @Test
     void compareSameCostMilitaryVsReligion(){
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
     }
