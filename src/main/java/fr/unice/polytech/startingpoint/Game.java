@@ -4,7 +4,6 @@ import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.csv.CsvRead;
 import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.Player;
-import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.text.DateFormat;
 import java.util.*;
@@ -12,7 +11,6 @@ import java.util.logging.Formatter;
 import java.util.logging.*;
 
 import static fr.unice.polytech.startingpoint.Board.*;
-import static fr.unice.polytech.startingpoint.Main.nb_players;
 import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 
 /**
@@ -26,7 +24,7 @@ public class Game {
     private Player first;
     private CsvWrite writer = new CsvWrite();
     private CsvRead reader = new CsvRead();
-    private Date aujourdhui = new Date();
+    private Date today = new Date();
 
 
     /**
@@ -152,7 +150,7 @@ public class Game {
      */
     void newGame() {
         initBoard();
-        writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");//TODO modif
+        writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");
         boolean endOfGame = false;
         int turn = 0;
         while (!endOfGame) {
@@ -213,13 +211,21 @@ public class Game {
         return orderPlayers;
     }
 
+    /**
+     * Get the date time
+     * @return current Date
+     */
     public String getDate(){
         DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
                 DateFormat.MEDIUM,
                 DateFormat.MEDIUM);
-        return(mediumDateFormat.format(aujourdhui));
+        return(mediumDateFormat.format(today));
     }
 
+    /**
+     * Update stats results in results.csv
+     * @param results of all games
+     */
     public void updateResults(Map<String, int[]> results){
         writer.append(getDate());
         writer.appendStats(results);

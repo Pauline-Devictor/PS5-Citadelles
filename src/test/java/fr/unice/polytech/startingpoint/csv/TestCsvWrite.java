@@ -77,7 +77,7 @@ public class TestCsvWrite {
     }
 
     @Test
-    void appendStatsOneLine(){//TODO trouver comment verifier 2 lignes print avec mock
+    void appendStatsOneLine(){
         data.put("Tester",new int[4]);
         writer.appendStats(data);
 
