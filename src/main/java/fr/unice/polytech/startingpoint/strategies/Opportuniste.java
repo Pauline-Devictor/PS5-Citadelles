@@ -36,9 +36,9 @@ public class Opportuniste extends Player {
         }
 
         //test special cases
-        Boolean enemyHas7builds = false;
-        Boolean enemyArchi = false;
-        Boolean enemyHas6builds = false;
+        boolean enemyHas7builds = false;
+        boolean enemyArchi = false;
+        boolean enemyHas6builds = false;
 
         for (Player p : board.getPlayers()){
             if(p.hashCode() == this.hashCode()){
@@ -59,30 +59,39 @@ public class Opportuniste extends Player {
 
         //case: a 7-build enemy
         if(enemyHas7builds){
+            //if Bishop and Condottiere available, pick condottiere
            if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()
               && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
                pickRole(CharacterEnum.Condottiere.getOrder()-1);
                return;
            }
+           //if Assassin and Condottiere available, pick Assassin
            else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
                    && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
                pickRole(CharacterEnum.Assassin.getOrder()-1);
                return;
            }
+           //if Assassin and Bishop available, pick Assassin
            else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
                    && board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()){
                pickRole(CharacterEnum.Assassin.getOrder()-1);
                for (Player p : board.getPlayers()) {
+                   //if the 7-builds player has an empty hand, kill Magician
                    if(p.getCity().size() == 7 && p.getCardHand().isEmpty()){
                        ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
                                .setPriorityTarget(CharacterEnum.Magician.getOrder()-1);
                        return;
                    }
                }
+               //else, kill Bishop
                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
                        .setPriorityTarget(CharacterEnum.Bishop.getOrder()-1);
                return;
            }
+           //if 2nd / 3rd to pick, pick what is left
+            if (pickRole(CharacterEnum.Assassin.getOrder()-1)) return;
+            if(pickRole(CharacterEnum.Condottiere.getOrder()-1)) return;
+            if(pickRole(CharacterEnum.Bishop.getOrder()-1)) return;
         }
 
         //case: someone has too much advance (might finish with Archi)
