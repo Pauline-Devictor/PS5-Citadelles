@@ -4,6 +4,7 @@ import fr.unice.polytech.startingpoint.characters.King;
 import fr.unice.polytech.startingpoint.csv.CsvRead;
 import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.Player;
+import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.util.*;
 import java.util.logging.Formatter;
@@ -32,7 +33,7 @@ public class Game {
      * @param nb_players the number of players
      */
     Game(int nb_players) {
-        initBoard(nb_players);
+        initBoard();
 
         ConsoleHandler show = new ConsoleHandler();
         LOGGER.addHandler(show);
@@ -86,8 +87,8 @@ public class Game {
         endOfGame();
     }
 
-    void initBoard(int nb_players) {
-        board = new Board(nb_players);
+    void initBoard() {
+        board = new Board();
         orderPlayers = List.copyOf(board.getPlayers());
         players = board.getPlayers();
         first = players.get(0);
@@ -150,7 +151,7 @@ public class Game {
      * Create a Board and play a full game with it
      */
     void newGame() {
-        initBoard(nb_players);
+        initBoard();
         writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");//TODO modif
         boolean endOfGame = false;
         int turn = 0;
