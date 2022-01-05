@@ -63,7 +63,7 @@ class TestGame {
     @Test
     void run1000Test() {
         g.run1000();
-        verify(g, times(1000)).initBoard(anyInt());
+        verify(g, times(1000)).initBoard();
     }
 
     @Test

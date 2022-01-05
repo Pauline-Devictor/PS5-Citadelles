@@ -10,6 +10,7 @@ import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,9 +53,9 @@ public class Board {
     /**
      * Instantiates a new Board.
      *
-     * @param nbPlayers the number of players
+     * @ param nbPlayers the number of players
      */
-    Board(int nbPlayers) {
+    /*Board(int nbPlayers) {
         this.bank = new Bank(30);
         this.pile = new Deck();
         characters = List.of(new Assassin(),
@@ -66,13 +67,33 @@ public class Board {
                 new Architect(),
                 new Condottiere());
         players = generatePlayers(nbPlayers);
-    }
-
-    /**
-     * Instantiates a new Board.
-     */
-    public Board() {
-        this(6);
+    }*/
+    public Board(Player... players) {
+        this.bank = new Bank(30);
+        this.pile = new Deck();
+        characters = List.of(new Assassin(),
+                new Thief(),
+                new Magician(),
+                new King(),
+                new Bishop(),
+                new Merchant(),
+                new Architect(),
+                new Condottiere());
+        List<Player> tmp = new ArrayList<>();
+        if (players.length > 6 || players.length < 2) {
+            tmp.add(new HighScoreArchi(this));
+            tmp.add(new HighScoreThief(this));
+            tmp.add(new HighThiefManufactory(this));
+            tmp.add(new RushArchiLab(this));
+        } else {
+            Collections.addAll(tmp, players);
+        }
+         /*   this.players= List.of(new HighScoreArchi(this),
+                    new Opportuniste(this),
+                    new RushMerch(this),
+                    new RushArchiLab(this));
+        else*/
+        this.players = tmp;
     }
 
     /**
@@ -81,7 +102,7 @@ public class Board {
      * @param nbPlayers the nb players
      * @return the list
      */
-    public List<Player> generatePlayers(int nbPlayers) {
+    /*public List<Player> generatePlayers(int nbPlayers) {
         List<Player> players = new ArrayList<>();
         players.add(new RushMerch(this));
         //players.add(new RushArchi(this));
@@ -93,7 +114,7 @@ public class Board {
         for (int i = 6; i < nbPlayers; i++)
             players.add(new Player(this));
         return players;
-    }
+    }*/
 
     /**
      * Gets players.
