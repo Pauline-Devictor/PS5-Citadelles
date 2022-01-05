@@ -36,28 +36,28 @@ public class TestCsvWrite {
     @Test
     void writeEmpty(){
         writer.write("");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
     }
 
     @Test
     void writeMessage(){
         writer.write("a message");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[a message]");
     }
 
     @Test
     void appendVoid(){
         writer.append("");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         verify(outMock,times(2)).println("[]");
     }
 
     @Test
     void appendSomething(){
         writer.append("Here some text to test");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[Here some text to test]");
     }
 
@@ -65,14 +65,14 @@ public class TestCsvWrite {
     void appendAfterWriting(){
         writer.write("write");
         writer.append("append");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         verify(outMock,times(2)).println(anyString());
     }
 
     @Test
     void appendStatsEmpty(){
         writer.appendStats(data);
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
     }
 
@@ -81,7 +81,7 @@ public class TestCsvWrite {
         data.put("Tester",new int[4]);
         writer.appendStats(data);
 
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
         Mockito.verify(outMock).println("[Tester,1,999,0]");
     }
@@ -92,7 +92,7 @@ public class TestCsvWrite {
         data.put("BetaTester", new int[4]);
         data.put("GammaTester", new int[4]);
         writer.appendStats(data);
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[failed]");
     }
 }

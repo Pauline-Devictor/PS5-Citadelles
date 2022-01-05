@@ -30,13 +30,13 @@ public class TestCsvRead {
     @Test
     void printNotEmpty(){
         writer.write("A message to add");
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[A message to add]");
     }
 
     @Test
     void printEmpty(){
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
     }
 
@@ -44,14 +44,14 @@ public class TestCsvRead {
     void readNotEmpty(){
         writer.write("A message to add");
         ArrayList<String> data;
-        data = reader.readCsv("src/main/resources/save/stats.csv");
+        data = reader.readCsv("save/stats.csv");
         assertEquals(List.of("[A message to add]"),data);
     }
 
     @Test
     void readEmpty(){
         ArrayList<String> data;
-        data = reader.readCsv("src/main/resources/save/stats.csv");
+        data = reader.readCsv("save/stats.csv");
         assertEquals(List.of("[]"),data);
     }
 }

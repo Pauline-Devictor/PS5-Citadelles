@@ -16,7 +16,7 @@ public class CsvWrite {
     //TODO Path
     public void write(String data) {
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/save/stats.csv"));
+            CSVWriter writer = new CSVWriter(new FileWriter("save/stats.csv"));
 
             //Create record
             String[] record = data.split(",");
@@ -32,7 +32,7 @@ public class CsvWrite {
 
     public void append(String data) {
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/save/stats.csv", true));
+            CSVWriter writer = new CSVWriter(new FileWriter("save/stats.csv", true));
 
             String[] record = data.split(",");
             writer.writeNext(record);
@@ -47,7 +47,7 @@ public class CsvWrite {
             String csv = "save/results.csv";
             CSVWriter writer = new CSVWriter(new FileWriter(csv, true));
 
-            CSVReader reader = new CSVReader(new FileReader("src/main/resources/save/stats.csv"), ',', '"', 1);
+            CSVReader reader = new CSVReader(new FileReader("save/stats.csv"), ',', '"', 1);
 
             //Read CSV line by line and use the string array as you want
             String[] nextLine;

@@ -102,7 +102,7 @@ public class Game {
         }
         board.showStats(results);
         writer.appendStats(results);
-        reader.printCsv("src/main/resources/save/stats.csv");
+        reader.printCsv("save/stats.csv");
         writer.save();
     }
 
