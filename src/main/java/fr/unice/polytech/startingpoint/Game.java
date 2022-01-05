@@ -24,7 +24,7 @@ public class Game {
     /**
      * Instantiates a new Game.
      *
-     * @param nb_players the nb players
+     * @param nb_players the number of players
      */
     Game(int nb_players) {
         initBoard(nb_players);
@@ -89,20 +89,55 @@ public class Game {
     }
 
     void run1000() {
-        Map<String, Integer> results = new TreeMap<>();
+        Map<String, int[]> results = new TreeMap<>();
         for (int i = 0; i < 1000; i++) {
             newGame();
-            players.sort(PointsOrder);
-            if (results.containsKey(players.get(0).getName()))
-                results.put(players.get(0).getName(), results.get(players.get(0).getName()) + 1);
-            else
-                results.put(players.get(0).getName(), 1);
+            calculStats(results);
         }
         board.showStats(results);
     }
 
     /**
-     * Start the game and keep going until game is over
+     * Compute the stats of all players
+     *
+     * @return stats of players
+     */
+    Map<String, int[]> calculStats(Map<String, int[]> stats) {
+        players.sort(PointsOrder);
+        getPlayers().forEach(e -> {
+            int[] tmp = stats.getOrDefault(e.getName(), new int[4]);
+            stats.put(e.getName(), calculStatsPlayer(tmp, e));
+        });
+        return stats;
+    }
+
+    /**
+     * Use the SORTED list of players to calcul the stats of a player
+     * Assumption is made that the array is has a length of 4, in this order :
+     * Score Cumulés : 0
+     * Parties Gagnées : 1
+     * Parties Nulles : 2
+     * Nombre de Parties : 3
+     *
+     * @param stats former stats of the player
+     * @param p     Player who need to update his stats
+     * @return updated stats of the player
+     */
+    int[] calculStatsPlayer(int[] stats, Player p) {
+        stats[0] += p.getScore();
+        //Si le Score est égal a celui du premier
+        if (p.getScore() == getPlayers().get(0).getScore()) {
+            if (getPlayers().get(0).getScore() != getPlayers().get(1).getScore()) //Il n'y a pas d'égalité
+                stats[1]++; //Il a donc gagné
+            else
+                stats[2]++;//il est donc égalité
+        }
+        stats[3]++;
+        return stats;
+    }
+
+    /**
+     * Create a Board and play a full game with it
      */
     void newGame() {
         initBoard(nb_players);

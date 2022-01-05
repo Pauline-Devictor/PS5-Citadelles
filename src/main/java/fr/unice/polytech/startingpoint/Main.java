@@ -8,7 +8,7 @@ import fr.unice.polytech.startingpoint.csv.CsvRead;
 import fr.unice.polytech.startingpoint.csv.CsvWrite;
 
 public class Main {
-    public static int nb_players = 4;
+    public static int nb_players = 6;
     private static CsvWrite writer = new CsvWrite();
 
     public static void main(String... args) {

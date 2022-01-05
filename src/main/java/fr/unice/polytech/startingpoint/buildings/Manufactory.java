@@ -36,6 +36,6 @@ public class Manufactory extends Prestige {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showManufactoryEffect(p, cards);
+        p.getBoard().showManufactureEffect(p, cards);
     }
 }
