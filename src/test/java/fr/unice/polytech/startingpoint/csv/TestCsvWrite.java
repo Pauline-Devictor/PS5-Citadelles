@@ -83,7 +83,7 @@ public class TestCsvWrite {
 
         reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
-        Mockito.verify(outMock).println("[Tester,1,999,0]");
+        Mockito.verify(outMock).println("[Tester\",\"0\",\"0\",\"0\",\"1000\",\"0]");
     }
 
     @Test
@@ -93,6 +93,9 @@ public class TestCsvWrite {
         data.put("GammaTester", new int[4]);
         writer.appendStats(data);
         reader.printCsv("save/stats.csv");
-        Mockito.verify(outMock).println("[failed]");
+        Mockito.verify(outMock).println("[]");
+        Mockito.verify(outMock).println("[AlphaTester\",\"0\",\"0\",\"0\",\"1000\",\"0]");
+        Mockito.verify(outMock).println("[BetaTester\",\"0\",\"0\",\"0\",\"1000\",\"0]");
+        Mockito.verify(outMock).println("[GammaTester\",\"0\",\"0\",\"0\",\"1000\",\"0]");
     }
 }
