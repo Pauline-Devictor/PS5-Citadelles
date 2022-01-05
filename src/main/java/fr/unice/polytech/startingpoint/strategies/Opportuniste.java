@@ -26,13 +26,13 @@ public class Opportuniste extends Player {
         //current player has 7 builds
         if(this.getCity().size() == 7){
             //to kill the Condottiere
-            if (pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
-                        .setPriorityTarget(CharacterEnum.Condottiere.getOrder()-1);
+            if (pickRole(CharacterEnum.Assassin.getOrder())) {
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
+                        .setPriorityTarget(CharacterEnum.Condottiere.getOrder());
                 return;
             }
-            else if (pickRole(CharacterEnum.Bishop.getOrder() - 1)) return;
-            else if (pickRole(CharacterEnum.Condottiere.getOrder() - 1)) return;
+            else if (pickRole(CharacterEnum.Bishop.getOrder())) return;
+            else if (pickRole(CharacterEnum.Condottiere.getOrder())) return;
         }
 
         //test special cases
@@ -63,29 +63,35 @@ public class Opportuniste extends Player {
            if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()
               && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
                pickRole(CharacterEnum.Condottiere.getOrder()-1);
+           if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()).isAvailable()
+              && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()).isAvailable()){
+               pickRole(CharacterEnum.Condottiere.getOrder());
                return;
            }
            //if Assassin and Condottiere available, pick Assassin
            else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
                    && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
                pickRole(CharacterEnum.Assassin.getOrder()-1);
+           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()).isAvailable()
+                   && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()).isAvailable()){
+               pickRole(CharacterEnum.Assassin.getOrder());
                return;
            }
            //if Assassin and Bishop available, pick Assassin
-           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
-                   && board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()){
-               pickRole(CharacterEnum.Assassin.getOrder()-1);
+           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()).isAvailable()
+                   && board.getCharactersInfos(CharacterEnum.Bishop.getOrder()).isAvailable()){
+               pickRole(CharacterEnum.Assassin.getOrder());
                for (Player p : board.getPlayers()) {
                    //if the 7-builds player has an empty hand, kill Magician
                    if(p.getCity().size() == 7 && p.getCardHand().isEmpty()){
-                       ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
-                               .setPriorityTarget(CharacterEnum.Magician.getOrder()-1);
+                       ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
+                               .setPriorityTarget(CharacterEnum.Magician.getOrder());
                        return;
                    }
                }
                //else, kill Bishop
-               ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
-                       .setPriorityTarget(CharacterEnum.Bishop.getOrder()-1);
+               ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
+                       .setPriorityTarget(CharacterEnum.Bishop.getOrder());
                return;
            }
            //if 2nd / 3rd to pick, pick what is left
@@ -96,38 +102,38 @@ public class Opportuniste extends Player {
 
         //case: someone has too much advance (might finish with Archi)
         else if (enemyArchi) {
-            if (pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
+            if (pickRole(CharacterEnum.Assassin.getOrder())) {
                 //to kill Architect
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
-                        .setPriorityTarget(CharacterEnum.Architect.getOrder()-1);
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
+                        .setPriorityTarget(CharacterEnum.Architect.getOrder());
                 return;
             }
-            else if (pickRole(CharacterEnum.Architect.getOrder() - 1)) return;
+            else if (pickRole(CharacterEnum.Architect.getOrder())) return;
         }
 
         //case: a 6-build enemy
         else if (enemyHas6builds) {
             //to prevent him from taking King -> Assassin
-            if (pickRole(CharacterEnum.King.getOrder() - 1)) return;
+            if (pickRole(CharacterEnum.King.getOrder())) return;
             //to kill the King
-            else if(pickRole(CharacterEnum.Assassin.getOrder() - 1)) {
+            else if(pickRole(CharacterEnum.Assassin.getOrder())) {
 
-                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder() - 1))
-                        .setPriorityTarget(CharacterEnum.King.getOrder()-1);
+                ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
+                        .setPriorityTarget(CharacterEnum.King.getOrder());
                 return;
             }
             //to destroy a building from the player
-            else if(pickRole(CharacterEnum.Condottiere.getOrder() - 1)) return;
+            else if(pickRole(CharacterEnum.Condottiere.getOrder())) return;
             //to prevent him from playing Bishop and have no Building destroyed
-            else if (pickRole(CharacterEnum.Bishop.getOrder() - 1)) return;
+            else if (pickRole(CharacterEnum.Bishop.getOrder())) return;
         }
 
 
         //initialize with main default choices
         ArrayList<Integer> characters = new ArrayList<>(List.of(
-                CharacterEnum.Bishop.getOrder() - 1,
-                CharacterEnum.Condottiere.getOrder() - 1,
-                CharacterEnum.Thief.getOrder() - 1
+                CharacterEnum.Bishop.getOrder(),
+                CharacterEnum.Condottiere.getOrder(),
+                CharacterEnum.Thief.getOrder()
         ));
 
         //adds all missing characters in order

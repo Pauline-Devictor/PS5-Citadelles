@@ -54,12 +54,12 @@ public class HighScoreThief extends Player {
 
         Collections.reverse(taxList);
 
-        taxList.add(0, CharacterEnum.King.getOrder() - 1);
-        taxList.add(0, CharacterEnum.Thief.getOrder() - 1);
+        taxList.add(0, CharacterEnum.King.getOrder());
+        taxList.add(0, CharacterEnum.Thief.getOrder());
         taxList.addAll(List.of(
-                CharacterEnum.Assassin.getOrder() - 1,
-                CharacterEnum.Magician.getOrder() - 1,
-                CharacterEnum.Architect.getOrder() - 1
+                CharacterEnum.Assassin.getOrder(),
+                CharacterEnum.Magician.getOrder(),
+                CharacterEnum.Architect.getOrder()
         ));
 
         for (int elem : taxList) {

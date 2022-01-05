@@ -54,21 +54,21 @@ public class HighScoreArchi extends Player {
         Collections.reverse(taxList);
 
         //if rich, architect
-        if (getGold() > 10) taxList.add(0, CharacterEnum.Architect.getOrder() - 1);
-        else taxList.add(CharacterEnum.Merchant.getOrder() - 1);
+        if (getGold() > 10) taxList.add(0, CharacterEnum.Architect.getOrder());
+        else taxList.add(CharacterEnum.Merchant.getOrder());
 
         //if a player has too much advance, condottiere
         Player biggestCity = board.getPlayers().get(0);
         for (Player p : board.getPlayers()) {
             if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
         }
-        if ((biggestCity.getCity().size() - city.size() > 5)) taxList.add(0, CharacterEnum.Condottiere.getOrder() - 1);
-        else taxList.add(CharacterEnum.Condottiere.getOrder() - 1);
+        if ((biggestCity.getCity().size() - city.size() > 5)) taxList.add(0, CharacterEnum.Condottiere.getOrder());
+        else taxList.add(CharacterEnum.Condottiere.getOrder());
 
         taxList.addAll(List.of(
-                CharacterEnum.Magician.getOrder() - 1,
-                CharacterEnum.Assassin.getOrder() - 1,
-                CharacterEnum.Thief.getOrder() - 1
+                CharacterEnum.Magician.getOrder(),
+                CharacterEnum.Assassin.getOrder(),
+                CharacterEnum.Thief.getOrder()
         ));
 
         for (int elem : taxList) {

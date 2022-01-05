@@ -57,7 +57,7 @@ public class Assassin extends Character {
         //condition archi
         for (Player p : board.getPlayers()) {
             if (p.getGold() >= 4 && p.getCardHand().size() >= 1 && p.getCity().size() >= 5 && !p.equals(player))
-                return board.getCharacters().get(CharacterEnum.Architect.getOrder() - 1);
+                return board.getCharacters().get(CharacterEnum.Architect.getOrder());
         }
 
         Optional<Player> p = findPlayer(board);
@@ -67,7 +67,7 @@ public class Assassin extends Character {
                 if (b.getCost() == 1) contains1gold = true; break;
             }
             if(p.get().getCity().size() == 6 || contains1gold){
-                return board.getCharacters().get(CharacterEnum.Condottiere.getOrder() - 1);
+                return board.getCharacters().get(CharacterEnum.Condottiere.getOrder());
             }
         }
 
@@ -76,7 +76,7 @@ public class Assassin extends Character {
             if (enemies.getGold() > 4) riches++;
         }
         if(riches > 1){
-            return  board.getCharactersInfos(CharacterEnum.Thief.getOrder() - 1);
+            return  board.getCharactersInfos(CharacterEnum.Thief.getOrder());
         }
 
 
