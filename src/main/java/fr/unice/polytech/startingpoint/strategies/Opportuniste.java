@@ -60,18 +60,12 @@ public class Opportuniste extends Player {
         //case: a 7-build enemy
         if(enemyHas7builds){
             //if Bishop and Condottiere available, pick condottiere
-           if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()-1).isAvailable()
-              && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
-               pickRole(CharacterEnum.Condottiere.getOrder()-1);
            if(board.getCharactersInfos(CharacterEnum.Bishop.getOrder()).isAvailable()
               && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()).isAvailable()){
                pickRole(CharacterEnum.Condottiere.getOrder());
                return;
            }
            //if Assassin and Condottiere available, pick Assassin
-           else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()-1).isAvailable()
-                   && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()-1).isAvailable()){
-               pickRole(CharacterEnum.Assassin.getOrder()-1);
            else if(board.getCharactersInfos(CharacterEnum.Assassin.getOrder()).isAvailable()
                    && board.getCharactersInfos(CharacterEnum.Condottiere.getOrder()).isAvailable()){
                pickRole(CharacterEnum.Assassin.getOrder());
@@ -95,9 +89,9 @@ public class Opportuniste extends Player {
                return;
            }
            //if 2nd / 3rd to pick, pick what is left
-            if (pickRole(CharacterEnum.Assassin.getOrder()-1)) return;
-            if(pickRole(CharacterEnum.Condottiere.getOrder()-1)) return;
-            if(pickRole(CharacterEnum.Bishop.getOrder()-1)) return;
+            if (pickRole(CharacterEnum.Assassin.getOrder())) return;
+            if(pickRole(CharacterEnum.Condottiere.getOrder())) return;
+            if(pickRole(CharacterEnum.Bishop.getOrder())) return;
         }
 
         //case: someone has too much advance (might finish with Archi)
