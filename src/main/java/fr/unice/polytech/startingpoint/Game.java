@@ -103,12 +103,7 @@ public class Game {
             results = calculStats(results);
         }
         board.showStats(results);
-
-        writer.append(getDate());
-        writer.appendStats(results);
-        writer.save();
-
-        reader.printCsv("save/results.csv");
+        updateResults(results);
     }
 
     /**
@@ -223,5 +218,12 @@ public class Game {
                 DateFormat.MEDIUM,
                 DateFormat.MEDIUM);
         return(mediumDateFormat.format(aujourdhui));
+    }
+
+    public void updateResults(Map<String, int[]> results){
+        writer.append(getDate());
+        writer.appendStats(results);
+        writer.save();
+        reader.printCsv("save/results.csv");
     }
 }
