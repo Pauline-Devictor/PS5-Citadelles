@@ -36,20 +36,20 @@ public class RushArchi extends Player {
         ArrayList<Integer> taxList = new ArrayList<>();
 
         //prioritize architect
-        taxList.add(CharacterEnum.Architect.getOrder() - 1);
+        taxList.add(CharacterEnum.Architect.getOrder());
 
         taxList.addAll(List.of(
-                CharacterEnum.Magician.getOrder() - 1,
-                CharacterEnum.King.getOrder() - 1,
-                CharacterEnum.Merchant.getOrder() - 1,
-                CharacterEnum.Thief.getOrder() - 1,
-                CharacterEnum.Assassin.getOrder() - 1,
-                CharacterEnum.Condottiere.getOrder() - 1
+                CharacterEnum.Magician.getOrder(),
+                CharacterEnum.King.getOrder(),
+                CharacterEnum.Merchant.getOrder(),
+                CharacterEnum.Thief.getOrder(),
+                CharacterEnum.Assassin.getOrder(),
+                CharacterEnum.Condottiere.getOrder()
         ));
 
         //if has 6+ buildings, Bishop
-        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder() - 1);
-        else taxList.add(CharacterEnum.Bishop.getOrder() - 1);
+        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder());
+        else taxList.add(CharacterEnum.Bishop.getOrder());
 
 
         for (int elem : taxList) {

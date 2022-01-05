@@ -2,14 +2,14 @@ package fr.unice.polytech.startingpoint.characters;
 
 public enum CharacterEnum {
 
-    Assassin("Assassin", 1),
-    Thief("Voleur", 2),
-    Magician("Magicien", 3),
-    King("Roi", 4),
-    Bishop("Eveque", 5),
-    Merchant("Marchand", 6),
-    Architect("Architecte", 7),
-    Condottiere("Condottiere", 8);
+    Assassin("Assassin", 0),
+    Thief("Voleur", 1),
+    Magician("Magicien", 2),
+    King("Roi", 3),
+    Bishop("Eveque", 4),
+    Merchant("Marchand", 5),
+    Architect("Architecte", 6),
+    Condottiere("Condottiere", 7);
 
     private final String name;
     private final int order;

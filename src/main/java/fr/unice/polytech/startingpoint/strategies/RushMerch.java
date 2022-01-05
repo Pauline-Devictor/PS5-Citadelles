@@ -32,14 +32,14 @@ public class RushMerch extends Player {
 
         //Marchand puis Archi
         ArrayList<Integer> taxList = new ArrayList<>(List.of(
-                CharacterEnum.Merchant.getOrder() - 1,
-                CharacterEnum.Architect.getOrder() - 1,
-                CharacterEnum.Magician.getOrder() - 1,
-                CharacterEnum.King.getOrder() - 1,
-                CharacterEnum.Thief.getOrder() - 1,
-                CharacterEnum.Bishop.getOrder() - 1,
-                CharacterEnum.Assassin.getOrder() - 1,
-                CharacterEnum.Condottiere.getOrder() - 1
+                CharacterEnum.Merchant.getOrder(),
+                CharacterEnum.Architect.getOrder(),
+                CharacterEnum.Magician.getOrder(),
+                CharacterEnum.King.getOrder(),
+                CharacterEnum.Thief.getOrder(),
+                CharacterEnum.Bishop.getOrder(),
+                CharacterEnum.Assassin.getOrder(),
+                CharacterEnum.Condottiere.getOrder()
         ));
 
         for (int elem : taxList) {
