@@ -6,6 +6,7 @@ import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import fr.unice.polytech.startingpoint.strategies.*;
 
+import java.text.DateFormat;
 import java.util.*;
 import java.util.logging.Formatter;
 import java.util.logging.*;
@@ -25,6 +26,7 @@ public class Game {
     private Player first;
     private CsvWrite writer = new CsvWrite();
     private CsvRead reader = new CsvRead();
+    private Date aujourdhui = new Date();
 
 
     /**
@@ -101,8 +103,11 @@ public class Game {
             results = calculStats(results);
         }
         board.showStats(results);
+
+        writer.append(getDate());
         writer.appendStats(results);
         writer.save();
+
         reader.printCsv("save/results.csv");
     }
 
@@ -211,5 +216,12 @@ public class Game {
      */
     public List<Player> getOrderPlayers() {
         return orderPlayers;
+    }
+
+    public String getDate(){
+        DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
+                DateFormat.MEDIUM,
+                DateFormat.MEDIUM);
+        return(mediumDateFormat.format(aujourdhui));
     }
 }
