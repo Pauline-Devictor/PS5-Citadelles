@@ -62,7 +62,11 @@ l'ajout et le calcul des points, de celui des bâtiments aux bonus de fin de par
 ##### Git et Github
 Le projet a nécessité l'usage de Git et Github. Afin de faciliter notre avancée, nous avons tiré profit des fonctionnalités de Github telles que la possibilité de définir des issues, d'en assigner des responsables et ainsi que de créer des labels pour déterminer l'utilité de chaque tâche. Les différents labels utilisés sont : enhancement, feature, documentation. Nous avons aussi utilisé deux branches différentes pour le projet : une branche master pour déposer nos avancées fonctionnelles et une branche conflit qui a servi à régler certains conflits entre nos versions. 
 ##### Communication et le groupe
-Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes restés soudés et n'avons pas eu de problème de communication. Nous avons aussi choisi de commenter notre code autant que possible pour être plus indépendant dans notre compréhension du code lors de nouvelles implémentations, notamment avec l'issue [#31][Rendu De Noel] nous avons aussi profité de la fonctionnalité "TODO" de IntelliJ afin de marquer les points importants à améliorer. 
+Pour l'avancée du projet, nous avons developpé une bonne communication et utilisé le logiciel Discord, nous sommes
+restés soudés et n'avons pas eu de problème de communication. Nous avons aussi choisi de commenter notre code autant que
+possible pour être plus indépendant dans notre compréhension du code lors de nouvelles implémentations, notamment avec
+l'issue [#31][RenduDeNoel] nous avons aussi profité de la fonctionnalité "TODO" de IntelliJ afin de marquer les points
+importants à améliorer.
 
 ## Etat actuel du projet
 
@@ -124,4 +128,7 @@ http://jeuxstrategie.free.fr/Citadelles_complet.php
    [issuePrestigeA]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/16>
    [issueTours]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/18>
    [issuePoints]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/issues/24>
-   [docRegles]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/tree/master/doc>
+
+[docRegles]:<https://github.com/pns-si3-projects/projet2-ps5-21-22-ps5-21-22-projet2-l/tree/master/doc>
+
+[RenduDeNoel]: <>

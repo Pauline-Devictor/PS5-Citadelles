@@ -23,7 +23,11 @@ public class HighScoreArchi extends Player {
      * @param b the b
      */
     public HighScoreArchi(Board b) {
-        super(b, "HautScoreArchitect");
+        super(b);
+    }
+
+    public HighScoreArchi(Board b, String name) {
+        super(b, name);
     }
 
     /**

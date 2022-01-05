@@ -20,8 +20,12 @@ public class RushMerch extends Player {
      *
      * @param b the b
      */
+    public RushMerch(Board b, String name) {
+        super(b, name);
+    }
+
     public RushMerch(Board b) {
-        super(b, "RushMarchand");
+        super(b);
     }
 
     /**

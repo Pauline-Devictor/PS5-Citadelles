@@ -21,7 +21,7 @@ public class RushArchi extends Player {
      * @param b the b
      */
     public RushArchi(Board b) {
-        super(b, "RushArchitect");
+        super(b);
     }
 
     public RushArchi(Board b, String name) {

@@ -13,7 +13,14 @@ import static java.util.Objects.isNull;
 
 public class Opportuniste extends Player {
 
-    public Opportuniste(Board b) { super(b, "Opportuniste");}
+    public Opportuniste(Board b) {
+        super(b);
+    }
+
+    public Opportuniste(Board b, String name) {
+        super(b, name);
+    }
+
 
     /**
      * Choose the Role depending on the state of the game :
@@ -21,17 +28,16 @@ public class Opportuniste extends Player {
      * Then adapts when a player is about to win
      */
     @Override
-    public void chooseRole(){
+    public void chooseRole() {
 
         //current player has 7 builds
-        if(this.getCity().size() == 7){
+        if (this.getCity().size() == 7) {
             //to kill the Condottiere
             if (pickRole(CharacterEnum.Assassin.getOrder())) {
                 ((Assassin) board.getCharacters().get(CharacterEnum.Assassin.getOrder()))
                         .setPriorityTarget(CharacterEnum.Condottiere.getOrder());
                 return;
-            }
-            else if (pickRole(CharacterEnum.Bishop.getOrder())) return;
+            } else if (pickRole(CharacterEnum.Bishop.getOrder())) return;
             else if (pickRole(CharacterEnum.Condottiere.getOrder())) return;
         }
 

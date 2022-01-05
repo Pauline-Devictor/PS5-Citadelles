@@ -23,7 +23,7 @@ public class HighScoreThief extends Player {
      * @param b the Board
      */
     public HighScoreThief(Board b) {
-        super(b, "HautScoreVoleur");
+        super(b);
     }
 
     public HighScoreThief(Board b, String name) {

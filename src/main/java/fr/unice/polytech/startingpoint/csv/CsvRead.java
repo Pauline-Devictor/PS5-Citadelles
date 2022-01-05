@@ -21,7 +21,9 @@ public class CsvRead {
 
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
-                System.out.println(Arrays.toString(nextLine));
+                //TODO Affichage
+                //LOGGER.finest(Arrays.toString(nextLine));
+                //System.out.println(Arrays.toString(nextLine));
             }
         } catch (Exception e) {
             LOGGER.severe("Failed to print :" + e.getMessage());

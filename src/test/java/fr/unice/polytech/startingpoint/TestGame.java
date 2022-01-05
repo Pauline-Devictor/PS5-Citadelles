@@ -2,6 +2,7 @@ package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -21,15 +22,13 @@ class TestGame {
 
     @BeforeEach
     void setUp() {
-        g = spy(new Game(6));
+        g = spy(new Game());
         p = mock(Player.class);
         p1 = mock(Player.class);
         LOGGER.setLevel(Level.OFF);
-
         winner = mock(Player.class);
         tie = mock(Player.class);
         looser = mock(Player.class);
-
     }
 
     @Test
@@ -134,6 +133,12 @@ class TestGame {
                         Arrays.equals(resultsT, results.get("T")) &&
                         Arrays.equals(resultsL, results.get("L"))
         );
+    }
+
+    @Test
+    void gameTest2Players() {
+        g.run1000("HighScoreThief", "RushArchiLab");
+        verify(g, times(1000)).newGame();
     }
 
 }

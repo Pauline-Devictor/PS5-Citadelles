@@ -15,7 +15,11 @@ public class RushArchiLab extends RushArchi {
      * @param b the building
      */
     public RushArchiLab(Board b) {
-        super(b, "RushArchiLab");
+        super(b);
+    }
+
+    public RushArchiLab(Board b, String name) {
+        super(b, name);
     }
 
     /**

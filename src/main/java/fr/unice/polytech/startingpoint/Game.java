@@ -22,17 +22,15 @@ public class Game {
     private List<Player> players;
     private List<Player> orderPlayers;
     private Player first;
-    private CsvWrite writer = new CsvWrite();
-    private CsvRead reader = new CsvRead();
-    private Date today = new Date();
+    private final CsvWrite writer = new CsvWrite();
+    private final CsvRead reader = new CsvRead();
+    private final Date today = new Date();
 
 
     /**
      * Instantiates a new Game.
-     *
-     * @param nb_players the number of players
      */
-    Game(int nb_players) {
+    Game() {
         initBoard();
 
         ConsoleHandler show = new ConsoleHandler();
@@ -87,16 +85,17 @@ public class Game {
         endOfGame();
     }
 
-    void initBoard() {
-        board = new Board();
+    void initBoard(String... namePlayers) {
+        board = new Board(namePlayers);
         orderPlayers = List.copyOf(board.getPlayers());
         players = board.getPlayers();
         first = players.get(0);
     }
 
-    void run1000() {
+    void run1000(String... namePlayers) {
         Map<String, int[]> results = new TreeMap<>();
         for (int i = 0; i < 1000; i++) {
+            initBoard(namePlayers);
             newGame();
             results = calculStats(results);
         }
@@ -149,7 +148,6 @@ public class Game {
      * Create a Board and play a full game with it
      */
     void newGame() {
-        initBoard();
         writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");
         boolean endOfGame = false;
         int turn = 0;

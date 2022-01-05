@@ -16,7 +16,11 @@ public class HighThiefManufactory extends HighScoreThief {
      * @param b the Board
      */
     public HighThiefManufactory(Board b) {
-        super(b, "HighThiefManufactory");
+        super(b);
+    }
+
+    public HighThiefManufactory(Board b, String name) {
+        super(b, name);
     }
 
     /**

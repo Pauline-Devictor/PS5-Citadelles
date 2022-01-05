@@ -14,47 +14,24 @@ import static java.util.Objects.isNull;
  * All decisions made by a player is either done by this class or one of its subclasses.
  */
 public class Player implements Comparator<Building> {
-    /**
-     * The Name.
-     */
     protected String name;
-    /**
-     * The Gold.
-     */
     protected int gold;
-    /**
-     * The Score.
-     */
     protected int score;
-    /**
-     * The Board.
-     */
     protected final Board board;
-    /**
-     * The Role.
-     */
     protected Character role;
-    /**
-     * The Nb buildable.
-     */
     protected int nbBuildable = 1;
-    /**
-     * The Card hand.
-     */
     protected List<Building> cardHand;
-    /**
-     * The City.
-     */
     protected final List<Building> city;
 
     /**
      * Instantiates a new Player.
      *
      * @param b    board linked to the player
-     * @param name player's name Creates a player linked to a board with a name
+     * @param name player's name
+     *             Creates a player linked to a board with a name
      */
     public Player(Board b, String name) {
-        this.name = name;
+        this.name = this.getClass().getSimpleName() + "-" + name;
         board = b;
         gold = board.getBank().withdrawGold(2);
         cardHand = new ArrayList<>();
@@ -70,7 +47,7 @@ public class Player implements Comparator<Building> {
      * @param b board linked to the player Creates a player linked to a board with undefined name
      */
     public Player(Board b) {
-        this.name = "undefined";
+        this.name = this.getClass().getSimpleName();
         board = b;
         gold = board.getBank().withdrawGold(2);
         cardHand = new ArrayList<>();
@@ -373,7 +350,7 @@ public class Player implements Comparator<Building> {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(printName(this)).append(", ").append(board.printRole(this));
+        StringBuilder res = new StringBuilder(printName(this)).append(", ").append(isNull(getRole()) ? "" : board.printRole(this));
 
         res.append(printFormat(" avec ", ANSI_WHITE)).append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(printFormat(" pieces d'or et un score de ", ANSI_WHITE))
                 .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
@@ -520,4 +497,5 @@ public class Player implements Comparator<Building> {
     public void bonusPoints(int i) {
         score += i;
     }
+
 }

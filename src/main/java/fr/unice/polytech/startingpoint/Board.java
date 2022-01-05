@@ -68,7 +68,7 @@ public class Board {
                 new Condottiere());
         players = generatePlayers(nbPlayers);
     }*/
-    public Board(Player... players) {
+    public Board(String... players) {
         this.bank = new Bank(30);
         this.pile = new Deck();
         characters = List.of(new Assassin(),
@@ -84,37 +84,23 @@ public class Board {
             tmp.add(new HighScoreArchi(this));
             tmp.add(new HighScoreThief(this));
             tmp.add(new HighThiefManufactory(this));
-            tmp.add(new RushArchiLab(this));
+            tmp.add(new RushArchi(this));
         } else {
-            Collections.addAll(tmp, players);
+            for (int i = 0; i < players.length; i++) {
+                switch (players[i]) {
+                    case "RushMerch" -> tmp.add(new RushMerch(this, String.valueOf(i)));
+                    case "HighScoreArchi" -> tmp.add(new HighScoreArchi(this, String.valueOf(i)));
+                    case "HighScoreThief" -> tmp.add(new HighScoreThief(this, String.valueOf(i)));
+                    case "HighThiefManufacture" -> tmp.add(new HighThiefManufactory(this, String.valueOf(i)));
+                    case "Opportuniste" -> tmp.add(new Opportuniste(this, String.valueOf(i)));
+                    case "RushArchi" -> tmp.add(new RushArchi(this, String.valueOf(i)));
+                    case "RushArchiLab" -> tmp.add(new RushArchiLab(this, String.valueOf(i)));
+                    default -> tmp.add(new Player(this, String.valueOf(i)));
+                }
+            }
         }
-         /*   this.players= List.of(new HighScoreArchi(this),
-                    new Opportuniste(this),
-                    new RushMerch(this),
-                    new RushArchiLab(this));
-        else*/
         this.players = tmp;
     }
-
-    /**
-     * Generate players list.
-     *
-     * @param nbPlayers the nb players
-     * @return the list
-     */
-    /*public List<Player> generatePlayers(int nbPlayers) {
-        List<Player> players = new ArrayList<>();
-        players.add(new RushMerch(this));
-        //players.add(new RushArchi(this));
-        players.add(new HighScoreArchi(this));
-        players.add(new HighScoreThief(this));
-        players.add(new HighThiefManufactory(this));
-        players.add(new RushArchiLab(this));
-        players.add(new Opportuniste(this));
-        for (int i = 6; i < nbPlayers; i++)
-            players.add(new Player(this));
-        return players;
-    }*/
 
     /**
      * Gets players.
