@@ -42,6 +42,7 @@ public class CsvWrite {
             LOGGER.severe("Error during append : " + e.getMessage());
         }
     }
+
     public void save(){
         try {
             String csv = "save/results.csv";
@@ -59,13 +60,21 @@ public class CsvWrite {
             LOGGER.severe("Error during save : " + e.getMessage());
         }
     }
+
     public void appendStats(Map<String, int[]> stats) {
             stats.forEach((k, v) -> {
                 int defaites = 1000 - v[1] - v[2];
+                float winrate = (float) v[1]/10;
+                int averageScore = v[0]/1000;
+
+                //Nom;ScoreMoyen;Pourcentage Victoire;NbParties;Victoire;Egalite;Defaite
+                append(k+","+averageScore+","+ winrate +"%,"+v[3]+","+v[1]+","+v[2]+","+ defaites);
+
                 //Nom du bot, Score moyen, Victoires, Egalites,Defaites Nb de parties
-                append(k+","+v[0]/1000+","+v[1]+","+v[2]+","+ defaites + ","+v[3]);
+                // append(k+","+v[1]+","+v[2]+","+ defaites + ","+v[3]);
             });
     }
+
     //TODO methode pour reset le fichier stats.csv proprement (sans write("") qui ajoute une ligne vide)
     public void resetStats(){
 

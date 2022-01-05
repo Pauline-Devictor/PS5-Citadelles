@@ -102,8 +102,8 @@ public class Game {
         }
         board.showStats(results);
         writer.appendStats(results);
-        reader.printCsv("save/stats.csv");
         writer.save();
+        reader.printCsv("save/results.csv");
     }
 
     /**
