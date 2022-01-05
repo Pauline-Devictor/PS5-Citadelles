@@ -1,7 +1,2 @@
-Nom;Victoire;Egalite;Defaite
-"HautScoreVoleur","1","0","0"
-"HighThiefManufactory","0","0","1"
-"HautScoreArchitect","0","0","1"
-"RushMarchand","0","0","1"
-"RushArchitect","0","0","1"
-"RushArchiLab","0","0","1"
+Nom;ScoreMoyen;Victoire;Egalite;Defaite;NbParties
+

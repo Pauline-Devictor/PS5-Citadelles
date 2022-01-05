@@ -1,6 +1,8 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.King;
+import fr.unice.polytech.startingpoint.csv.CsvRead;
+import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;
@@ -20,6 +22,9 @@ public class Game {
     private List<Player> players;
     private List<Player> orderPlayers;
     private Player first;
+    private CsvWrite writer = new CsvWrite();
+    private CsvRead reader = new CsvRead();
+
 
     /**
      * Instantiates a new Game.
@@ -92,9 +97,12 @@ public class Game {
         Map<String, int[]> results = new TreeMap<>();
         for (int i = 0; i < 1000; i++) {
             newGame();
-            calculStats(results);
+            results = calculStats(results);
         }
         board.showStats(results);
+        writer.appendStats(results);
+        reader.printCsv("src/main/resources/save/stats.csv");
+        writer.save();
     }
 
     /**
@@ -137,10 +145,13 @@ public class Game {
     }
 
     /**
+     * Start the game and keep going until game is over
+     * Reinitialize the stats.csv datas
      * Create a Board and play a full game with it
      */
     void newGame() {
         initBoard(nb_players);
+        writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");//TODO modif
         boolean endOfGame = false;
         int turn = 0;
         while (!endOfGame) {

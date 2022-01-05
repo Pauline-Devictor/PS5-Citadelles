@@ -2,7 +2,11 @@ package fr.unice.polytech.startingpoint.csv;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -59,5 +63,8 @@ public class CsvRead {
             LOGGER.severe("Failed to read :" + e.getMessage());
         }
         return null;
+    }
+    public void resetStats(){
+
     }
 }
