@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import static fr.unice.polytech.startingpoint.Display.showCharacterEffect;
+import static fr.unice.polytech.startingpoint.Display.showTaxes;
 import static java.util.Objects.isNull;
 
 /**
@@ -44,7 +46,6 @@ public abstract class Character {
     }
 
     /**
-     *
      * @return A reprentation of the Character
      */
     @Override
@@ -109,7 +110,7 @@ public abstract class Character {
             }
         }
         p.takeMoney(taxes);
-        p.getBoard().showTaxes(d, p, taxes);
+        showTaxes(d, p, taxes, p.getBoard().getBank());
     }
 
 
@@ -181,7 +182,7 @@ public abstract class Character {
      * @param p the player
      */
     public void printEffect(Player p) {
-        p.getBoard().showCharacterEffect(p);
+        showCharacterEffect(p);
     }
 
     /**

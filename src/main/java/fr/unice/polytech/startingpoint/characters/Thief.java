@@ -37,7 +37,7 @@ public class Thief extends Character {
      * @param board kills current game's board
      * @return the Thief's victim
      */
-    public Character chooseVictim(Board board){
+    public Character chooseVictim(Board board) {
         Random random = new Random();
         //exclu l'indice de l'assassin et le voleur
         // """Ponderation""" pour favoriser le vol de l'architect

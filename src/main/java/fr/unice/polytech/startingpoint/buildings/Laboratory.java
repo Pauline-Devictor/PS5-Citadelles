@@ -2,6 +2,7 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
+import static fr.unice.polytech.startingpoint.Display.showLaboratoryEffect;
 import static java.util.Objects.isNull;
 
 /**
@@ -36,6 +37,6 @@ public class Laboratory extends Prestige {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showLaboratoryEffect(p, card);
+        showLaboratoryEffect(p, card);
     }
 }

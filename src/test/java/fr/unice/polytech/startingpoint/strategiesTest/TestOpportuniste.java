@@ -70,7 +70,7 @@ public class TestOpportuniste {
         opponent = spy(new HighScoreArchi(board));
 
         bot = spy(new Opportuniste(board));
-        for(int i = 0; i < bot.getCardHand().size(); i++){
+        for (int i = 0; i < bot.getCardHand().size(); i++) {
             bot.discardCard();
         }
         when(bot.getCardHand()).thenReturn(new ArrayList<>(
@@ -84,20 +84,20 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleDefaultBishop(){
+    void chooseRoleDefaultBishop() {
         bot.chooseRole();
         assertEquals(mockBishop, bot.getRole());
     }
 
     @Test
-    void chooseRoleDefaultCondottiere(){
+    void chooseRoleDefaultCondottiere() {
         when(mockBishop.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(mockCondottiere, bot.getRole());
     }
 
     @Test
-    void chooseRoleDefaultThief(){
+    void chooseRoleDefaultThief() {
         when(mockBishop.isAvailable()).thenReturn(false);
         when(mockCondottiere.isAvailable()).thenReturn(false);
         bot.chooseRole();
@@ -105,7 +105,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleAssassin1(){
+    void chooseRoleAssassin1() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -122,7 +122,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleArchitect1(){
+    void chooseRoleArchitect1() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -141,7 +141,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleKing(){
+    void chooseRoleKing() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -157,7 +157,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleAssassin2(){
+    void chooseRoleAssassin2() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -174,7 +174,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleCondottiere2(){
+    void chooseRoleCondottiere2() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -192,7 +192,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleBishop2(){
+    void chooseRoleBishop2() {
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -211,7 +211,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleBishop3(){
+    void chooseRoleBishop3() {
         when(bot.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -227,7 +227,7 @@ public class TestOpportuniste {
     }
 
     @Test
-    void chooseRoleAssassin3(){
+    void chooseRoleAssassin3() {
         when(bot.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
                 new Building(BuildingEnum.Cathedrale),
@@ -404,32 +404,32 @@ public class TestOpportuniste {
     }
 
     @Test
-    void compareSameCostMilitaryVsReligion(){
+    void compareSameCostMilitaryVsReligion() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
     }
 
     @Test
-    void compareSameCostMilitaryVsCommercial(){
+    void compareSameCostMilitaryVsCommercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Comptoir)) < 0);
     }
 
     @Test
-    void compareSameCostBishopVsCommercial(){
+    void compareSameCostBishopVsCommercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Comptoir)) < 0);
     }
 
     @Test
-    void compareSameCostNobleVsCommercial(){
+    void compareSameCostNobleVsCommercial() {
         assertEquals(0, bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)));
     }
 
     @Test
-    void compare3goldMilitaryVs1goldReligion(){
+    void compare3goldMilitaryVs1goldReligion() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Temple)) > 0);
     }
 
     @Test
-    void compare3goldVs1gold(){
+    void compare3goldVs1gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Taverne)) < 0);
     }
 }

@@ -4,7 +4,9 @@ import fr.unice.polytech.startingpoint.Bank;
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.Deck;
 import fr.unice.polytech.startingpoint.buildings.*;
-import fr.unice.polytech.startingpoint.strategies.*;
+import fr.unice.polytech.startingpoint.strategies.HighScoreThief;
+import fr.unice.polytech.startingpoint.strategies.Player;
+import fr.unice.polytech.startingpoint.strategies.RushMerch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -340,5 +342,10 @@ public class TestPlayer {
         pLow.discardCard();
         assertEquals(List.of(new Building(BuildingEnum.Palais), new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Temple))
                 , pLow.getCardHand());
+    }
+
+    @Test
+    void compareRushDistrict() {
+        assertEquals(0, p.compareRushDistrict(District.Commercial, new Building(BuildingEnum.Marche), new Building(BuildingEnum.Echoppe), 0, 6));
     }
 }

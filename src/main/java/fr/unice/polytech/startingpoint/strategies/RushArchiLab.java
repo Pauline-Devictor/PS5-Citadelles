@@ -46,11 +46,10 @@ public class RushArchiLab extends RushArchi {
             return -1;
         else if (b2 instanceof Laboratory)
             return 1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Religion && b2.getDistrict() == District.Religion)
-                return (b1.getCost() - b2.getCost());
-            if (b1.getDistrict() == District.Religion) return -1;
-            if (b2.getDistrict() == District.Religion) return 1;
+        else {
+            int cmp = compareRushDistrict(District.Religion, b1, b2, costMin, costMax);
+            if (cmp != 0)
+                return cmp;
         }
         return (b1.getCost() - b2.getCost());
     }

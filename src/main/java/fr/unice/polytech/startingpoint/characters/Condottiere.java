@@ -8,6 +8,7 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fr.unice.polytech.startingpoint.Display.showCondottiereEffect;
 import static fr.unice.polytech.startingpoint.buildings.District.Military;
 import static java.util.Objects.isNull;
 
@@ -23,6 +24,7 @@ public class Condottiere extends Character {
 
     /**
      * uses the Condottiere's power
+     *
      * @param b the current game's board
      */
     @Override
@@ -50,18 +52,19 @@ public class Condottiere extends Character {
     public Player chooseTarget(Board board, Player player) {
         List<Player> cityList = map(board);
         //Verification que le personnage est un role qui ne soit pas Eveque, ou que ce ne soit pas le condottiere
-        cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class || c.getCity().size()>=8);
-        if((!cityList.isEmpty() && cityList.get(cityList.size() - 1).getCity().size() > 5)) return cityList.get(cityList.size() - 1);
+        cityList.removeIf(c -> c.equals(player) || isNull(c.getRole()) || c.getRole().getClass() == Bishop.class || c.getCity().size() >= 8);
+        if ((!cityList.isEmpty() && cityList.get(cityList.size() - 1).getCity().size() > 5))
+            return cityList.get(cityList.size() - 1);
 
         else if (!cityList.isEmpty()) {
             Collections.reverse(cityList);
             for (Player p : cityList) {
-                for (Building b: p.getCity()) {
-                    if(b.getCost() == 1) return p;
+                for (Building b : p.getCity()) {
+                    if (b.getCost() == 1) return p;
                 }
             }
         }
-        return  null;
+        return null;
     }
 
     /**
@@ -87,8 +90,8 @@ public class Condottiere extends Character {
 
         costList.removeIf(c -> c instanceof Donjon);
 
-        if(!costList.isEmpty()) {
-            if (condo.getGold() > 10 && target.getCity().size() >5)
+        if (!costList.isEmpty()) {
+            if (condo.getGold() > 10 && target.getCity().size() > 5)
                 this.build = costList.get(costList.size() - 1);
             else
                 this.build = costList.get(0);
@@ -110,6 +113,6 @@ public class Condottiere extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showCondottiereEffect(target, build, p);
+        showCondottiereEffect(target, build, p);
     }
 }

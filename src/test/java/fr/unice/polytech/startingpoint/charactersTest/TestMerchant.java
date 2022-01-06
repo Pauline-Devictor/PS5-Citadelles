@@ -4,8 +4,8 @@ import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.District;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ public class TestMerchant {
         merchant.pickRole(5);
         when(board.getPlayers()).thenReturn(List.of(merchant));
         merchantCharacter.usePower(board);
-        assertEquals(3,merchant.getGold());
+        assertEquals(3, merchant.getGold());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class TestMerchant {
         merchant.takeMoney(moneyBank);
         when(board.getPlayers()).thenReturn(List.of(merchant));
         merchantCharacter.usePower(board);
-        assertEquals(moneyBank+2, merchant.getGold());
+        assertEquals(moneyBank + 2, merchant.getGold());
         //Money Bank + 2 bc player starts with 2 golds
     }
 }

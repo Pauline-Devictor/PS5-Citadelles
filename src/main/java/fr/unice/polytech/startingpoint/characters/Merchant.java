@@ -5,6 +5,7 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
 
+import static fr.unice.polytech.startingpoint.Display.showMerchantEffect;
 import static fr.unice.polytech.startingpoint.buildings.District.Commercial;
 
 public class Merchant extends Character {
@@ -38,6 +39,6 @@ public class Merchant extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showMerchantEffect(p);
+        showMerchantEffect(p);
     }
 }

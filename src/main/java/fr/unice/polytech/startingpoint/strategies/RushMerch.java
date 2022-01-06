@@ -14,6 +14,8 @@ import static java.util.Objects.isNull;
  * The type Rush merch.
  */
 public class RushMerch extends Player {
+    private final int costMax = 3;
+    private final int costMin = 1;
 
     /**
      * Instantiates a new Rush merch.
@@ -63,8 +65,6 @@ public class RushMerch extends Player {
     @Override
     public int compare(Building b1, Building b2) {
         //return -1 pour b1, 1 pour b2
-        int costMax = 3;
-        int costMin = 1;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))
@@ -73,10 +73,10 @@ public class RushMerch extends Player {
             return 1;
         else if (getCardHand().contains(b2))
             return -1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Commercial && b2.getDistrict() == District.Commercial) return (b1.getCost() - b2.getCost());
-            if (b1.getDistrict() == District.Commercial) return -1;
-            if (b2.getDistrict() == District.Commercial) return 1;
+        else {
+            int cmp = compareRushDistrict(District.Commercial, b1, b2, costMin, costMax);
+            if (cmp != 0)
+                return cmp;
         }
         return (b1.getCost() - b2.getCost());
     }

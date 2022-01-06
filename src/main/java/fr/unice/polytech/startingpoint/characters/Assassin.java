@@ -40,12 +40,13 @@ public class Assassin extends Character {
      * Chooses the Assassin's victim
      * if the hand is full, kill the magician,
      * else kill the player which the most Building of a Color
+     *
      * @param board  the current game's board
      * @param player the Assassin's player
      * @return the Assassin's victim
      */
     public Character chooseVictim(Board board, Player player) {
-        if(priorityTarget.isPresent()){
+        if (priorityTarget.isPresent()) {
             int copyOfTarget = priorityTarget.get();
             priorityTarget = Optional.empty();
             return board.getCharactersInfos(copyOfTarget);
@@ -61,12 +62,13 @@ public class Assassin extends Character {
         }
 
         Optional<Player> p = findPlayer(board);
-        if(p.isPresent()){
+        if (p.isPresent()) {
             boolean contains1gold = false;
-            for (Building b: p.get().getCity()) {
-                if (b.getCost() == 1) contains1gold = true; break;
+            for (Building b : p.get().getCity()) {
+                if (b.getCost() == 1) contains1gold = true;
+                break;
             }
-            if(p.get().getCity().size() == 6 || contains1gold){
+            if (p.get().getCity().size() == 6 || contains1gold) {
                 return board.getCharacters().get(CharacterEnum.Condottiere.getOrder());
             }
         }
@@ -75,12 +77,9 @@ public class Assassin extends Character {
         for (Player enemies : board.getPlayers()) {
             if (enemies.getGold() > 4) riches++;
         }
-        if(riches > 1){
-            return  board.getCharactersInfos(CharacterEnum.Thief.getOrder());
+        if (riches > 1) {
+            return board.getCharactersInfos(CharacterEnum.Thief.getOrder());
         }
-
-
-
 
 
         for (Player enemies : board.getPlayers()) {

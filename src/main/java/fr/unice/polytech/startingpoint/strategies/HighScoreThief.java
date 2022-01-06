@@ -5,8 +5,9 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 import static java.util.Objects.isNull;
 
@@ -35,24 +36,10 @@ public class HighScoreThief extends Player {
      */
     @Override
     public void chooseRole() {
-        TreeMap<District, Integer> taxmap = new TreeMap<>();
-        for (District d : District.values()) {
-            taxmap.put(d, 0);
-        }
-        for (Building b : getCity()) {
-            taxmap.put(b.getDistrict(), taxmap.get(b.getDistrict()) + 1);
-        }
+        TreeMap<District, Integer> taxmap = getDistrictValues();
         taxmap.remove(District.Prestige);
         taxmap.remove(District.Noble);
-        ArrayList<Integer> taxList = (ArrayList<Integer>) taxmap
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .map(District::getTaxCollector)
-                .collect(Collectors.toList());
-
-        Collections.reverse(taxList);
+        ArrayList<Integer> taxList = mapToSortedList(taxmap);
 
         taxList.add(0, CharacterEnum.King.getOrder());
         taxList.add(0, CharacterEnum.Thief.getOrder());
@@ -62,11 +49,7 @@ public class HighScoreThief extends Player {
                 CharacterEnum.Architect.getOrder()
         ));
 
-        for (int elem : taxList) {
-            if (pickRole(elem)) {
-                return;
-            }
-        }
+        pickRole(taxList);
     }
 
     /**
@@ -88,7 +71,8 @@ public class HighScoreThief extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble) return (b2.getCost() - b1.getCost());
+            if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble)
+                return (b2.getCost() - b1.getCost());
             if (b1.getDistrict() == District.Noble) return -1;
             if (b2.getDistrict() == District.Noble) return 1;
         }

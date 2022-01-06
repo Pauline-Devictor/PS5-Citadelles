@@ -5,6 +5,8 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.unice.polytech.startingpoint.Display.showManufactureEffect;
+
 /**
  * The type Manufactory.
  */
@@ -36,6 +38,6 @@ public class Manufactory extends Prestige {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showManufactureEffect(p, cards);
+        showManufactureEffect(p, cards);
     }
 }

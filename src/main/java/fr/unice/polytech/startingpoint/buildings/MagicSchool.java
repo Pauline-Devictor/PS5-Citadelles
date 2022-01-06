@@ -2,6 +2,8 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
+import static fr.unice.polytech.startingpoint.Display.showMagicSchoolEffect;
+
 /**
  * The type Magic school.
  */
@@ -21,6 +23,6 @@ public class MagicSchool extends Prestige {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showMagicSchoolEffect(p);
+        showMagicSchoolEffect(p);
     }
 }

@@ -20,7 +20,6 @@ public enum CharacterEnum {
     }
 
     /**
-     *
      * @return name
      */
     public String getName() {
@@ -28,7 +27,6 @@ public enum CharacterEnum {
     }
 
     /**
-     *
      * @return order
      */
     public int getOrder() {

@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestBoard {
     Board board;
+
     @BeforeEach
-    void setup(){
+    void setup() {
         LOGGER.setLevel(Level.OFF);
         board = new Board();
     }

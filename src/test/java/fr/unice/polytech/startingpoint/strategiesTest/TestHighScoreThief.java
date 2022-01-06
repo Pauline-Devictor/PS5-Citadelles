@@ -68,7 +68,7 @@ public class TestHighScoreThief {
                 mockCondottiere));
 
         bot = spy(new HighScoreThief(board));
-        for(int i = 0; i < bot.getCardHand().size(); i++){
+        for (int i = 0; i < bot.getCardHand().size(); i++) {
             bot.discardCard();
         }
 
@@ -84,20 +84,20 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void choose_role_everything_available(){
+    void choose_role_everything_available() {
         bot.chooseRole();
         assertEquals(bot.getRole(), mockThief);
     }
 
     @Test
-    void choose_role_default_King(){
+    void choose_role_default_King() {
         when(mockThief.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockKing);
     }
 
     @Test
-    void choose_role_income_religious(){
+    void choose_role_income_religious() {
         when(mockThief.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(bot.getCity()).thenReturn(List.of(
@@ -112,7 +112,7 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void choose_role_income_military(){
+    void choose_role_income_military() {
         when(mockThief.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(bot.getCity()).thenReturn(List.of(
@@ -128,7 +128,7 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void choose_role_income_merchant(){
+    void choose_role_income_merchant() {
         when(mockThief.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(bot.getGold()).thenReturn(11);
@@ -140,7 +140,7 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void choose_role_default_assassin(){
+    void choose_role_default_assassin() {
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
         when(mockCondottiere.isAvailable()).thenReturn(false);
@@ -151,7 +151,7 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void choose_role_default_magician(){
+    void choose_role_default_magician() {
         when(mockThief.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
@@ -163,9 +163,8 @@ public class TestHighScoreThief {
     }
 
 
-
     @Test
-    void choose_role_default_architect(){
+    void choose_role_default_architect() {
         when(mockThief.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
@@ -178,42 +177,42 @@ public class TestHighScoreThief {
     }
 
     @Test
-    void compare_same_cost_military_vs_noble(){
+    void compare_same_cost_military_vs_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)) < 0);
     }
 
     @Test
-    void compare_same_cost_bishop_vs_noble(){
+    void compare_same_cost_bishop_vs_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Manoir)) > 0);
     }
 
     @Test
-    void compare_same_cost_noble_vs_commercial(){
+    void compare_same_cost_noble_vs_commercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) < 0);
     }
 
     @Test
-    void compare_3golds_to_1gold(){
+    void compare_3golds_to_1gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Taverne)) < 0);
     }
 
     @Test
-    void compare_5golds_to_3gold(){
+    void compare_5golds_to_3gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Forteresse)) > 0);
     }
 
     @Test
-    void alreadyOwnsCard(){
+    void alreadyOwnsCard() {
         assertTrue(bot.compare(new Building(BuildingEnum.Port), new Building(BuildingEnum.TourDeGuet)) > 0);
     }
 
     @Test
-    void compare_noble_to_noble(){
+    void compare_noble_to_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Palais)) > 0);
     }
 
     @Test
-    void compare_cards_with_same_value(){
+    void compare_cards_with_same_value() {
         assertEquals(0, bot.compare(new Building(BuildingEnum.Marche), new Building(BuildingEnum.Echoppe)));
     }
 }

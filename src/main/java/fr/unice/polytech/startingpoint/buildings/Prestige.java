@@ -2,6 +2,8 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
+import static fr.unice.polytech.startingpoint.Display.showPrestigeEffect;
+
 /**
  * The type Prestige.
  */
@@ -29,7 +31,7 @@ public abstract class Prestige extends Building {
      * @param p the p
      */
     public void printEffect(Player p) {
-        p.getBoard().showPrestigeEffect(p, this);
+        showPrestigeEffect(p, this);
     }
 
 }

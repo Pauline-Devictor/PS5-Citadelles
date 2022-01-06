@@ -2,8 +2,10 @@ package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.*;
-import fr.unice.polytech.startingpoint.characters.*;
+import fr.unice.polytech.startingpoint.characters.Assassin;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.Magician;
+import fr.unice.polytech.startingpoint.characters.Merchant;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,7 @@ public class TestAssassin {
         magicianCharacter = spy(Magician.class);
         merchantCharacter = spy(Merchant.class);
     }
+
     @Test
     void killSomeone() {
         when(player.getRole()).thenReturn(assassinCharacter);
@@ -87,7 +90,7 @@ public class TestAssassin {
 
     @Test
     void assassinChooseVictimMagician() {
-        player.drawAndChoose(4,4);
+        player.drawAndChoose(4, 4);
         when(player.getRole()).thenReturn(assassinCharacter);
         when(board.getPlayers()).thenReturn(List.of(player));
         assassinCharacter.usePower(board);
@@ -95,7 +98,7 @@ public class TestAssassin {
     }
 
     @Test
-    void assassinArchi(){
+    void assassinArchi() {
         when(magician.getCity()).thenReturn(List.of(new Manufactory(), new Graveyard(), new Library(), new Observatory(), new MiracleCourtyard()));
         when(magician.getCardHand()).thenReturn(List.of(new MiracleCourtyard(), new Graveyard()));
         when(magician.getGold()).thenReturn(5);
@@ -107,7 +110,7 @@ public class TestAssassin {
     }
 
     @Test
-    void assassinTargetKing(){
+    void assassinTargetKing() {
         when(magician.getCity()).thenReturn(List.of(new Manufactory(), new Graveyard(), new Library(), new Observatory(), new MiracleCourtyard()));
         when(magician.getCardHand()).thenReturn(List.of(new MiracleCourtyard(), new Graveyard()));
         when(magician.getGold()).thenReturn(5);

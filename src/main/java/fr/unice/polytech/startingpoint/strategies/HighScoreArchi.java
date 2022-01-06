@@ -5,9 +5,11 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
+import static fr.unice.polytech.startingpoint.characters.CharacterEnum.*;
 import static java.util.Objects.isNull;
 
 /**
@@ -31,43 +33,30 @@ public class HighScoreArchi extends Player {
     }
 
     /**
-     * Choose the Role depending of the state of the game :
+     * Choose the Role depending on the state of the game :
      * Architect if he's rich, Marchand otherwise
      * Condottiere if someone is close to finish
      */
     @Override
     public void chooseRole() {
-        //Taxes priority
-        TreeMap<District, Integer> taxmap = new TreeMap<>();
-        for (District d : District.values()) {
-            taxmap.put(d, 0);
-        }
-        for (Building b : getCity()) {
-            taxmap.put(b.getDistrict(), taxmap.get(b.getDistrict()) + 1);
-        }
+        TreeMap<District, Integer> taxmap = getDistrictValues();
+        //Definir l'ordre des taxes
         taxmap.remove(District.Prestige);
         taxmap.remove(District.Military);
-        ArrayList<Integer> taxList = (ArrayList<Integer>) taxmap
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .map(District::getTaxCollector)
-                .collect(Collectors.toList());
+        //Retirer les Quartiers Militaire et Prestige
 
-        Collections.reverse(taxList);
-
+        ArrayList<Integer> taxList = mapToSortedList(taxmap);
         //if rich, architect
-        if (getGold() > 10) taxList.add(0, CharacterEnum.Architect.getOrder());
-        else taxList.add(CharacterEnum.Merchant.getOrder());
+        if (getGold() > 10)
+            taxList.add(0, Architect.getOrder());
+        else
+            taxList.add(Merchant.getOrder());
 
         //if a player has too much advance, condottiere
-        Player biggestCity = board.getPlayers().get(0);
-        for (Player p : board.getPlayers()) {
-            if (p.getCity().size() > biggestCity.getCity().size()) biggestCity = p;
-        }
-        if ((biggestCity.getCity().size() - city.size() > 5)) taxList.add(0, CharacterEnum.Condottiere.getOrder());
-        else taxList.add(CharacterEnum.Condottiere.getOrder());
+        if (board.getPlayers().stream().anyMatch(e -> e.getCity().size() - city.size() > 5))
+            taxList.add(0, Condottiere.getOrder());
+        else
+            taxList.add(Condottiere.getOrder());
 
         taxList.addAll(List.of(
                 CharacterEnum.Magician.getOrder(),
@@ -75,11 +64,7 @@ public class HighScoreArchi extends Player {
                 CharacterEnum.Thief.getOrder()
         ));
 
-        for (int elem : taxList) {
-            if (pickRole(elem)) {
-                return;
-            }
-        }
+        pickRole(taxList);
     }
 
     /**

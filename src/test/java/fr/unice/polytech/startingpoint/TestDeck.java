@@ -8,14 +8,14 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TestDeck {
     Deck d;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         LOGGER.setLevel(Level.OFF);
         d = spy(new Deck());
     }

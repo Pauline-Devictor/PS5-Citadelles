@@ -5,6 +5,7 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.Optional;
 
+import static fr.unice.polytech.startingpoint.Display.showKingEffect;
 import static fr.unice.polytech.startingpoint.buildings.District.Noble;
 
 public class King extends Character {
@@ -37,6 +38,6 @@ public class King extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showKingEffect(p);
+        showKingEffect(p);
     }
 }

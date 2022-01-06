@@ -33,12 +33,10 @@ public class RushArchi extends Player {
      */
     @Override
     public void chooseRole() {
-        ArrayList<Integer> taxList = new ArrayList<>();
 
         //prioritize architect
-        taxList.add(CharacterEnum.Architect.getOrder());
-
-        taxList.addAll(List.of(
+        ArrayList<Integer> taxList = new ArrayList<>(List.of(
+                CharacterEnum.Architect.getOrder(),
                 CharacterEnum.Magician.getOrder(),
                 CharacterEnum.King.getOrder(),
                 CharacterEnum.Merchant.getOrder(),
@@ -48,15 +46,13 @@ public class RushArchi extends Player {
         ));
 
         //if has 6+ buildings, Bishop
-        if(getCity().size() > 5) taxList.add(0, CharacterEnum.Bishop.getOrder());
-        else taxList.add(CharacterEnum.Bishop.getOrder());
+        if (getCity().size() > 5)
+            taxList.add(0, CharacterEnum.Bishop.getOrder());
+        else
+            taxList.add(CharacterEnum.Bishop.getOrder());
 
 
-        for (int elem : taxList) {
-            if (pickRole(elem)) {
-                return;
-            }
-        }
+        pickRole(taxList);
     }
 
     /**
@@ -79,10 +75,10 @@ public class RushArchi extends Player {
             return 1;
         else if (getCardHand().contains(b2))
             return -1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Religion && b2.getDistrict() == District.Religion) return (b1.getCost() - b2.getCost());
-            if (b1.getDistrict() == District.Religion) return -1;
-            if (b2.getDistrict() == District.Religion) return 1;
+        else {
+            int cmp = compareRushDistrict(District.Religion, b1, b2, costMin, costMax);
+            if (cmp != 0)
+                return cmp;
         }
         return (b1.getCost() - b2.getCost());
     }

@@ -1,8 +1,8 @@
 package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
+import fr.unice.polytech.startingpoint.characters.Architect;
 import fr.unice.polytech.startingpoint.characters.Character;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class TestCharacter {
     Board board;

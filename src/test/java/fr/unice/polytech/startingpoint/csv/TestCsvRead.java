@@ -18,7 +18,7 @@ public class TestCsvRead {
     PrintStream outMock;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         LOGGER.setLevel(Level.OFF);
         writer = new CsvWrite();
         writer.write("");
@@ -28,30 +28,30 @@ public class TestCsvRead {
     }
 
     //@Test
-    void printNotEmpty(){
+    void printNotEmpty() {
         writer.write("A message to add");
         reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[A message to add]");
     }
 
     //@Test
-    void printEmpty(){
+    void printEmpty() {
         reader.printCsv("save/stats.csv");
         Mockito.verify(outMock).println("[]");
     }
 
     @Test
-    void readNotEmpty(){
+    void readNotEmpty() {
         writer.write("A message to add");
         ArrayList<String> data;
         data = reader.readCsv("save/stats.csv");
-        assertEquals(List.of("[A message to add]"),data);
+        assertEquals(List.of("[A message to add]"), data);
     }
 
     @Test
-    void readEmpty(){
+    void readEmpty() {
         ArrayList<String> data;
         data = reader.readCsv("save/stats.csv");
-        assertEquals(List.of("[]"),data);
+        assertEquals(List.of("[]"), data);
     }
 }

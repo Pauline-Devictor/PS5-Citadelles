@@ -1,8 +1,4 @@
 package fr.unice.polytech.startingpoint.strategiesTest;
-import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import fr.unice.polytech.startingpoint.Board;
 import fr.unice.polytech.startingpoint.buildings.Building;
@@ -18,6 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class TestHighScoreArchi {
     Board board;
@@ -65,7 +67,7 @@ public class TestHighScoreArchi {
                 mockCondottiere));
 
         bot = spy(new HighScoreArchi(board));
-        for(int i = 0; i < bot.getCardHand().size(); i++){
+        for (int i = 0; i < bot.getCardHand().size(); i++) {
             bot.discardCard();
         }
         when(bot.getCardHand()).thenReturn(new ArrayList<>(
@@ -80,14 +82,14 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_everything_available_and_rich(){
+    void choose_role_everything_available_and_rich() {
         when(bot.getGold()).thenReturn(11);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockArchitect);
     }
 
     @Test
-    void choose_role_everything_available_poor_religious(){
+    void choose_role_everything_available_poor_religious() {
         when(bot.getGold()).thenReturn(1);
         when(bot.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Monastere),
@@ -101,7 +103,7 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_everything_available_poor_noble(){
+    void choose_role_everything_available_poor_noble() {
         when(bot.getGold()).thenReturn(1);
         when(bot.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Manoir),
@@ -113,7 +115,7 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_everything_available_poor_opponent_close_to_finish(){
+    void choose_role_everything_available_poor_opponent_close_to_finish() {
         HighScoreArchi opponent = spy(new HighScoreArchi(board));
         when(opponent.getCity()).thenReturn(List.of(
                 new Building(BuildingEnum.Temple),
@@ -130,7 +132,7 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_architect_unavailable_rich_merchant(){
+    void choose_role_architect_unavailable_rich_merchant() {
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(bot.getGold()).thenReturn(11);
         when(bot.getCity()).thenReturn(List.of(
@@ -139,8 +141,9 @@ public class TestHighScoreArchi {
         bot.chooseRole();
         assertEquals(bot.getRole(), mockMerchant);
     }
+
     @Test
-    void choose_role_default_magician(){
+    void choose_role_default_magician() {
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
@@ -151,7 +154,7 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_default_assassin(){
+    void choose_role_default_assassin() {
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
@@ -163,7 +166,7 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void choose_role_default_thief(){
+    void choose_role_default_thief() {
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockKing.isAvailable()).thenReturn(false);
         when(mockBishop.isAvailable()).thenReturn(false);
@@ -176,52 +179,52 @@ public class TestHighScoreArchi {
     }
 
     @Test
-    void compare_same_cost_military_vs_bishop(){
+    void compare_same_cost_military_vs_bishop() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Monastere)) > 0);
     }
 
     @Test
-    void compare_same_cost_military_vs_noble(){
+    void compare_same_cost_military_vs_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)) < 0);
     }
 
     @Test
-    void compare_same_cost_military_vs_commercial(){
+    void compare_same_cost_military_vs_commercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Comptoir)) > 0);
     }
 
     @Test
-    void compare_same_cost_bishop_vs_noble(){
+    void compare_same_cost_bishop_vs_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Manoir)) > 0);
     }
 
     @Test
-    void compare_same_cost_bishop_vs_commercial(){
+    void compare_same_cost_bishop_vs_commercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Comptoir)) > 0);
     }
 
     @Test
-    void compare_same_cost_noble_vs_commercial(){
+    void compare_same_cost_noble_vs_commercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) > 0);
     }
 
     @Test
-    void compare_3golds_to_1gold(){
+    void compare_3golds_to_1gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Taverne)) < 0);
     }
 
     @Test
-    void compare_5golds_to_3gold(){
+    void compare_5golds_to_3gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Forteresse)) > 0);
     }
 
     @Test
-    void alreadyOwnsCard(){
+    void alreadyOwnsCard() {
         assertTrue(bot.compare(new Building(BuildingEnum.Port), new Building(BuildingEnum.TourDeGuet)) > 0);
     }
 
     @Test
-    void compare_cards_with_same_value(){
+    void compare_cards_with_same_value() {
         assertEquals(0, bot.compare(new Building(BuildingEnum.Marche), new Building(BuildingEnum.Echoppe)));
     }
 

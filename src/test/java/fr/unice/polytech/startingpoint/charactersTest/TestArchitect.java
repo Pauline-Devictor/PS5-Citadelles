@@ -1,8 +1,8 @@
 package fr.unice.polytech.startingpoint.charactersTest;
 
 import fr.unice.polytech.startingpoint.Board;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

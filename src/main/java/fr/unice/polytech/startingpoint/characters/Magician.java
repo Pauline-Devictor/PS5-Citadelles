@@ -7,6 +7,8 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fr.unice.polytech.startingpoint.Display.showMagicianEffect;
+
 public class Magician extends Character {
     private Player target;
 
@@ -71,7 +73,7 @@ public class Magician extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showMagicianEffect(p, target);
+        showMagicianEffect(p, target);
     }
 
     /**

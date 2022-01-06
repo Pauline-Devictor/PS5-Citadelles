@@ -7,6 +7,8 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import java.util.List;
 import java.util.Optional;
 
+import static fr.unice.polytech.startingpoint.Display.showArchitectEffect;
+
 
 public class Architect extends Character {
     private List<Building> cards;
@@ -41,7 +43,6 @@ public class Architect extends Character {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().showArchitectEffect(p, cards);
-
+        showArchitectEffect(p, cards);
     }
 }

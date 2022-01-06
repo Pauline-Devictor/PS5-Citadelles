@@ -5,8 +5,9 @@ import fr.unice.polytech.startingpoint.buildings.*;
 import fr.unice.polytech.startingpoint.characters.Character;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static fr.unice.polytech.startingpoint.Board.*;
+import static fr.unice.polytech.startingpoint.Display.*;
 import static java.util.Objects.isNull;
 
 /**
@@ -124,7 +125,7 @@ public class Player implements Comparator<Building> {
             buildDecision();
             //show the move in the console
         }
-        board.showPlay(this, goldDraw);
+        showPlay(this, goldDraw);
     }
 
     /**
@@ -137,7 +138,7 @@ public class Player implements Comparator<Building> {
         boolean anythingBuildable = getCardHand().stream().anyMatch(this::isBuildable);
         boolean emptyBank = getBoard().getBank().isEmpty();
         boolean isDraw = (!emptyDeck && !anythingBuildable) || emptyBank;
-        board.showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, this);
+        showDrawOrGold(emptyDeck, anythingBuildable, emptyBank, isDraw, this);
         return isDraw;
     }
 
@@ -199,7 +200,7 @@ public class Player implements Comparator<Building> {
             }
 
         }
-        board.showBuilds(checkBuilding, toBuild, this);
+        showBuilds(checkBuilding, toBuild, this);
     }
 
     /**
@@ -253,7 +254,7 @@ public class Player implements Comparator<Building> {
 
         List<Building> drawn = (builds.size() >= nbBuilds) ? builds.subList(0, nbBuilds) : builds;
         cardHand.addAll(drawn);
-        board.showDrawChoice(builds, new ArrayList<>(discarded), drawn, this);
+        showDrawChoice(builds, new ArrayList<>(discarded), drawn, this);
         return drawn;
     }
 
@@ -272,7 +273,7 @@ public class Player implements Comparator<Building> {
     /**
      * Discard card building.
      *
-     * @return true if a card has been discarded, else false discards worse card of the hand
+     * @return the building discarded, or null
      */
     public Building discardCard() {
         if (getCardHand().size() > 0) {
@@ -333,7 +334,7 @@ public class Player implements Comparator<Building> {
         if (b) {
             role = board.getCharactersInfos(index);
             role.took();
-            board.showRole(this);
+            showRole(this);
         }
         return b;
     }
@@ -350,15 +351,13 @@ public class Player implements Comparator<Building> {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(printName(this)).append(", ").append(isNull(getRole()) ? "" : board.printRole(this));
-
-        res.append(printFormat(" avec ", ANSI_WHITE)).append(printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD)).append(printFormat(" pieces d'or et un score de ", ANSI_WHITE))
-                .append(printFormat(String.valueOf(score), ANSI_BLUE)).append("\n")
-                .append(printFormat("Bâtiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK));
-        res.append(printBuildings(cardHand, true));
-        res.append("\n").append(printFormat("Bâtiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK));
-        res.append(printBuildings(city, true));
-        return res.toString();
+        return printName(this) + ", " + (isNull(getRole()) ? "" : printRole(this)) +
+                printFormat(" avec ", ANSI_WHITE) + printFormat(String.valueOf(gold), ANSI_YELLOW, ANSI_BOLD) + printFormat(" pieces d'or et un score de ", ANSI_WHITE) +
+                printFormat(String.valueOf(score), ANSI_BLUE) + "\n" +
+                printFormat("Bâtiments Non Construits :", ANSI_BLUE_BACKGROUND, ANSI_BLACK) +
+                printBuildings(cardHand, true) +
+                "\n" + printFormat("Bâtiments Construits :", ANSI_CYAN_BACKGROUND, ANSI_BLACK) +
+                printBuildings(city, true);
     }
 
     /**
@@ -498,4 +497,44 @@ public class Player implements Comparator<Building> {
         score += i;
     }
 
+    protected TreeMap<District, Integer> getDistrictValues() {
+        TreeMap<District, Integer> taxmap = new TreeMap<>();
+        for (District d : District.values()) {
+            taxmap.put(d, 0);
+        }
+        for (Building b : getCity()) {
+            taxmap.put(b.getDistrict(), taxmap.get(b.getDistrict()) + 1);
+        }
+        return taxmap;
+    }
+
+    protected boolean pickRole(ArrayList<Integer> taxList) {
+        for (int elem : taxList) {
+            if (pickRole(elem)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected ArrayList<Integer> mapToSortedList(TreeMap<District, Integer> taxmap) {
+        ArrayList<Integer> taxList = (ArrayList<Integer>) taxmap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .map(e -> e.getKey().getTaxCollector())
+                .collect(Collectors.toList());
+        Collections.reverse(taxList);
+        return taxList;
+    }
+
+    public int compareRushDistrict(District d, Building b1, Building b2, int costMin, int costMax) {
+        int res = 0;
+        if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+            if (b1.getDistrict() == d) res--;
+            if (b2.getDistrict() == d) res++;
+            if (b1.getDistrict() == d && b2.getDistrict() == d) res = (b1.getCost() - b2.getCost());
+        }
+        return res;
+    }
 }

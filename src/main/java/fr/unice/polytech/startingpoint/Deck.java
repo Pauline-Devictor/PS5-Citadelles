@@ -87,6 +87,7 @@ public class Deck {
 
     /**
      * Store the given Building in the Deck
+     *
      * @param b the Building
      */
     public void putCard(Building b) {

@@ -2,7 +2,6 @@ package fr.unice.polytech.startingpoint.csv;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +11,8 @@ import static fr.unice.polytech.startingpoint.Game.LOGGER;
 public class CsvRead {
 
     /**
-     *print the data from the file of the given file
+     * print the data from the file of the given file
+     *
      * @param path of the file to be read
      */
     public void printCsv(String path) {
@@ -32,6 +32,7 @@ public class CsvRead {
 
     /**
      * Stock datas from a file with the given path
+     *
      * @param path of the file
      * @return data contain in target csv
      */

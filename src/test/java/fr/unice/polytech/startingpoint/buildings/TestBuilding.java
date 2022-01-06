@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.logging.Level;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
 
 public class TestBuilding {
     Building eglise;

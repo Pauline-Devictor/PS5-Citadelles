@@ -5,8 +5,8 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.BuildingEnum;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.buildings.Manufactory;
-import fr.unice.polytech.startingpoint.characters.*;
 import fr.unice.polytech.startingpoint.characters.Character;
+import fr.unice.polytech.startingpoint.characters.Condottiere;
 import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,6 +45,7 @@ public class TestCondottiere {
         condottiereCharacter.collectTaxes(condo, District.Military);
         assertEquals(1, condo.getGold());
     }
+
     @Test
     void destroyNoBuild() {
         archi.takeMoney(25);

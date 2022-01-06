@@ -2,6 +2,8 @@ package fr.unice.polytech.startingpoint.buildings;
 
 import fr.unice.polytech.startingpoint.strategies.Player;
 
+import static fr.unice.polytech.startingpoint.Display.printPrestigePoint;
+
 /**
  * The type Dracoport.
  */
@@ -28,6 +30,6 @@ public class Dracoport extends Prestige {
     @Override
     public void printEffect(Player p) {
         super.printEffect(p);
-        p.getBoard().printPrestigePoint(p, this);
+        printPrestigePoint(p, this);
     }
 }

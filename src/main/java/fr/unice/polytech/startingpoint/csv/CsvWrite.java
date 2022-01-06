@@ -3,7 +3,8 @@ package fr.unice.polytech.startingpoint.csv;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Map;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
@@ -14,6 +15,7 @@ public class CsvWrite {
 
     /**
      * overwrite the file stats.csv with the given data
+     *
      * @param data that have to be written
      */
     public void write(String data) {
@@ -31,6 +33,7 @@ public class CsvWrite {
 
     /**
      * append in the file stats.csv the given data
+     *
      * @param data that have to be appended
      */
     public void append(String data) {
@@ -49,7 +52,7 @@ public class CsvWrite {
     /**
      * save all stats from stats.csv in results.csv
      */
-    public void save(){
+    public void save() {
         try {
             String csv = "save/results.csv";
             CSVWriter writer = new CSVWriter(new FileWriter(csv, true));
@@ -66,19 +69,20 @@ public class CsvWrite {
 
     /**
      * append all the given stats data in the file stats
+     *
      * @param stats of some games
      */
     public void appendStats(Map<String, int[]> stats) {
-            stats.forEach((k, v) -> {
-                int defeat = 1000 - v[1] - v[2];
-                float winrate = (float) v[1]/10;
-                int averageScore = v[0]/1000;
+        stats.forEach((k, v) -> {
+            int defeat = 1000 - v[1] - v[2];
+            float winrate = (float) v[1] / 10;
+            int averageScore = v[0] / 1000;
 
-                //Nom;ScoreMoyen;PourcentageVictoire;NbParties;Victoire;Egalite;Defaite
-                append(k+","+averageScore+","+ winrate +"%,"+v[3]+","+v[1]+","+v[2]+","+ defeat);
+            //Nom;ScoreMoyen;PourcentageVictoire;NbParties;Victoire;Egalite;Defaite
+            append(k + "," + averageScore + "," + winrate + "%," + v[3] + "," + v[1] + "," + v[2] + "," + defeat);
 
-                //Nom du bot, Score moyen, Victoires, Egalites,Defaites Nb de parties
-                // append(k+","+v[1]+","+v[2]+","+ defeat + ","+v[3]);
-            });
+            //Nom du bot, Score moyen, Victoires, Egalites,Defaites Nb de parties
+            // append(k+","+v[1]+","+v[2]+","+ defeat + ","+v[3]);
+        });
     }
 }

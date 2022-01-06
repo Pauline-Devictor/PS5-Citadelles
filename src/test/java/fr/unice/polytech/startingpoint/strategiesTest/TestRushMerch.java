@@ -81,20 +81,20 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_everything_available(){
+    void choose_role_everything_available() {
         bot.chooseRole();
         assertEquals(bot.getRole(), mockMerchant);
     }
 
     @Test
-    void choose_role_default_architect(){
+    void choose_role_default_architect() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         bot.chooseRole();
         assertEquals(bot.getRole(), mockArchitect);
     }
 
     @Test
-    void choose_role_default_magician(){
+    void choose_role_default_magician() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         bot.chooseRole();
@@ -102,7 +102,7 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_king(){
+    void choose_role_default_king() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
@@ -111,7 +111,7 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_thief(){
+    void choose_role_default_thief() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
@@ -121,7 +121,7 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_bishop(){
+    void choose_role_default_bishop() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
@@ -132,7 +132,7 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_assassin(){
+    void choose_role_default_assassin() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
@@ -144,7 +144,7 @@ public class TestRushMerch {
     }
 
     @Test
-    void choose_role_default_condottiere(){
+    void choose_role_default_condottiere() {
         when(mockMerchant.isAvailable()).thenReturn(false);
         when(mockArchitect.isAvailable()).thenReturn(false);
         when(mockMagician.isAvailable()).thenReturn(false);
@@ -157,44 +157,45 @@ public class TestRushMerch {
     }
 
 
-
     @Test
-    void compare_same_cost_military_vs_noble(){
-        assertEquals(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)),0);
+    void compare_same_cost_military_vs_noble() {
+        assertEquals(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Caserne)), 0);
     }
 
     @Test
-    void compare_same_cost_bishop_vs_noble(){
+    void compare_same_cost_bishop_vs_noble() {
         assertEquals(0, bot.compare(new Building(BuildingEnum.Monastere), new Building(BuildingEnum.Manoir)));
     }
 
     @Test
-    void compare_same_cost_noble_vs_commercial(){
+    void compare_same_cost_noble_vs_commercial() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Comptoir)) > 0);
     }
 
     @Test
-    void compare_3golds_to_1gold(){
+    void compare_3golds_to_1gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Taverne)) > 0);
     }
 
     @Test
-    void compare_5golds_to_3gold(){
+    void compare_5golds_to_3gold() {
         assertTrue(bot.compare(new Building(BuildingEnum.Caserne), new Building(BuildingEnum.Forteresse)) < 0);
     }
 
     @Test
-    void alreadyOwnsCard(){
+    void alreadyOwnsCard() {
         assertTrue(bot.compare(new Building(BuildingEnum.Port), new Building(BuildingEnum.Forteresse)) > 0);
     }
 
     @Test
-    void compare_noble_to_noble(){
+    void compare_noble_to_noble() {
         assertTrue(bot.compare(new Building(BuildingEnum.Manoir), new Building(BuildingEnum.Palais)) < 0);
     }
 
     @Test
-    void compare_cards_with_same_value(){
+    void compare_cards_with_same_value() {
+
+        when(bot.getCardHand()).thenReturn(new ArrayList<>());
         assertEquals(0, bot.compare(new Building(BuildingEnum.Marche), new Building(BuildingEnum.Echoppe)));
     }
 }

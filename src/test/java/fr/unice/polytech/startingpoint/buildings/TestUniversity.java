@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
