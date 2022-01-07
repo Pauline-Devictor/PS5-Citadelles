@@ -120,28 +120,4 @@ public class Board {
         pile.putCard(b);
     }
 
-    /**
-     * write result of the game in results.csv
-     */
-    public void writeWinner() {
-        CsvWrite writer = new CsvWrite();
-        writer.write(""); //reset the resources "stats.csv"
-        players.sort(PointsOrder);
-        int index = 0;
-        if (players.get(1).getScore() == players.get(0).getScore()) { //determine if equalities or not
-            while (players.get(index).getScore() == players.get(0).getScore() && index < players.size()) {
-                writer.append(players.get(index).getName() + ",0,1,0");
-                index += 1;
-            }
-            while (index < players.size()) {
-                writer.append(players.get(index).getName() + ",0,0,1");
-                index += 1;
-            }
-        } else {
-            writer.append(players.get(0).getName() + ",1,0,0");
-            for (index = 1; index < players.size(); index++) {
-                writer.append(players.get(index).getName() + ",0,0,1");
-            }
-        }
-    }
 }

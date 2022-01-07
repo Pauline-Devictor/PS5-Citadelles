@@ -1,6 +1,7 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.King;
+import fr.unice.polytech.startingpoint.csv.Save;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;
@@ -45,7 +46,7 @@ public class Game {
             }
         };
         show.setFormatter(testFormat);
-        save = new Save("save/resultsBis.csv");
+        save = new Save("results");
     }
 
     /**
@@ -62,7 +63,6 @@ public class Game {
                 + "\n"
                 + printFormat("Pour plus de details sur la fin de partie :", ANSI_YELLOW, ANSI_ITALIC));
         showBoard(board.getPlayers());
-        board.writeWinner();
     }
 
     /**
@@ -133,7 +133,6 @@ public class Game {
 
     /**
      * Start the game and keep going until game is over
-     * Reinitialize the stats.csv datas
      * Create a Board and play a full game with it
      */
     void newGame() {

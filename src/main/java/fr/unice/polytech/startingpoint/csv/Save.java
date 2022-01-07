@@ -1,18 +1,20 @@
-package fr.unice.polytech.startingpoint;
+package fr.unice.polytech.startingpoint.csv;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import fr.unice.polytech.startingpoint.csv.CsvWrite;
 
 import java.io.FileWriter;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import static fr.unice.polytech.startingpoint.Game.LOGGER;
+
 public class Save {
     private final String fileName;
 
-    Save(String fileName) {
+    public Save(String fileName) {
         this.fileName = fileName;
     }
 
@@ -24,8 +26,6 @@ public class Save {
             int defeat = 1000 - v[1] - v[2];
             float winRate = (float) v[1] / 10;
             int averageScore = v[0] / 1000;
-
-            //Nom;ScoreMoyen;PourcentageVictoire;NbParties;Victoire;Egalite;Defaite
             writeLine(k + "," + averageScore + "," + winRate + "%," + v[3] + "," + v[1] + "," + v[2] + "," + defeat + ",");
 
         }
@@ -33,12 +33,16 @@ public class Save {
 
     private void writeLine(String data) {
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(fileName, true));
+            Path file = Path.of("save", fileName + ".csv");
+            boolean exist = Files.exists(file);
+            CSVWriter writer = new CSVWriter(new FileWriter(file.toString(), true));
+            if (!exist)
+                writer.writeNext(("Nom,ScoreMoyen,PourcentageVictoire,NbParties,Victoire,Egalite,Defaite").split(","));
             String[] record = data.split(",");
             writer.writeNext(record);
             writer.close();
         } catch (Exception e) {
-            System.out.println("Les données n'ont pas été sauvegardés : " + data);
+            LOGGER.severe("Les données n'ont pas été sauvegardés : " + data);
         }
     }
 
