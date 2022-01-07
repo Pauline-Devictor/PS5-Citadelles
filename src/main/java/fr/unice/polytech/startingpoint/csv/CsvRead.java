@@ -43,7 +43,6 @@ public class CsvRead {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 data.add(Arrays.toString(nextLine));
-
             }
             return data;
         } catch (Exception e) {

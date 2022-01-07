@@ -13,6 +13,7 @@ public class Main {
         game.run();
         LOGGER.setLevel(Level.CONFIG);
         game.run1000("HighScoreArchi", "HighScoreThief", "HighThiefManufactory", "Opportuniste", "RushArchiLab", "RushMerch");
-        //game.run1000("RushMerch","RushMerch","RushMerch","RushMerch");
+        game.run1000("RushMerch", "RushMerch", "RushMerch", "RushMerch");
+        game.run1000("Opportuniste", "Opportuniste", "Opportuniste", "Opportuniste", "RushArchiLab", "RushMerch");
     }
 }

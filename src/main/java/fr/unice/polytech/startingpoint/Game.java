@@ -1,11 +1,8 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.King;
-import fr.unice.polytech.startingpoint.csv.CsvRead;
-import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
-import java.text.DateFormat;
 import java.util.*;
 import java.util.logging.Formatter;
 import java.util.logging.*;
@@ -22,9 +19,7 @@ public class Game {
     //private List<Player> players;
     private List<Player> orderPlayers;
     private Player first;
-    private final CsvWrite writer = new CsvWrite();
-    private final CsvRead reader = new CsvRead();
-    private final Date today = new Date();
+    private final Save save;
 
 
     /**
@@ -50,6 +45,7 @@ public class Game {
             }
         };
         show.setFormatter(testFormat);
+        save = new Save("save/resultsBis.csv");
     }
 
     /**
@@ -92,7 +88,7 @@ public class Game {
             results = calculStats(results);
         }
         showStats(results);
-        updateResults(results);
+        save.saveGame(results);
     }
 
     /**
@@ -141,7 +137,6 @@ public class Game {
      * Create a Board and play a full game with it
      */
     void newGame() {
-        writer.write("Nom;ScoreMoyen;Victoire;Egalite;NbParties");
         boolean endOfGame = false;
         int turn = 0;
         while (!endOfGame) {
@@ -202,27 +197,4 @@ public class Game {
         return orderPlayers;
     }
 
-    /**
-     * Get the date time
-     *
-     * @return current Date
-     */
-    public String getDate() {
-        DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
-                DateFormat.MEDIUM,
-                DateFormat.MEDIUM);
-        return (mediumDateFormat.format(today));
-    }
-
-    /**
-     * Update stats results in results.csv
-     *
-     * @param results of all games
-     */
-    public void updateResults(Map<String, int[]> results) {
-        writer.append(getDate());
-        writer.appendStats(results);
-        writer.save();
-        reader.printCsv("save/results.csv");
-    }
 }

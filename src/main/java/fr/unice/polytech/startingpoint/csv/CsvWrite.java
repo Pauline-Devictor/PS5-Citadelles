@@ -75,14 +75,11 @@ public class CsvWrite {
     public void appendStats(Map<String, int[]> stats) {
         stats.forEach((k, v) -> {
             int defeat = 1000 - v[1] - v[2];
-            float winrate = (float) v[1] / 10;
+            float winRate = (float) v[1] / 10;
             int averageScore = v[0] / 1000;
 
             //Nom;ScoreMoyen;PourcentageVictoire;NbParties;Victoire;Egalite;Defaite
-            append(k + "," + averageScore + "," + winrate + "%," + v[3] + "," + v[1] + "," + v[2] + "," + defeat);
-
-            //Nom du bot, Score moyen, Victoires, Egalites,Defaites Nb de parties
-            // append(k+","+v[1]+","+v[2]+","+ defeat + ","+v[3]);
+            append(k + "," + averageScore + "," + winRate + "%," + v[3] + "," + v[1] + "," + v[2] + "," + defeat);
         });
     }
 }
