@@ -508,7 +508,7 @@ public class Player implements Comparator<Building> {
         return taxmap;
     }
 
-    protected boolean pickRole(ArrayList<Integer> taxList) {
+    protected boolean pickRole(List<Integer> taxList) {
         for (int elem : taxList) {
             if (pickRole(elem)) {
                 return true;
