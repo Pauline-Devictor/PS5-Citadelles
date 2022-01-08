@@ -28,6 +28,7 @@ le niveau _SEVERE_.
 Chaque exécution de 1000 parties génère des résultats, avec les statistiques de chaque robot inscrit dans le fichier _
 results.csv_, avec un timestamp correspondant aux parties jouées. Ces données sont ensuite agrégées, pour former les
 statistiques de chaque stratégie, que l'on peut retrouver au début du fichier de résultats
+|Nom du bot|Score Moyen | Winrate|Nombre de Parties|Victoires|Égalités|Défaites
 
 #### Conception d'un SuperBot
 
