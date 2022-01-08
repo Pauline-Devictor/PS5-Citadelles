@@ -30,6 +30,10 @@ results.csv_, avec un timestamp correspondant aux parties jouées. Ces données 
 statistiques de chaque stratégie, que l'on peut retrouver au début du fichier de résultats
 [representationCSV](doc/ImageCSV.png)
 
+|Nom du bot|Score Moyen|Winrate|Nombre de Parties|Victoires|Égalités|Défaites|
+|----------|-----------|-------|-----------------|---------|--------|--------|
+
+
 #### Conception d'un SuperBot
 
 Nous avons choisi d'implémenter le robot _Opportuniste_, stratégie qui était la plus éloignée de celles déjà existantes
