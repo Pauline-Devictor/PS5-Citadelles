@@ -69,7 +69,6 @@ public class Game {
      */
 
     void run() {
-        LOGGER.setLevel(Level.FINEST);
         newGame();
         endOfGame();
     }
@@ -81,7 +80,6 @@ public class Game {
     }
 
     void run1000(String... namePlayers) {
-        LOGGER.setLevel(Level.CONFIG);
         Map<String, int[]> results = new TreeMap<>();
         for (int i = 0; i < 1000; i++) {
             initBoard(namePlayers);
