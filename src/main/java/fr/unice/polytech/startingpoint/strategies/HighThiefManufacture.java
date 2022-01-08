@@ -7,7 +7,7 @@ import fr.unice.polytech.startingpoint.buildings.Manufactory;
 
 import static java.util.Objects.isNull;
 
-public class HighThiefManufactory extends HighScoreThief {
+public class HighThiefManufacture extends HighScoreThief {
 
 
     /**
@@ -15,11 +15,11 @@ public class HighThiefManufactory extends HighScoreThief {
      *
      * @param b the Board
      */
-    public HighThiefManufactory(Board b) {
+    public HighThiefManufacture(Board b) {
         super(b);
     }
 
-    public HighThiefManufactory(Board b, String name) {
+    public HighThiefManufacture(Board b, String name) {
         super(b, name);
     }
 
@@ -45,12 +45,13 @@ public class HighThiefManufactory extends HighScoreThief {
             return -1;
         else if (b2 instanceof Manufactory)
             return 1;
-        else if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
-            if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble)
-                return (b2.getCost() - b1.getCost());
-            if (b1.getDistrict() == District.Noble) return -1;
-            if (b2.getDistrict() == District.Noble) return 1;
-        }
+        else //noinspection DuplicatedCode
+            if (b1.getCost() <= costMax && b1.getCost() >= costMin && b2.getCost() <= costMax && b2.getCost() >= costMin) {
+                if (b1.getDistrict() == District.Noble && b2.getDistrict() == District.Noble)
+                    return (b2.getCost() - b1.getCost());
+                if (b1.getDistrict() == District.Noble) return -1;
+                if (b2.getDistrict() == District.Noble) return 1;
+            }
         return (b2.getCost() - b1.getCost());
     }
 }

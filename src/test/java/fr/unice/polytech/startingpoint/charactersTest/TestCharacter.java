@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 public class TestCharacter {
     Board board;
     Player player;
-    Player archi;
     Character archiCharacter;
 
     @BeforeEach
@@ -26,7 +25,6 @@ public class TestCharacter {
         //LOGGER.setLevel(Level.OFF);
         board = spy(new Board());
         player = spy(new Player(board));
-        archi = spy(new Player(board));
         archiCharacter = spy(Architect.class);
 
     }

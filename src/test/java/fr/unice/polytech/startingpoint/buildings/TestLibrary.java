@@ -14,14 +14,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 public class TestLibrary {
-    Building eglise;
     Player p;
 
     @BeforeEach
     void setUp() {
         LOGGER.setLevel(Level.OFF);
         p = spy(new Player(new Board()));
-        eglise = new Building(BuildingEnum.Eglise);
     }
 
     @Test

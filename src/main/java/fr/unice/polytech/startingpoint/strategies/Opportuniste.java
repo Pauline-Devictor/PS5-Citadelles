@@ -5,7 +5,6 @@ import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.buildings.District;
 import fr.unice.polytech.startingpoint.characters.Assassin;
 import fr.unice.polytech.startingpoint.characters.CharacterEnum;
-import fr.unice.polytech.startingpoint.characters.Condottiere;
 
 import java.util.ArrayList;
 import java.util.List;

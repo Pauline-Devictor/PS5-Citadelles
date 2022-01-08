@@ -17,7 +17,7 @@ public class Dracoport extends Prestige {
     }
 
     /**
-     * Give 2 points to the the player in variables
+     * Give 2 points to the player in variables
      *
      * @param p the Player
      */

@@ -15,7 +15,7 @@ import static java.util.Objects.isNull;
  * All decisions made by a player is either done by this class or one of its subclasses.
  */
 public class Player implements Comparator<Building> {
-    protected String name;
+    protected final String name;
     protected int gold;
     protected int score;
     protected final Board board;
@@ -48,7 +48,7 @@ public class Player implements Comparator<Building> {
      * @param b board linked to the player Creates a player linked to a board with undefined name
      */
     public Player(Board b) {
-        this.name = this.getClass().getSimpleName();
+        this.name = this.getClass().getSimpleName() + "-X";
         board = b;
         gold = board.getBank().withdrawGold(2);
         cardHand = new ArrayList<>();
@@ -61,7 +61,7 @@ public class Player implements Comparator<Building> {
     /**
      * Compare two players depending on the order in the turn
      */
-    public static Comparator<Player> RoleOrder = (e1, e2) -> {
+    public static final Comparator<Player> RoleOrder = (e1, e2) -> {
         //Positive if e2 > e1
         int res = 1;
         if (!isNull(e1.getRole()) && !isNull(e2.getRole())) {
@@ -74,7 +74,7 @@ public class Player implements Comparator<Building> {
     /**
      * The constant PointsOrder.
      */
-    public static Comparator<Player> PointsOrder = (e1, e2) -> {
+    public static final Comparator<Player> PointsOrder = (e1, e2) -> {
         //Positive if e2 > e1
         return e2.getScore() - e1.getScore();
     };

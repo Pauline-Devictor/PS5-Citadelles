@@ -1,16 +1,5 @@
 package fr.unice.polytech.startingpoint.csv;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
-
-import java.io.PrintStream;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.logging.Level;
-
-import static fr.unice.polytech.startingpoint.Game.LOGGER;
-import static org.mockito.Mockito.*;
-
 /*public class TestCsvWrite {
     CsvWrite writer;
     CsvRead reader;

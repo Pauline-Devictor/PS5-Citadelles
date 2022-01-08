@@ -14,8 +14,6 @@ import static java.util.Objects.isNull;
  * The type Rush merch.
  */
 public class RushMerch extends Player {
-    private final int costMax = 3;
-    private final int costMin = 1;
 
     /**
      * Instantiates a new Rush merch.
@@ -74,6 +72,8 @@ public class RushMerch extends Player {
         else if (getCardHand().contains(b2))
             return -1;
         else {
+            int costMax = 3;
+            int costMin = 1;
             int cmp = compareRushDistrict(District.Commercial, b1, b2, costMin, costMax);
             if (cmp != 0)
                 return cmp;

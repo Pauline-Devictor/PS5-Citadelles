@@ -45,7 +45,7 @@ public class RushArchi extends Player {
                 CharacterEnum.Condottiere.getOrder()
         ));
 
-        //if has 6+ buildings, Bishop
+        //if he has 6+ buildings, Bishop
         if (getCity().size() > 5)
             taxList.add(0, CharacterEnum.Bishop.getOrder());
         else

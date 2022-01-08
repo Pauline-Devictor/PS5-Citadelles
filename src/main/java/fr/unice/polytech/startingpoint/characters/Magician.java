@@ -77,7 +77,7 @@ public class Magician extends Character {
     }
 
     /**
-     * Chooses the target with the most of cards
+     * Chooses the target with the most of the cards
      *
      * @param board  the current game's board
      * @param player the Magician's player

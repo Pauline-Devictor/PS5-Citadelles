@@ -4,7 +4,6 @@ import fr.unice.polytech.startingpoint.strategies.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -14,8 +13,6 @@ import static org.mockito.Mockito.*;
 
 class TestGame {
     Game g;
-    Player p;
-    Player p1;
     Player winner;
     Player tie;
     Player looser;
@@ -24,8 +21,6 @@ class TestGame {
     @BeforeEach
     void setUp() {
         g = spy(new Game());
-        p = mock(Player.class);
-        p1 = mock(Player.class);
         LOGGER.setLevel(Level.OFF);
         winner = mock(Player.class);
         tie = mock(Player.class);

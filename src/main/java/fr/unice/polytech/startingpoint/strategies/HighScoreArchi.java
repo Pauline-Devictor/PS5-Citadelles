@@ -16,8 +16,6 @@ import static java.util.Objects.isNull;
  * The type High score archi.
  */
 public class HighScoreArchi extends Player {
-    private final int costMax = 6;
-    private final int costMin = 3;
 
     /**
      * Instantiates a new High score archi.
@@ -89,6 +87,8 @@ public class HighScoreArchi extends Player {
      */
     @Override
     public int compare(Building b1, Building b2) {
+        int costMax = 6;
+        int costMin = 3;
         if (isNull(b1))
             return 1;
         else if (isNull(b2))

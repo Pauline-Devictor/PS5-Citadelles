@@ -33,7 +33,7 @@ public class Board {
         if (players.length > 6 || players.length < 2) {
             tmp.add(new HighScoreArchi(this));
             tmp.add(new HighScoreThief(this));
-            tmp.add(new HighThiefManufactory(this));
+            tmp.add(new HighThiefManufacture(this));
             tmp.add(new RushArchi(this));
         } else {
             for (int i = 0; i < players.length; i++) {
@@ -41,7 +41,7 @@ public class Board {
                     case "RushMerch" -> tmp.add(new RushMerch(this, String.valueOf(i)));
                     case "HighScoreArchi" -> tmp.add(new HighScoreArchi(this, String.valueOf(i)));
                     case "HighScoreThief" -> tmp.add(new HighScoreThief(this, String.valueOf(i)));
-                    case "HighThiefManufacture" -> tmp.add(new HighThiefManufactory(this, String.valueOf(i)));
+                    case "HighThiefManufacture" -> tmp.add(new HighThiefManufacture(this, String.valueOf(i)));
                     case "Opportuniste" -> tmp.add(new Opportuniste(this, String.valueOf(i)));
                     case "RushArchi" -> tmp.add(new RushArchi(this, String.valueOf(i)));
                     case "RushArchiLab" -> tmp.add(new RushArchiLab(this, String.valueOf(i)));
