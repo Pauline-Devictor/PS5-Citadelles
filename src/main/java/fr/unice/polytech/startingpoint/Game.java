@@ -1,7 +1,6 @@
 package fr.unice.polytech.startingpoint;
 
 import fr.unice.polytech.startingpoint.characters.King;
-import fr.unice.polytech.startingpoint.csv.Save;
 import fr.unice.polytech.startingpoint.strategies.Player;
 
 import java.util.*;

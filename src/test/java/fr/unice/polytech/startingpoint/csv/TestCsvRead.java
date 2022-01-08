@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestCsvRead {
+/*public class TestCsvRead {
     CsvWrite writer;
     CsvRead reader;
     PrintStream outMock;
@@ -54,4 +54,4 @@ public class TestCsvRead {
         data = reader.readCsv("save/stats.csv");
         assertEquals(List.of("[]"), data);
     }
-}
+}*/

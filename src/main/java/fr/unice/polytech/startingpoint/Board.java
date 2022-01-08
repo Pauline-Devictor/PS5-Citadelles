@@ -3,13 +3,10 @@ package fr.unice.polytech.startingpoint;
 import fr.unice.polytech.startingpoint.buildings.Building;
 import fr.unice.polytech.startingpoint.characters.Character;
 import fr.unice.polytech.startingpoint.characters.*;
-import fr.unice.polytech.startingpoint.csv.CsvWrite;
 import fr.unice.polytech.startingpoint.strategies.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static fr.unice.polytech.startingpoint.strategies.Player.PointsOrder;
 
 /**
  * The type Board.

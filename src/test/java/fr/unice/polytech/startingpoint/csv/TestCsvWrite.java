@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
 import static org.mockito.Mockito.*;
 
-public class TestCsvWrite {
+/*public class TestCsvWrite {
     CsvWrite writer;
     CsvRead reader;
     PrintStream outMock;
@@ -95,4 +95,4 @@ public class TestCsvWrite {
         Mockito.verify(outMock).println("[BetaTester\",\"0\",\"0.0%\",\"0\",\"0\",\"0\",\"1000]");
         Mockito.verify(outMock).println("[GammaTester\",\"0\",\"0.0%\",\"0\",\"0\",\"0\",\"1000]");
     }
-}
+}*/
