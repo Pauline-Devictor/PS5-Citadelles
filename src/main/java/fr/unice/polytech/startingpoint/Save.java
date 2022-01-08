@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static fr.unice.polytech.startingpoint.Game.LOGGER;
+import static java.lang.Math.min;
 
 /**
  * Write and computed results in order to save data from this game
@@ -64,7 +65,7 @@ public final class Save {
                 break;
             }
         }
-        List<String[]> logs = save.subList(startLogs + 1, save.size());//Remove Overall data from it
+        List<String[]> logs = save.subList(min(startLogs + 1, save.size()), save.size());//Remove Overall data from it
         List<String> header = computeData(logs.stream().filter(e -> !digitFind.matcher(e[0]).find()).toList());//Take out dates, and compute the data
         rewriteFile(logs, header);
     }
