@@ -75,7 +75,7 @@ public final class Save {
      * @param save   logs of games
      * @param header overall stats
      */
-    public void rewriteFile(List<String[]> save, List<String> header) {
+    private void rewriteFile(List<String[]> save, List<String> header) {
         writeLine("Nom,ScoreMoyen,PourcentageVictoire,NbParties,Victoire,Égalité,Défaite", true);
         for (String value : header) {
             writeLine(value, false);
@@ -116,7 +116,7 @@ public final class Save {
      * @param computed Logs of a Strategy
      * @return results of this strategy, ready to written down
      */
-    public String newStatsLine(List<String[]> computed) {
+    private String newStatsLine(List<String[]> computed) {
         String name = computed.get(0)[0];
         float scoreMoyen = computed.stream().map(e -> Float.valueOf(e[1])).reduce((float) 0, Float::sum) / computed.size();
         float pourcentageMoyen = computed.stream().map(e -> Float.valueOf(e[2])).reduce((float) 0, Float::sum) / computed.size();
@@ -169,7 +169,7 @@ public final class Save {
      *
      * @return current Date
      */
-    public String getDate() {
+    private String getDate() {
         DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
                 DateFormat.MEDIUM,
                 DateFormat.MEDIUM);

@@ -3,10 +3,10 @@
 
 ### Fonctionnalités
 
-Les seules fonctionnalités qui ne sont pas présentes sont l'effet de la carte _Cimetière_ , et la mécanique des cartes
+Les seules fonctionnalités qui ne sont pas présentes sont l'effet de la carte _Cimetière_, et la mécanique des cartes
 Personnages cachées en début de tour. Pour l'instant, le jeu propose les 8 Rôles au premier joueur, qui choisit et passe
-les cartes restantes au second, sans qu'il n'y ai de cartes écartées, ni face cachée ni face visible. Le tableau ci
-dessous résume notre couverture fonctionnelle du jeu de citadelles
+les cartes restantes au second, sans qu'il n'y ait de cartes écartées, ni face cachée ni face visible. Le tableau
+ci-dessous résume notre couverture fonctionnelle du jeu de citadelles
 
 | Catégorie             | Fonctionnalités présentes                                                                                                                           | Détails                                                                                                                                                                                        |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -28,6 +28,7 @@ le niveau _SEVERE_.
 Chaque exécution de 1000 parties génère des résultats, avec les statistiques de chaque robot inscrit dans le fichier _
 results.csv_, avec un timestamp correspondant aux parties jouées. Ces données sont ensuite agrégées, pour former les
 statistiques de chaque stratégie, que l'on peut retrouver au début du fichier de résultats
+[representationCSV](doc/ImageCSV.png)
 
 #### Conception d'un SuperBot
 
